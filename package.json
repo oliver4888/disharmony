@@ -1,0 +1,23 @@
+{
+  "name": "disharmony",
+  "version": "0.1.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/ts-node ./test-runner.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benji7425/disharmony.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benji7425/disharmony/issues"
+  },
+  "homepage": "https://github.com/benji7425/disharmony#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.4.1"
+  }
+}
