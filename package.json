@@ -16,7 +16,13 @@
     "url": "https://github.com/benji7425/disharmony/issues"
   },
   "homepage": "https://github.com/benji7425/disharmony#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@types/mongodb": "^3.1.22",
+    "@types/node": "^11.12.2",
+    "mongodb": "^3.2.2",
+    "nedb-core": "^3.0.6",
+    "simple-file-writer": "^2.0.0"
+  },
   "devDependencies": {
     "typescript": "^3.4.1"
   }
