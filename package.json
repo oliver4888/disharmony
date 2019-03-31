@@ -21,11 +21,13 @@
     "@types/node": "^11.12.2",
     "mongodb": "^3.2.2",
     "nedb-core": "^3.0.6",
-    "simple-file-writer": "^2.0.0"
+    "simple-file-writer": "^2.0.0",
+    "typed-promisify": "^0.4.0"
   },
   "devDependencies": {
     "alsatian": "^2.4.0",
     "ts-node": "^8.0.3",
+    "typemoq": "^2.1.0",
     "typescript": "^3.4.1"
   }
 }
