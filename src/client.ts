@@ -1,6 +1,9 @@
 import { Client as DjsClient, Message as DjsMessage, Channel as DChannel } from "discord.js"
 import { SimpleEventDispatcher, SignalDispatcher, ISimpleEvent } from "strongly-typed-events"
 import Command from "./commands/command"
+import getCommandInvoker, { RejectionReason } from "./commands/command-parser"
+import inbuiltCommands from "./inbuilt-commands"
+import Stats from "./models/internal/stats";
 import logger from "./utilities/logger";
 import { initialize as initializeDb } from "./database/db-client";
 import Message from "./models/discord/message";
@@ -12,6 +15,7 @@ export interface IClient
     readonly commands: Command[]
     readonly channels: Map<string, DChannel>
     readonly onMessage: ISimpleEvent<Message>
+    stats: Stats
 }
 
 export default class Client implements IClient
@@ -21,6 +25,7 @@ export default class Client implements IClient
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
     public readonly onMessage = new SimpleEventDispatcher<Message>()
+    public stats: Stats
 
     get botID() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
     get channels(): Map<string, DChannel> { return this.client.channels }
@@ -35,6 +40,8 @@ export default class Client implements IClient
         await this.client.login(token.replace(/\r?\n|\r/g, ""))
 
         logger.consoleLog(`Registered bot ${this.client.user.username}`)
+
+        this.commands = this.commands.concat(inbuiltCommands)
     }
 
     private async handleMessage(djsMessage: DjsMessage)
@@ -43,7 +50,24 @@ export default class Client implements IClient
         if (djsMessage.member.id === djsMessage.member.guild.me.id)
             return
 
-        djsMessage.reply("Ping")
+        const message = new Message(djsMessage)
+
+        try
+        {
+            const commandInvoker = await getCommandInvoker(this, message)
+            if (commandInvoker)
+                commandInvoker(this, message).then(val =>
+                {
+                    if (val)
+                        message.reply(val)
+                })
+        }
+        catch (reason)
+        {
+            message.reply(getRejectionMsg(reason))
+        }
+
+        this.onMessage.dispatch(message)
     }
 
     private onDebug(msg: string)
@@ -68,11 +92,23 @@ export default class Client implements IClient
             ]
         })
 
+        this.stats = new Stats(this.client)
         initializeDb(dbConnectionString)
 
         Error.stackTraceLimit = Infinity
         process.on("uncaughtException", err => logger.debugLog(`Unhandled exception!\n${err.message}\n${err.stack}`, true))
         process.on("exit", () => logger.debugLog("Shutdown"))
         process.on("SIGINT", () => process.exit())
+    }
+}
+
+function getRejectionMsg(reason: RejectionReason)
+{
+    switch (reason)
+    {
+        case RejectionReason.MissingPermission:
+            return "You do not have permission to use this command."
+        case RejectionReason.IncorrectSyntax:
+            return "Incorrect syntax! See correct syntax with the `help` command."
     }
 }
