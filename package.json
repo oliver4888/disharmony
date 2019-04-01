@@ -23,6 +23,7 @@
     "mongodb": "^3.2.2",
     "nedb-core": "^3.0.6",
     "simple-file-writer": "^2.0.0",
+    "strongly-typed-events": "^1.4.10",
     "typed-promisify": "^0.4.0"
   },
   "devDependencies": {
