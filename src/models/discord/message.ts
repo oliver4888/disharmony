@@ -7,8 +7,8 @@ export default class Message
 {
     readonly guild: BotGuild
     readonly member: BotGuildMember
-    get content() { return this.djsMessage.content }
-    get channelId() { return this.djsMessage.channel.id }
+    public get content() { return this.djsMessage.content }
+    public get channelId() { return this.djsMessage.channel.id }
 
     public async reply(response: string | RichEmbed)
     {

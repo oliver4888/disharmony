@@ -4,9 +4,9 @@ import Document from "../document";
 
 export default class BotGuildMember extends Document
 {
-    get permissions() { return this.guildMember.permissions }
-    get nickname() { return this.guildMember.nickname }
-    get username() { return this.guildMember.user.username }
+    public get permissions() { return this.djsGuildMember.permissions }
+    public get nickname() { return this.djsGuildMember.nickname }
+    public get username() { return this.djsGuildMember.user.username }
 
     public getPermissionLevel(): PermissionLevel
     {

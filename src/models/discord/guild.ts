@@ -1,13 +1,14 @@
 import { Guild as DjsGuild } from "discord.js"
 import Document from "../document";
 import BotGuildMember from "./guild-member";
+import Config from "../internal/config";
 
 export default class BotGuild extends Document
 {
     public readonly me: BotGuildMember
 
-    get commandPrefix() { return this.record.commandPrefix }
-    set commandPrefix(val: string) { this.record.commandPrefix = val }
+    public get name() { return this.djsGuild.name }
+    public get commandPrefix() { return this.record.commandPrefix }
 
     constructor(
         protected readonly djsGuild: DjsGuild)
