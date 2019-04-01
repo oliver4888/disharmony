@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/mongodb": "^3.1.22",
     "@types/node": "^11.12.2",
+    "discord.js": "^11.4.2",
     "mongodb": "^3.2.2",
     "nedb-core": "^3.0.6",
     "simple-file-writer": "^2.0.0",
