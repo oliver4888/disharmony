@@ -1,16 +1,16 @@
 import Command, { PermissionLevel } from "../commands/command"
 import Message from "../models/discord/message"
-import Client from "../client"
+import { IClient } from "../client"
 import { RichEmbed } from "discord.js"
 import BotGuildMember from "../models/discord/guild-member";
 
-function invoke(params: string[], message: Message, client: Client): Promise<void>
+function invoke(params: string[], message: Message, client: IClient): Promise<void>
 {
     message.reply(createHelpEmbed(client, message.guild.me, message.member))
     return Promise.resolve()
 }
 
-function createHelpEmbed(client: Client, me: BotGuildMember, member: BotGuildMember): RichEmbed
+function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMember): RichEmbed
 {
     const embed = new RichEmbed().setTitle(`__${client.name} help__`)
 

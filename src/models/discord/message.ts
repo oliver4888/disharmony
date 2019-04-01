@@ -1,7 +1,7 @@
 import { Message as DjsMessage, RichEmbed, TextChannel } from "discord.js"
 import BotGuild from "./guild";
 import BotGuildMember from "./guild-member";
-import Client from "../../client";
+import { IClient } from "../../client";
 
 export default class Message
 {
@@ -15,7 +15,7 @@ export default class Message
         await this.djsMessage.reply(response)
     }
 
-    public static async ask(client: Client, channelID: string, question: string, askee?: BotGuildMember, pingAskee: boolean = false): Promise<Message>
+    public static async ask(client: IClient, channelID: string, question: string, askee?: BotGuildMember, pingAskee: boolean = false): Promise<Message>
     {
         if (askee && pingAskee)
             question = askee.toString() + " " + question
