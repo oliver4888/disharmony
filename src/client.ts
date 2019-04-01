@@ -18,7 +18,9 @@ export interface IClient
     stats: Stats
 }
 
-export default class Client implements IClient
+type MessageConstructor<TMessage extends Message> = { new(djsMessage: DjsMessage): TMessage }
+
+export default class Client<TMessage extends Message> implements IClient
 {
     private client: DjsClient
 
@@ -27,8 +29,8 @@ export default class Client implements IClient
     public readonly onMessage = new SimpleEventDispatcher<Message>()
     public stats: Stats
 
-    get botID() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
-    get channels(): Map<string, DChannel> { return this.client.channels }
+    public get botID() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
+    public get channels(): Map<string, DChannel> { return this.client.channels }
 
     public async initialize(token: string)
     {
@@ -50,7 +52,7 @@ export default class Client implements IClient
         if (djsMessage.member.id === djsMessage.member.guild.me.id)
             return
 
-        const message = new Message(djsMessage)
+        const message = new this.messageCtor(djsMessage)
 
         try
         {
@@ -64,7 +66,8 @@ export default class Client implements IClient
         }
         catch (reason)
         {
-            message.reply(getRejectionMsg(reason))
+            if (reason in RejectionReason)
+                message.reply(getRejectionMsg(reason))
         }
 
         this.onMessage.dispatch(message)
@@ -77,7 +80,7 @@ export default class Client implements IClient
             logger.debugLog(msg)
     }
 
-    constructor(public name: string, public commands: Command[] = new Array<Command>(), dbConnectionString: string = "nedb://nedb-data")
+    constructor(public name: string, public commands: Command[] = new Array<Command>(), private messageCtor: MessageConstructor<TMessage>, dbConnectionString: string = "nedb://nedb-data")
     {
         this.client = new DjsClient({
             messageCacheMaxSize: 16,
