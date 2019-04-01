@@ -1,8 +1,8 @@
 import { PermissionLevel } from "../../commands/command";
 import { GuildMember } from "discord.js";
-import Serializable from "../serializable";
+import Document from "../document";
 
-export default class BotGuildMember extends Serializable
+export default class BotGuildMember extends Document
 {
     get permissions() { return this.guildMember.permissions }
     get nickname() { return this.guildMember.nickname }
@@ -19,8 +19,8 @@ export default class BotGuildMember extends Serializable
     }
 
     constructor(
-        private guildMember: GuildMember)
+        protected readonly djsGuildMember: GuildMember)
     {
-        super()
+        super(djsGuildMember.id)
     }
 }

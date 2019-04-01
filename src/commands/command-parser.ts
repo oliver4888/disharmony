@@ -19,7 +19,7 @@ export default async function getCommandInvoker(client: IClient, message: Messag
         {
             try
             {
-                const out = await command.invoke(details.params, message, disharmonyClient);
+                await message.guild.loadDocument()
                 const out = await command.invoke(details.params, message, client);
                 message.guild.save();
                 return out as string;

@@ -1,7 +1,7 @@
 import { Test, AsyncTest, Expect, Setup } from "alsatian"
 import { Mock, It, Times, IMock } from "typemoq"
 import { IDbClient } from "../database/db-client";
-import Serializable from "./serializable";
+import Document from "./document";
 
 export class SerializableTests
 {
@@ -18,12 +18,11 @@ export class SerializableTests
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
-        class Derived extends Serializable
+        class Derived extends Document
         {
             constructor()
             {
-                super(dbClientObject)
-                this.id = "id"
+                super("id", dbClientObject)
                 this.record = { a: 1 }
             }
         }
@@ -40,12 +39,11 @@ export class SerializableTests
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
-        class Derived extends Serializable
+        class Derived extends Document
         {
             constructor()
             {
-                super(dbClientObject)
-                this.id = "id"
+                super("id", dbClientObject)
                 this.record = { a: 1 }
             }
         }
@@ -62,10 +60,10 @@ export class SerializableTests
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
-        class Derived extends Serializable
+        class Derived extends Document
         {
             get exposedRecord() { return this.record }
-            constructor() { super(dbClientObject) }
+            constructor() { super("id", dbClientObject) }
         }
 
         this.dbClient
@@ -74,7 +72,7 @@ export class SerializableTests
 
         //ACT
         const sut = new Derived()
-        await sut.loadRecord("id")
+        await sut.loadDocument()
 
         //ASSERT
         Expect(sut.exposedRecord).toEqual({ a: 1 })
@@ -85,10 +83,10 @@ export class SerializableTests
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
-        class Derived extends Serializable
+        class Derived extends Document
         {
             get exposedRecord() { return this.record }
-            constructor() { super(dbClientObject) }
+            constructor() { super("id", dbClientObject) }
         }
 
         this.dbClient
@@ -97,7 +95,7 @@ export class SerializableTests
 
         //ACT
         const sut = new Derived()
-        await sut.loadRecord("id")
+        await sut.loadDocument()
 
         //ASSERT
         Expect(sut.exposedRecord).toEqual({})

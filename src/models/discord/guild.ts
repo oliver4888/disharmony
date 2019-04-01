@@ -1,8 +1,8 @@
 import { Guild as DjsGuild } from "discord.js"
-import Serializable from "../serializable";
+import Document from "../document";
 import BotGuildMember from "./guild-member";
 
-export default class BotGuild extends Serializable
+export default class BotGuild extends Document
 {
     public readonly me: BotGuildMember
 
@@ -10,9 +10,9 @@ export default class BotGuild extends Serializable
     set commandPrefix(val: string) { this.record.commandPrefix = val }
 
     constructor(
-        private readonly djsGuild: DjsGuild)
+        protected readonly djsGuild: DjsGuild)
     {
-        super()
-        this.me = new BotGuildMember(this.djsGuild.me)
+        super(djsGuild.id)
+        this.me = new BotGuildMember(djsGuild.me)
     }
 }

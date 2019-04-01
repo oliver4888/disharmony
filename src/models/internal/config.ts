@@ -1,6 +1,6 @@
-import Serializable from "../serializable";
+import Document from "../document"
 
-export default class Config extends Serializable
+export default class Config extends Document
 {
     [index: string]: any
     public readonly id: string = "config"
