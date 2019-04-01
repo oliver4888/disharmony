@@ -41,7 +41,6 @@ export default class Message
     constructor(
         private djsMessage: DjsMessage)
     {
-        //todo inject record
         this.guild = new BotGuild(this.djsMessage.guild)
         this.member = new BotGuildMember(this.djsMessage.member)
     }
