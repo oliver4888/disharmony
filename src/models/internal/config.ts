@@ -3,6 +3,6 @@ import Document from "../document"
 export default class Config extends Document
 {
     [index: string]: any
-    public readonly id: string = "config"
-    public askTimeoutMs: number
+    public get askTimeoutMs() { return this.record.askTimeoutMs }
+    public set askTimeoutMs(value: number) { this.record.askTimeoutMs = value }
 }

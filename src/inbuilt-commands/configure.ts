@@ -4,14 +4,17 @@ import Config from "../models/internal/config"
 
 async function invoke(params: string[], message: Message)
 {
-    const config = await new Config().loadRecord(message.guild.id)
+    const config = await new Config("config");
+    config.loadDocument()
 
-    if (!isNaN(params[1] as any))
-        config[params[0]] = Number(params[1])
+    if (params[0] in config)
+        // convert to a Number if value is number-y
+        config[params[0]] = !isNaN(params[1] as any) ? Number(params[1]) : params[1]
     else
-        config[params[0]] = params[1]
+        throw "Unknown config key"
 
     config.save()
+    return `Updated value for key ${params[0]}`
 }
 
 module.exports = new Command(
