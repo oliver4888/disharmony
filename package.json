@@ -4,6 +4,8 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "build-debug": "./node_modules/.bin/tsc --sourceMap",
     "test": "./node_modules/.bin/ts-node ./test-runner.ts"
   },
   "repository": {
