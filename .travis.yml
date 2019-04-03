@@ -1,0 +1,19 @@
+language: node_js
+
+node_js:
+  - lts/*
+
+before_script:
+  - npm run test
+
+script:
+  - npm run build
+
+deploy:
+  provider: npm
+  email: benji7425@outlook.com
+  api_key: $NPM_TOKEN
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
