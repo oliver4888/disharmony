@@ -31,7 +31,7 @@ export class SerializableTests
         new Derived().save()
 
         //ASSERT
-        this.dbClient.verify(x => x.upsertOne("Derived", { _id: "id" }, { a: 1 }), Times.once())
+        this.dbClient.verify(x => x.upsertOne("Derived", { _id: "id" }, { _id: "id", a: 1 }), Times.once())
     }
 
     @Test()
@@ -79,7 +79,7 @@ export class SerializableTests
     }
 
     @AsyncTest()
-    public async serializable_record_set_to_empty_object_if_error_returned_when_serializable_loads_record()
+    public async load_document_errors_if_error_returned_when_serializable_loads_record()
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
@@ -95,9 +95,8 @@ export class SerializableTests
 
         //ACT
         const sut = new Derived()
-        await sut.loadDocument()
 
         //ASSERT
-        Expect(sut.exposedRecord).toEqual({})
+        Expect(async () => await sut.loadDocument()).toThrowAsync()
     }
 }
