@@ -11,7 +11,7 @@ script:
 
 deploy:
   provider: npm
-  email: benji7425@outlook.com
+  email: benji7425@pm.me
   api_key: $NPM_TOKEN
   skip_cleanup: true
   on:
