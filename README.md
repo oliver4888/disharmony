@@ -1,4 +1,6 @@
-[![NPM](https://nodei.co/npm/disharmony.png?compact=true)](https://nodei.co/npm/disharmony/) [![Build Status](https://travis-ci.com/benji7425/disharmony.svg?branch=master)](https://travis-ci.com/benji7425/disharmony)
+[![Build Status](https://travis-ci.com/benji7425/disharmony.svg?branch=master)](https://travis-ci.com/benji7425/disharmony)
+
+[![NPM](https://nodei.co/npm/disharmony.png?compact=true)](https://nodei.co/npm/disharmony/)
 
 # Title
 A Discord bot framework built on top of [discord.js](https://github.com/discordjs/discord.js) with command parsing and basic Mongo-like database integration
@@ -49,7 +51,7 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 - [TypeMoq](https://github.com/florinn/typemoq) - *mocking library*
 
 ## Documentation
-- See [/docs](./docs)
+- See [docs/](./docs)
 
 ## Versioning
 [SemVer](http://semver.org/) is used for versioning; view available versions on the [tags page](https://github.com/your/project/tags)
