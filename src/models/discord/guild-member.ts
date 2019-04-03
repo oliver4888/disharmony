@@ -18,6 +18,8 @@ export default class BotGuildMember extends Document
             return PermissionLevel.Anyone
     }
 
+    public toString(): string { return this.djsGuildMember.toString() }
+
     constructor(
         protected readonly djsGuildMember: GuildMember)
     {
