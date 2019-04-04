@@ -1,8 +1,8 @@
-import Message from "../models/discord/message"
+import BotMessage from "../models/discord/message"
 import Command, { PermissionLevel } from "../commands/command"
 import Config from "../models/internal/config"
 
-async function invoke(params: string[], message: Message)
+async function invoke(params: string[], message: BotMessage)
 {
     const config = await new Config("config");
     config.loadDocument()

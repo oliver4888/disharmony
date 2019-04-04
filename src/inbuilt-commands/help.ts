@@ -1,10 +1,10 @@
 import Command, { PermissionLevel } from "../commands/command"
-import Message from "../models/discord/message"
+import BotMessage from "../models/discord/message"
 import { IClient } from "../client"
 import { RichEmbed } from "discord.js"
 import BotGuildMember from "../models/discord/guild-member";
 
-function invoke(params: string[], message: Message, client: IClient): Promise<void>
+function invoke(params: string[], message: BotMessage, client: IClient): Promise<void>
 {
     message.reply(createHelpEmbed(client, message.guild.me, message.member))
     return Promise.resolve()

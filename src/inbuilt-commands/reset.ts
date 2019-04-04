@@ -1,12 +1,12 @@
-import Message from "../models/discord/message"
+import BotMessage from "../models/discord/message"
 import { IClient } from "../client"
 import Command, { PermissionLevel } from "../commands/command"
 
-async function invoke(_: string[], message: Message, client: IClient)
+async function invoke(_: string[], message: BotMessage, client: IClient)
 {
     return new Promise<string>(async (resolve, reject) =>
     {
-        const response = await Message.ask(
+        const response = await BotMessage.ask(
             client, message.channelId,
             "Are you sure you want to delete all the data for this server? (yes/no)",
             message.member, true)

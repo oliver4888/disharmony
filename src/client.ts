@@ -6,7 +6,7 @@ import inbuiltCommands from "./inbuilt-commands"
 import Stats from "./models/internal/stats";
 import logger from "./utilities/logger";
 import { initialize as initializeDb } from "./database/db-client";
-import Message from "./models/discord/message";
+import BotMessage from "./models/discord/message";
 
 export interface IClient
 {
@@ -14,19 +14,19 @@ export interface IClient
     readonly botID: string
     readonly commands: Command[]
     readonly channels: Map<string, DChannel>
-    readonly onMessage: ISimpleEvent<Message>
+    readonly onMessage: ISimpleEvent<BotMessage>
     stats: Stats
 }
 
-type MessageConstructor<TMessage extends Message> = { new(djsMessage: DjsMessage): TMessage }
+type MessageConstructor<TMessage extends BotMessage> = { new(djsMessage: DjsMessage): TMessage }
 
-export default class Client<TMessage extends Message> implements IClient
+export default class Client<TMessage extends BotMessage> implements IClient
 {
     private client: DjsClient
 
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
-    public readonly onMessage = new SimpleEventDispatcher<Message>()
+    public readonly onMessage = new SimpleEventDispatcher<BotMessage>()
     public stats: Stats
 
     public get botID() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }

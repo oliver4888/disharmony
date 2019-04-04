@@ -1,8 +1,8 @@
 import { IClient } from "../client"
 import Command from "./command"
-import Message from "../models/discord/message";
+import BotMessage from "../models/discord/message";
 
-export default async function getCommandInvoker(client: IClient, message: Message): Promise<((disharmonyClient: IClient, message: Message) => Promise<string>) | null>
+export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
     const details = getCommandDetails(message, client)
     if (!details) return null
@@ -15,7 +15,7 @@ export default async function getCommandInvoker(client: IClient, message: Messag
     else if (details.params.length < (command.syntax.match(/ [^ \[]+/g) || []).length)
         throw RejectionReason.IncorrectSyntax
     else
-        return async (client: IClient, message: Message) =>
+        return async (client: IClient, message: BotMessage) =>
         {
             try
             {
@@ -28,12 +28,12 @@ export default async function getCommandInvoker(client: IClient, message: Messag
         }
 }
 
-function isUserPermitted(message: Message, command: Command)
+function isUserPermitted(message: BotMessage, command: Command)
 {
     return message.member.getPermissionLevel() >= command.permissionLevel
 }
 
-function getCommandDetails(message: Message, client: IClient)
+function getCommandDetails(message: BotMessage, client: IClient)
 {
     //if no command prefix exists for this guild command criteria is bot mention
     const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botID}>`

@@ -1,8 +1,8 @@
-import Message from "../models/discord/message"
+import BotMessage from "../models/discord/message"
 import { IClient } from "../client"
 import Command, { PermissionLevel } from "../commands/command"
 
-function invoke(_: string[], __: Message, client: IClient)
+function invoke(_: string[], __: BotMessage, client: IClient)
 {
     return Promise.resolve(
         `
