@@ -32,7 +32,7 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 
 ## Development
 ### Prerequisites
-- [NodeJS v10](https://nodejs.org/en/) installed
+- [NodeJS v11](https://nodejs.org/en/) installed (latest)
 
 ### Setup
 - `npm install --only dev` to install dependencies
