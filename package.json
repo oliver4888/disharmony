@@ -7,7 +7,7 @@
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "build-debug": "./node_modules/.bin/tsc --sourceMap",
-    "test": "./node_modules/.bin/ts-node ./test-runner.ts"
+    "test": "node ./test-runner.js"
   },
   "repository": {
     "type": "git",
@@ -31,7 +31,6 @@
     "@types/mongodb": "^3.1.22",
     "@types/node": "^11.12.2",
     "alsatian": "^2.4.0",
-    "ts-node": "^8.0.3",
     "typemoq": "^2.1.0",
     "typescript": "^3.4.1"
   },
