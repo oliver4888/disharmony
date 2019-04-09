@@ -2,8 +2,8 @@
   "name": "disharmony",
   "version": "0.4.1",
   "description": "Discord bot framework built on discord.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "build-debug": "./node_modules/.bin/tsc --sourceMap",
@@ -36,7 +36,7 @@
     "typescript": "^3.4.1"
   },
   "files": [
-    "/lib",
+    "/dist",
     "!*.map",
     "!*.spec.*"
   ],
