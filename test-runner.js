@@ -1,10 +1,10 @@
-import { TapBark } from "tap-bark";
-import { TestSet, TestRunner } from "alsatian";
+const { TapBark } = require("tap-bark");
+const { TestSet, TestRunner } = require("alsatian");
 
 (async () =>
 {
     const testSet = TestSet.create();
-    testSet.addTestsFromFiles('./src/**/*.spec.ts');
+    testSet.addTestsFromFiles('./dist/**/*.spec.js');
 
     const testRunner = new TestRunner();
 

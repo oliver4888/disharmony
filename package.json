@@ -2,12 +2,12 @@
   "name": "disharmony",
   "version": "0.4.1",
   "description": "Discord bot framework built on discord.js",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "build-debug": "./node_modules/.bin/tsc --sourceMap",
-    "test": "./node_modules/.bin/ts-node ./test-runner.ts"
+    "test": "node ./test-runner.js"
   },
   "repository": {
     "type": "git",
@@ -31,12 +31,11 @@
     "@types/mongodb": "^3.1.22",
     "@types/node": "^11.12.2",
     "alsatian": "^2.4.0",
-    "ts-node": "^8.0.3",
     "typemoq": "^2.1.0",
     "typescript": "^3.4.1"
   },
   "files": [
-    "/lib",
+    "/dist",
     "!*.map",
     "!*.spec.*"
   ],

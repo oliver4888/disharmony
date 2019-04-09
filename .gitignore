@@ -1,6 +1,5 @@
 .vscode/[!.]*.json
-# !.vscode/.*
-lib/
+dist/
 token*
 nedb-data
 

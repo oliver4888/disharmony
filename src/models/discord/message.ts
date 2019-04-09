@@ -3,7 +3,7 @@ import BotGuild from "./guild";
 import BotGuildMember from "./guild-member";
 import { IClient } from "../../client";
 
-export default class Message
+export default class BotMessage
 {
     readonly guild: BotGuild
     readonly member: BotGuildMember
@@ -15,7 +15,7 @@ export default class Message
         await this.djsMessage.reply(response)
     }
 
-    public static async ask(client: IClient, channelID: string, question: string, askee?: BotGuildMember, pingAskee: boolean = false): Promise<Message>
+    public static async ask(client: IClient, channelID: string, question: string, askee?: BotGuildMember, pingAskee: boolean = false): Promise<BotMessage>
     {
         if (askee && pingAskee)
             question = askee.toString() + " " + question
@@ -23,9 +23,9 @@ export default class Message
         const channel = client.channels.get(channelID) as TextChannel
         await channel.send(question)
 
-        return new Promise<Message>((resolve) =>
+        return new Promise<BotMessage>((resolve) =>
         {
-            let resolver: (msg: Message) => void
+            let resolver: (msg: BotMessage) => void
             resolver = msg =>
             {
                 if (!askee || msg.member.id === askee.id)

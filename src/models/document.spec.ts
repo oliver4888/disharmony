@@ -3,7 +3,7 @@ import { Mock, It, Times, IMock } from "typemoq"
 import { IDbClient } from "../database/db-client";
 import Document from "./document";
 
-export class SerializableTests
+export class DocumentTests
 {
     public dbClient: IMock<IDbClient>
 

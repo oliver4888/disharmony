@@ -36,7 +36,7 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 
 ### Setup
 - `npm install --only dev` to install dependencies
-- `tsc` to compile JS into /lib
+- `tsc` to compile JS into dist/
 
 ### Tests
 - Written in TypeScript using [Alsatian](https://github.com/alsatian-test/alsatian)
