@@ -7,6 +7,8 @@ import Stats from "./models/internal/stats";
 import logger from "./utilities/logger";
 import { initialize as initializeDb } from "./database/db-client";
 import BotMessage from "./models/discord/message";
+
+process.env.MAX_WORKERS = "2"
 import * as MicroJob from "microjob"
 
 export interface IClient
