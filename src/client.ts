@@ -9,9 +9,6 @@ import { initialize as initializeDb } from "./database/db-client";
 import BotMessage from "./models/discord/message";
 import BotGuildMember from "./models/discord/guild-member";
 
-process.env.MAX_WORKERS = "2"
-import * as MicroJob from "microjob"
-
 export interface IClient
 {
     readonly name: string
@@ -27,7 +24,6 @@ type MessageConstructor<TMessage extends BotMessage> = { new(djsMessage: DjsMess
 export default class Client<TMessage extends BotMessage> implements IClient
 {
     private client: DjsClient
-    private jobsReady: boolean = false
 
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
@@ -38,23 +34,8 @@ export default class Client<TMessage extends BotMessage> implements IClient
     public get botId() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
     public get channels(): Map<string, DjsChannel> { return this.client.channels }
 
-    public get runWorkerJob()
-    {
-        if (!this.useJobs)
-            return () => Promise.reject("Jobs cannot be used unless enabled in the Client constructor")
-        if (!this.jobsReady)
-            return () => Promise.reject("Initialization not complete, jobs not available (did you await client.initialize?)")
-        return MicroJob.job
-    }
-
     public async initialize(token: string)
     {
-        if (this.useJobs)
-        {
-            await MicroJob.start();
-            this.jobsReady = true
-        }
-
         this.client.on("message", dMsg => this.handleMessage(dMsg))
         this.client.on("debug", this.onDebug)
         this.client.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
@@ -102,13 +83,7 @@ export default class Client<TMessage extends BotMessage> implements IClient
             logger.debugLog(msg)
     }
 
-    constructor(
-        public name: string,
-        public commands: Command[],
-        private messageCtor: MessageConstructor<TMessage>,
-        private useJobs: boolean = false,
-        dbConnectionString: string = "nedb://nedb-data"
-    )
+    constructor(public name: string, public commands: Command[] = new Array<Command>(), private messageCtor: MessageConstructor<TMessage>, dbConnectionString: string = "nedb://nedb-data")
     {
         this.client = new DjsClient({
             messageCacheMaxSize: 16,
