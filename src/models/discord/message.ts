@@ -9,6 +9,7 @@ export default class BotMessage
     readonly member: BotGuildMember
     public get content() { return this.djsMessage.content }
     public get channelId() { return this.djsMessage.channel.id }
+    public get mentions() { return this.djsMessage.mentions }
 
     public async reply(response: string | RichEmbed)
     {
