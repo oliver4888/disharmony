@@ -101,9 +101,9 @@ export default class Client<TMessage extends BotMessage> implements IClient
 
     constructor(
         public name: string,
-        public commands: Command[] = new Array<Command>(),
+        public commands: Command[],
         private messageCtor: MessageConstructor<TMessage>,
-        private useJobs: boolean,
+        private useJobs: boolean = false,
         dbConnectionString: string = "nedb://nedb-data"
     )
     {
