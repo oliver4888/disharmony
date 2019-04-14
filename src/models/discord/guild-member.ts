@@ -8,6 +8,14 @@ export default class BotGuildMember extends Document
     public get nickname() { return this.djsGuildMember.nickname }
     public get username() { return this.djsGuildMember.user.username }
 
+    public addRole(snowflake: string) { return this.djsGuildMember.addRole(snowflake) }
+    public removeRole(snowflake: string) { return this.djsGuildMember.removeRole(snowflake) }
+
+    public hasRole(snowflake: string): boolean
+    {
+        return !!this.djsGuildMember.roles.get(snowflake)
+    }
+
     public getPermissionLevel(): PermissionLevel
     {
         if (this.id === "117966411548196870")
