@@ -7,6 +7,7 @@ import Stats from "./models/internal/stats";
 import logger from "./utilities/logger";
 import { initialize as initializeDb } from "./database/db-client";
 import BotMessage from "./models/discord/message";
+import BotGuildMember from "./models/discord/guild-member";
 
 process.env.MAX_WORKERS = "2"
 import * as MicroJob from "microjob"
@@ -31,6 +32,7 @@ export default class Client<TMessage extends BotMessage> implements IClient
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
     public readonly onMessage = new SimpleEventDispatcher<TMessage>()
+    public readonly onVoiceStateUpdate = new SimpleEventDispatcher<BotGuildMember>()
     public stats: Stats
 
     public get botId() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
@@ -56,6 +58,7 @@ export default class Client<TMessage extends BotMessage> implements IClient
         this.client.on("message", dMsg => this.handleMessage(dMsg))
         this.client.on("debug", this.onDebug)
         this.client.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
+        this.client.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
 
         //remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.client.login(token.replace(/\r?\n|\r/g, ""))
