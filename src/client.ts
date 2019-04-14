@@ -83,7 +83,12 @@ export default class Client<TMessage extends BotMessage> implements IClient
             logger.debugLog(msg)
     }
 
-    constructor(public name: string, public commands: Command[] = new Array<Command>(), private messageCtor: MessageConstructor<TMessage>, dbConnectionString: string = "nedb://nedb-data")
+    constructor(
+        public name: string,
+        public commands: Command[],
+        private messageCtor: MessageConstructor<TMessage>,
+        dbConnectionString: string = "nedb://nedb-data"
+    )
     {
         this.client = new DjsClient({
             messageCacheMaxSize: 16,
