@@ -1,4 +1,4 @@
-import { Client as DjsClient, Message as DjsMessage, Channel as DChannel } from "discord.js"
+import { Client as DjsClient, Message as DjsMessage, Channel as DjsChannel, Guild as DjsGuild } from "discord.js"
 import { SimpleEventDispatcher, SignalDispatcher, ISimpleEvent } from "strongly-typed-events"
 import Command from "./commands/command"
 import getCommandInvoker, { RejectionReason } from "./commands/command-parser"
@@ -14,9 +14,9 @@ import * as MicroJob from "microjob"
 export interface IClient
 {
     readonly name: string
-    readonly botID: string
+    readonly botId: string
     readonly commands: Command[]
-    readonly channels: Map<string, DChannel>
+    readonly channels: Map<string, DjsChannel>
     readonly onMessage: ISimpleEvent<BotMessage>
     stats: Stats
 }
@@ -30,11 +30,11 @@ export default class Client<TMessage extends BotMessage> implements IClient
 
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
-    public readonly onMessage = new SimpleEventDispatcher<BotMessage>()
+    public readonly onMessage = new SimpleEventDispatcher<TMessage>()
     public stats: Stats
 
-    public get botID() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
-    public get channels(): Map<string, DChannel> { return this.client.channels }
+    public get botId() { return /[0-9]{18}/.exec(this.client.user.toString())![0] }
+    public get channels(): Map<string, DjsChannel> { return this.client.channels }
 
     public get runWorkerJob()
     {

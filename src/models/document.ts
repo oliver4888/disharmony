@@ -9,7 +9,7 @@ export default abstract class Document extends Record
     public save()
     {
         this.record._id = this.id
-        this.dbClient.upsertOne(this.constructor.name, { _id: this.id }, this.record)
+        this.dbClient.upsertOne(this.constructor.name, { _id: this.id }, this.toRecord())
     }
 
     public deleteRecord()

@@ -1,7 +1,6 @@
 import { Guild as DjsGuild } from "discord.js"
 import Document from "../document";
 import BotGuildMember from "./guild-member";
-import Config from "../internal/config";
 
 export default class BotGuild extends Document
 {

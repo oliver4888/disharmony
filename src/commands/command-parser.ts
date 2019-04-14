@@ -36,7 +36,7 @@ function isUserPermitted(message: BotMessage, command: Command)
 function getCommandDetails(message: BotMessage, client: IClient)
 {
     //if no command prefix exists for this guild command criteria is bot mention
-    const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botID}>`
+    const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botId}>`
     const regexp = new RegExp(`${commandPrefix} ?([^ ]+)(?: ([^ ].*))?`)
     const result = regexp.exec(message.content)
     return !result ? null :
