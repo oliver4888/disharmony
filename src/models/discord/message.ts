@@ -2,18 +2,19 @@ import { Message as DjsMessage, RichEmbed, TextChannel } from "discord.js"
 import BotGuild from "./guild";
 import BotGuildMember from "./guild-member";
 import { IClient } from "../../client";
+import IDjsExtension from "./djs-extension";
 
-export default class BotMessage
+export default class BotMessage implements IDjsExtension<DjsMessage>
 {
     readonly guild: BotGuild
     readonly member: BotGuildMember
-    public get content() { return this.djsMessage.content }
-    public get channelId() { return this.djsMessage.channel.id }
-    public get mentions() { return this.djsMessage.mentions }
+    public get content() { return this.djs.content }
+    public get channelId() { return this.djs.channel.id }
+    public get mentions() { return this.djs.mentions }
 
     public async reply(response: string | RichEmbed)
     {
-        await this.djsMessage.reply(response)
+        await this.djs.reply(response)
     }
 
     public static async ask(client: IClient, channelID: string, question: string, askee?: BotGuildMember, pingAskee: boolean = false): Promise<BotMessage>
@@ -40,9 +41,9 @@ export default class BotMessage
     }
 
     constructor(
-        private djsMessage: DjsMessage)
+        public readonly djs: DjsMessage)
     {
-        this.guild = new BotGuild(this.djsMessage.guild)
-        this.member = new BotGuildMember(this.djsMessage.member)
+        this.guild = new BotGuild(this.djs.guild)
+        this.member = new BotGuildMember(this.djs.member)
     }
 }

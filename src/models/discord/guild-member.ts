@@ -1,19 +1,20 @@
 import { PermissionLevel } from "../../commands/command";
-import { GuildMember } from "discord.js";
+import { GuildMember as DjsGuildMember } from "discord.js";
 import Document from "../document";
+import IDjsExtension from "./djs-extension";
 
-export default class BotGuildMember extends Document
+export default class BotGuildMember extends Document implements IDjsExtension<DjsGuildMember>
 {
-    public get permissions() { return this.djsGuildMember.permissions }
-    public get nickname() { return this.djsGuildMember.nickname }
-    public get username() { return this.djsGuildMember.user.username }
+    public get permissions() { return this.djs.permissions }
+    public get nickname() { return this.djs.nickname }
+    public get username() { return this.djs.user.username }
 
-    public addRole(snowflake: string) { return this.djsGuildMember.addRole(snowflake) }
-    public removeRole(snowflake: string) { return this.djsGuildMember.removeRole(snowflake) }
+    public addRole(snowflake: string) { return this.djs.addRole(snowflake) }
+    public removeRole(snowflake: string) { return this.djs.removeRole(snowflake) }
 
     public hasRole(snowflake: string): boolean
     {
-        return !!this.djsGuildMember.roles.get(snowflake)
+        return !!this.djs.roles.get(snowflake)
     }
 
     public getPermissionLevel(): PermissionLevel
@@ -26,11 +27,11 @@ export default class BotGuildMember extends Document
             return PermissionLevel.Anyone
     }
 
-    public toString(): string { return this.djsGuildMember.toString() }
+    public toString(): string { return this.djs.toString() }
 
     constructor(
-        protected readonly djsGuildMember: GuildMember)
+        public readonly djs: DjsGuildMember)
     {
-        super(djsGuildMember.id)
+        super(djs.id)
     }
 }
