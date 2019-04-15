@@ -7,7 +7,7 @@ const debugLogWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
 function doLog(message: string, error: boolean, debug: boolean)
 {
     const prefix = error ? "[ERROR]" : debug ? "[DEBUG]" : "[INFO]"
-    let logStr = [`[${new Date().toUTCString()}]`, prefix, message].join(" ")
+    let logStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
 
     if (!debug)
         if (error)
