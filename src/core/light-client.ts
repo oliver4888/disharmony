@@ -1,4 +1,4 @@
-import getDbClient, { initialize as initializeDb, IDbClient } from "../database/db-client";
+import getDbClient, { initializeDb, IDbClient } from "../database/db-client";
 import { Client as DjsClient } from "discord.js";
 import Logger from "../utilities/logger";
 
