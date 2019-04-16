@@ -1,6 +1,6 @@
 import Command, { PermissionLevel } from "../commands/command"
 import BotMessage from "../models/discord/message"
-import { IClient } from "../client"
+import { IClient } from "../core/client"
 import { RichEmbed } from "discord.js"
 import BotGuildMember from "../models/discord/guild-member";
 
@@ -12,7 +12,7 @@ function invoke(params: string[], message: BotMessage, client: IClient): Promise
 
 function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMember): RichEmbed
 {
-    const embed = new RichEmbed().setTitle(`__${client.name} help__`)
+    const embed = new RichEmbed().setTitle(`__${client.botName} help__`)
 
     for (let command of client.commands.filter(x => x.permissionLevel <= member.getPermissionLevel()))
         embed.addField(command.name,

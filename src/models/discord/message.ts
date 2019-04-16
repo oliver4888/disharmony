@@ -1,7 +1,7 @@
 import { Message as DjsMessage, RichEmbed, TextChannel } from "discord.js"
 import BotGuild from "./guild";
 import BotGuildMember from "./guild-member";
-import { IClient } from "../../client";
+import { IClient } from "../../core/client";
 import IDjsExtension from "./djs-extension";
 
 export default class BotMessage implements IDjsExtension<DjsMessage>

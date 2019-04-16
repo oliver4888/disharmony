@@ -1,4 +1,4 @@
-import { IClient } from "../client"
+import { IClient } from "../core/client"
 import Command from "./command"
 import BotMessage from "../models/discord/message";
 

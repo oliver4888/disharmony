@@ -1,5 +1,5 @@
 import BotMessage from "../models/discord/message"
-import { IClient } from "../client"
+import { IClient } from "../core/client"
 import Command, { PermissionLevel } from "../commands/command"
 
 async function invoke(_: string[], message: BotMessage, client: IClient)
