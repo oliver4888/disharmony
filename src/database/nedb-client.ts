@@ -1,4 +1,4 @@
-///<reference path="../declarations/nedb-core.d.ts"/>
+///<reference path="../types/nedb-core.d.ts"/>
 
 import * as Datastore from "nedb-core"
 import { join } from "path"

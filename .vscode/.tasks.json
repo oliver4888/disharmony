@@ -30,7 +30,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "./node_modules/.bin/ts-node --files test-runner.ts",
+            "command": "npm run test",
             "group": {
                 "kind": "test",
                 "isDefault": true

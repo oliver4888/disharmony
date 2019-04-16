@@ -1,5 +1,5 @@
 import BotMessage from "../models/discord/message"
-import { IClient } from "../client"
+import { IClient } from "../core/client"
 
 // allow any type messages so implementers can override Message as for some reason derived types aren't allowed
 type InvokeFunc = (params: string[], message: BotMessage | any, client: IClient) => Promise<string | void>

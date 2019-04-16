@@ -19,7 +19,7 @@ export interface IDbClient
     isMongo: boolean
 }
 
-export function initialize(connectionString: string)
+export function initializeDb(connectionString: string)
 {
     let protocol = connectionString.match(/^.+:\/\//)![0]
 
