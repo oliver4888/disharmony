@@ -12,7 +12,7 @@ function invoke(params: string[], message: BotMessage, client: IClient): Promise
 
 function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMember): RichEmbed
 {
-    const embed = new RichEmbed().setTitle(`__${client.botName} help__`)
+    const embed = new RichEmbed().setTitle(`__${client.serviceName} help__`)
 
     for (let command of client.commands.filter(x => x.permissionLevel <= member.getPermissionLevel()))
         embed.addField(command.name,

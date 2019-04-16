@@ -11,6 +11,7 @@ import LightClient, { ILightClient } from "./light-client";
 
 export interface IClient extends ILightClient
 {
+    readonly serviceName: string
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
     readonly onMessage: ISimpleEvent<BotMessage>
@@ -27,15 +28,15 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     public readonly onVoiceStateUpdate = new SimpleEventDispatcher<BotGuildMember>()
     public stats: Stats
 
-    public get channels(): Map<string, DjsChannel> { return this.djsClient.channels }
+    public get channels(): Map<string, DjsChannel> { return this.djs.channels }
 
     public async initialize(token: string)
     {
         super.initialize(token)
 
-        this.djsClient.on("message", dMsg => this.handleMessage(dMsg))
-        this.djsClient.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
-        this.djsClient.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
+        this.djs.on("message", dMsg => this.handleMessage(dMsg))
+        this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
+        this.djs.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
         this.commands = this.commands.concat(inbuiltCommands)
     }
 
@@ -67,14 +68,14 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     }
 
     constructor(
-        botName: string,
-        dbConnectionString: string = "nedb://nedb-data",
+        public serviceName: string,
         public commands: Command[],
-        private messageCtor: MessageConstructor<TMessage>
+        private messageCtor: MessageConstructor<TMessage>,
+        dbConnectionString?: string,
     )
     {
-        super(botName, dbConnectionString)
-        this.stats = new Stats(this.djsClient)
+        super(dbConnectionString)
+        this.stats = new Stats(this.djs)
     }
 }
 
