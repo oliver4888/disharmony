@@ -8,12 +8,8 @@
             "type": "node",
             "request": "launch",
             "name": "Debug tests",
-            "runtimeArgs": [
-                "-r",
-                "ts-node/register"
-            ],
             "args": [
-                "${workspaceFolder}/test-runner.ts"
+                "${workspaceFolder}/test-runner.js"
             ]
         }
     ]
