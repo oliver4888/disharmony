@@ -1,4 +1,18 @@
 # Changelog
+## v0.6.0
+### Added
+- LightClient which provides just a discord.js client and a database client
+- VoiceStateUpdate event (for [Activity Monitor](https://github.com/benji7425/discord-bot-activity-monitor))
+- BotGuildMember now has role managing methods
+- Log messages now indicate the process ID that sent them
+
+### Updated
+- Removed [MicroJob](https://github.com/wilk/microjob) integration from last version
+    - [Cluster](https://nodejs.org/api/cluster.html) seems to more suit my needs at present
+
+### Fixed
+- Fixed database serialization not invoking toRecord method
+
 ## v0.5.0
 ### Added
 - Threaded job support via [MicroJob](https://github.com/wilk/microjob)
