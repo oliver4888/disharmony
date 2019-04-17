@@ -1,4 +1,3 @@
-///<reference path="../types/simple-file-writer.d.ts"/>
 import * as SimpleFileWriter from "simple-file-writer"
 
 const consoleLogWriter = new SimpleFileWriter(process.cwd() + "/console.log")

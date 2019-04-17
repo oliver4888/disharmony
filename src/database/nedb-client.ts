@@ -1,5 +1,3 @@
-///<reference path="../types/nedb-core.d.ts"/>
-
 import * as Datastore from "nedb-core"
 import { join } from "path"
 import { IDbClient } from "./db-client"
