@@ -1,4 +1,8 @@
 # Changelog
+## v0.6.1
+### Fixed
+- Fixed incorrect method of referencing local typings causing compilation issue for client projects
+
 ## v0.6.0
 ### Added
 - LightClient which provides just a discord.js client and a database client
