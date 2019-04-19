@@ -6,8 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "build-debug": "./node_modules/.bin/tsc --sourceMap",
-    "test": "node ./test-runner.js"
+    "test": "npm run build && node ./test-runner.js"
   },
   "repository": {
     "type": "git",
