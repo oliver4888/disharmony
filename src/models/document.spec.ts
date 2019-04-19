@@ -79,7 +79,7 @@ export class DocumentTests
     }
 
     @AsyncTest()
-    public async load_document_errors_if_error_returned_when_serializable_loads_record()
+    public async load_document_throws_if_error_returned_when_serializable_loads_record()
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
@@ -97,6 +97,6 @@ export class DocumentTests
         const sut = new Derived()
 
         //ASSERT
-        Expect(async () => await sut.loadDocument()).toThrowAsync()
+        await Expect(async () => await sut.loadDocument()).toThrowAsync()
     }
 }
