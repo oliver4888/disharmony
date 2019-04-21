@@ -40,7 +40,7 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 
 ### Tests
 - Written in TypeScript using [Alsatian](https://github.com/alsatian-test/alsatian)
-- `ts-node test-runner.ts`
+- Run with `npm test`
 
 ## Built With
 - [TypeScript](https://www.typescriptlang.org/) - *language*

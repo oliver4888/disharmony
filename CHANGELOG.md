@@ -1,4 +1,8 @@
 # Changelog
+## v0.6.2
+### Added
+- Added various unit tests
+
 ## v0.6.1
 ### Fixed
 - Fixed incorrect method of referencing local typings causing compilation issue for client projects
