@@ -5,10 +5,12 @@ import BotMessage from "../models/discord/message";
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
     const details = getCommandDetails(message, client)
-    if (!details) return null
+    if (!details)
+        return null
 
     const command = client.commands.find(x => x.syntax.startsWith(details.name))
-    if (!command) return null
+    if (!command)
+        return null
 
     if (!isUserPermitted(message, command))
         throw RejectionReason.MissingPermission

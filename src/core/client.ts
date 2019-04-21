@@ -1,13 +1,13 @@
 import { Message as DjsMessage, Channel as DjsChannel } from "discord.js"
 import { SimpleEventDispatcher, SignalDispatcher, ISimpleEvent } from "strongly-typed-events"
 import Command from "../commands/command"
-import getCommandInvoker, { RejectionReason } from "../commands/command-parser"
 import inbuiltCommands from "../inbuilt-commands"
 import Stats from "../models/internal/stats";
 import logger from "../utilities/logger";
 import BotMessage from "../models/discord/message";
 import BotGuildMember from "../models/discord/guild-member";
 import LightClient, { ILightClient } from "./light-client";
+import handleMessage from "./handle-message";
 
 export interface IClient extends ILightClient
 {
@@ -34,43 +34,21 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     {
         super.initialize(token)
 
-        this.djs.on("message", dMsg => this.handleMessage(dMsg))
+        this.djs.on("message", dMsg => handleMessage(this, dMsg))
         this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
         this.djs.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
         this.commands = this.commands.concat(inbuiltCommands)
     }
 
-    private async handleMessage(djsMessage: DjsMessage)
+    public dispatchMessage(message: TMessage)
     {
-        //ignore messages from self
-        if (djsMessage.member.id === djsMessage.member.guild.me.id)
-            return
-
-        const message = new this.messageCtor(djsMessage)
-
-        try
-        {
-            const commandInvoker = await getCommandInvoker(this, message)
-            if (commandInvoker)
-                commandInvoker(this, message).then(val =>
-                {
-                    if (val)
-                        message.reply(val)
-                })
-        }
-        catch (reason)
-        {
-            if (reason in RejectionReason)
-                message.reply(getRejectionMsg(reason))
-        }
-
         this.onMessage.dispatch(message)
     }
 
     constructor(
         public serviceName: string,
         public commands: Command[],
-        private messageCtor: MessageConstructor<TMessage>,
+        public messageCtor: MessageConstructor<TMessage>,
         dbConnectionString?: string,
     )
     {
@@ -79,13 +57,3 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     }
 }
 
-function getRejectionMsg(reason: RejectionReason)
-{
-    switch (reason)
-    {
-        case RejectionReason.MissingPermission:
-            return "You do not have permission to use this command."
-        case RejectionReason.IncorrectSyntax:
-            return "Incorrect syntax! See correct syntax with the `help` command."
-    }
-}
