@@ -2,7 +2,7 @@
 
 [![NPM](https://nodei.co/npm/disharmony.png?compact=true)](https://nodei.co/npm/disharmony/)
 
-# Title
+# Disharmony
 A Discord bot framework built on top of [discord.js](https://github.com/discordjs/discord.js) with command parsing and basic Mongo-like database integration
 
 ## Features
@@ -55,11 +55,6 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 
 ## Versioning
 [SemVer](http://semver.org/) is used for versioning; view available versions on the [tags page](https://github.com/your/project/tags)
-
-## Authors
-- [Benji7425](https://github.com/benji7425) - *Developer*
-
-You can also view the [contributors](https://github.com/your/project/contributors)
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
