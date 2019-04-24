@@ -1,4 +1,8 @@
 # Changelog
+## v0.6.3
+### Fixed
+- Fixed onReady event not firing
+
 ## v0.6.2
 ### Added
 - Added various unit tests
