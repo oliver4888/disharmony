@@ -34,6 +34,7 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     {
         super.initialize(token)
 
+        this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
         this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
         this.djs.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
