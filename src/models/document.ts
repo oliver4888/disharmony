@@ -6,15 +6,15 @@ export default abstract class Document extends Record
 {
     private dbClient: IDbClient
 
-    public save()
+    public async save()
     {
         this.record._id = this.id
-        this.dbClient.upsertOne(this.constructor.name, { _id: this.id }, this.toRecord())
+        await this.dbClient.upsertOne(this.constructor.name, { _id: this.id }, this.toRecord())
     }
 
-    public deleteRecord()
+    public async deleteRecord()
     {
-        this.dbClient.deleteOne(this.constructor.name, { _id: this.id })
+        await this.dbClient.deleteOne(this.constructor.name, { _id: this.id })
     }
 
     public async loadDocument()
