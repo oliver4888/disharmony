@@ -5,8 +5,8 @@ import BotMessage from "./models/discord/message";
 import Command, { PermissionLevel } from "./commands/command";
 import Logger from "./utilities/logger"
 import LightClient, { ILightClient } from "./core/light-client";
-import ClusterHelper from "./clustering/cluster-helper"
-import ClientWorker from "./clustering/client-worker";
+import WorkerClient from "./clustering/worker-client";
+import getWorker from "./clustering/fork-worker"
 
 export
 {
@@ -20,6 +20,6 @@ export
     Command,
     PermissionLevel,
     Logger,
-    ClientWorker,
-    ClusterHelper
+    WorkerClient,
+    getWorker as forkWorkerClient
 }

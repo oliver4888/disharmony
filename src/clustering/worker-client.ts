@@ -1,6 +1,6 @@
 import { LightClient } from "..";
 
-export default abstract class ClientWorker
+export default abstract class WorkerClient
 {
     protected client: LightClient
 
