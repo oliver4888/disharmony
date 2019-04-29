@@ -5,6 +5,8 @@ import BotMessage from "./models/discord/message";
 import Command, { PermissionLevel } from "./commands/command";
 import Logger from "./utilities/logger"
 import LightClient, { ILightClient } from "./core/light-client";
+import ClusterHelper from "./clustering/cluster-helper"
+import ClientWorker from "./clustering/client-worker";
 
 export
 {
@@ -17,5 +19,7 @@ export
     BotGuildMember,
     Command,
     PermissionLevel,
-    Logger
+    Logger,
+    ClientWorker,
+    ClusterHelper
 }
