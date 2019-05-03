@@ -12,7 +12,21 @@ export default class NedbClient implements IDbClient
 
     public isMongo = false
 
-    public async upsertOne(collectionName: string, query: any, record: any)
+    public async updateOne(collectionName: string, query: any, update: any): Promise<void>
+    {
+        const collection = this.getCollection(collectionName)
+        await promisify(collection.update, collection)(query, update, { upsert: true })
+        this.incrementWriteCount()
+    }
+
+    public async insertOne(collectionName: string, record: any): Promise<void>
+    {
+        const collection = this.getCollection(collectionName)
+        await promisify(collection.insert, collection)(record)
+        this.incrementWriteCount()
+    }
+
+    public async replaceOne(collectionName: string, query: any, record: any)
     {
         const collection = this.getCollection(collectionName)
         await promisify(collection.update, collection)(query, record, { upsert: true })
@@ -46,6 +60,7 @@ export default class NedbClient implements IDbClient
         {
             for (let collection of this.collections)
                 collection.persistence.compactDatafile()
+            this.writeCount = 0
             logger.debugLog("Compacted NeDB collections")
         }
     }
