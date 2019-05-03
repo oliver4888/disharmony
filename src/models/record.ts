@@ -7,6 +7,7 @@ export interface IRecord
 export default abstract class Record implements IRecord
 {
     protected record: any = {}
+    protected isNewRecord = false
 
     public toRecord(): any { return this.record }
     public loadRecord(record: any): void { this.record = record }

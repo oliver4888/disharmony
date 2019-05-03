@@ -31,7 +31,7 @@ export class DocumentTests
         new Derived().save()
 
         //ASSERT
-        this.dbClient.verify(x => x.upsertOne("Derived", { _id: "id" }, { _id: "id", a: 1 }), Times.once())
+        this.dbClient.verify(x => x.replaceOne("Derived", { _id: "id" }, { _id: "id", a: 1 }), Times.once())
     }
 
     @Test()
