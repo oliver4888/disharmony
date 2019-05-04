@@ -15,7 +15,7 @@ export default class NedbClient implements IDbClient
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
         const collection = this.getCollection(collectionName)
-        await promisify(collection.update, collection)(query, update, { upsert: true })
+        await promisify(collection.update, collection)(query, update, { })
         this.incrementWriteCount()
     }
 
