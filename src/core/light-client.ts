@@ -7,6 +7,7 @@ export interface ILightClient extends IDjsExtension<DjsClient>
 {
     readonly botId: string
     readonly dbClient: IDbClient
+    readonly dbConnectionString: string
     initialize(token: string): Promise<void>
 }
 
@@ -39,20 +40,12 @@ export default class LightClient implements ILightClient
     }
 
     constructor(
-        dbConnectionString: string = "nedb://nedb-data"
+        public dbConnectionString: string = "nedb://nedb-data"
     )
     {
         this.djs = new DjsClient({
             messageCacheMaxSize: 16,
-            disabledEvents: [
-                "CHANNEL_PINS_UPDATE",
-                "GUILD_BAN_ADD",
-                "GUILD_BAN_REMOVE",
-                "PRESENCE_UPDATE",
-                "TYPING_START",
-                "USER_NOTE_UPDATE",
-                "USER_SETTINGS_UPDATE"
-            ]
+            disabledEvents: ["TYPING_START"]
         })
 
         initializeDb(dbConnectionString)
