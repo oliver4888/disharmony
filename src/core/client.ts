@@ -50,7 +50,7 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
         public serviceName: string,
         public commands: Command[],
         public messageCtor: MessageConstructor<TMessage>,
-        dbConnectionString?: string,
+        dbConnectionString: string,
     )
     {
         super(dbConnectionString)
