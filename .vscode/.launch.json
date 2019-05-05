@@ -7,9 +7,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug tests",
-            "args": [
-                "${workspaceFolder}/test-runner.js"
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/test-runner.js",
+            "preLaunchTask": "build",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
             ]
         }
     ]
