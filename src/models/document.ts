@@ -6,7 +6,7 @@ export default abstract class Document extends Serializable
 {
     private dbClient: IDbClient
     private updateFields: any = {}
-    private isNewRecord = false
+    protected isNewRecord = false
 
     public async save()
     {

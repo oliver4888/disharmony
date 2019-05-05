@@ -14,7 +14,7 @@ export class DocumentTests
     }
 
     @Test()
-    public db_client_receives_upsert_with_record_when_serializable_save()
+    public db_client_receives_insert_when_new_serializable_saved()
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
@@ -24,6 +24,7 @@ export class DocumentTests
             {
                 super("id", dbClientObject)
                 this.record = { a: 1 }
+                this.isNewRecord = true
             }
         }
 
@@ -31,28 +32,37 @@ export class DocumentTests
         new Derived().save()
 
         //ASSERT
-        this.dbClient.verify(x => x.replaceOne("Derived", { _id: "id" }, { _id: "id", a: 1 }), Times.once())
+        this.dbClient.verify(x => x.insertOne("Derived", { _id: "id", a: 1 }), Times.once())
     }
 
-    @Test()
-    public db_client_receives_delete_when_serializable_delete()
+    @AsyncTest()
+    public async db_client_receives_update_when_serializable_updated_and_saved()
     {
         //ARRANGE
         const dbClientObject = this.dbClient.object
         class Derived extends Document
         {
+            public get num() { return this.record.num }
+            public set num(value: number) { this.record.num = value }
             constructor()
             {
                 super("id", dbClientObject)
-                this.record = { a: 1 }
+                this.isNewRecord = false
             }
         }
 
+        this.dbClient
+            .setup(x => x.findOne("Derived", It.isAny()))
+            .returns(() => Promise.resolve({ num: 1 }))
+
         //ACT
-        new Derived().deleteRecord()
+        const sut = new Derived()
+        await sut.loadDocument()
+        sut.num = 2
+        sut.save()
 
         //ASSERT
-        this.dbClient.verify(x => x.deleteOne("Derived", { _id: "id" }), Times.once())
+        this.dbClient.verify(x => x.updateOne("Derived", { _id: "id" }, { $set: { num: 2 } }), Times.once())
     }
 
     @AsyncTest()

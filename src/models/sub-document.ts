@@ -7,7 +7,7 @@ export default abstract class SubDocument extends Serializable implements Notify
 {
     public onPropertyChanged = new SimpleEventDispatcher<string>()
 
-    public static getArrayProxy<T extends SubDocument>(proxyTarget: [], parent: Document, serializeName: string, ctor: new () => T): T[]
+    public static getArrayProxy<T extends SubDocument>(proxyTarget: any[], parent: Document, serializeName: string, ctor: new () => T): T[]
     {
         return new Proxy(proxyTarget, {
             get: (target: any, prop) =>
