@@ -26,13 +26,6 @@ export default class NedbClient implements IDbClient
         this.incrementWriteCount()
     }
 
-    public async replaceOne(collectionName: string, query: any, record: any)
-    {
-        const collection = this.getCollection(collectionName)
-        await promisify(collection.update, collection)(query, record, { upsert: true })
-        this.incrementWriteCount()
-    }
-
     public async findOne(collectionName: string, query: any)
     {
         const collection = this.getCollection(collectionName)

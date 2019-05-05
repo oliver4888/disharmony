@@ -15,7 +15,6 @@ export interface IDbClient
 {
     updateOne(collectionName: string, query: any, update: any): Promise<void>
     insertOne(collectionName: string, record: any): Promise<void>
-    replaceOne(collectionName: string, query: any, record: any): Promise<void>
     findOne(collectionName: string, query: any): Promise<any>
     deleteOne(collectionName: string, query: any): Promise<void>
     isMongo: boolean

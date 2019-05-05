@@ -18,12 +18,6 @@ export default class MongoClient implements IDbClient
             .insertOne(record)
     }
 
-    public async replaceOne(collectionName: string, query: any, record: any)
-    {
-        await (await this.getCollection(collectionName))
-            .replaceOne(query, record, { upsert: true })
-    }
-
     public async findOne(collectionName: string, query: any)
     {
         return (await this.getCollection(collectionName))
