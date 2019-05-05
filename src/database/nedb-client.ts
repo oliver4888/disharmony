@@ -12,10 +12,17 @@ export default class NedbClient implements IDbClient
 
     public isMongo = false
 
-    public async upsertOne(collectionName: string, query: any, record: any)
+    public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
         const collection = this.getCollection(collectionName)
-        await promisify(collection.update, collection)(query, record, { upsert: true })
+        await promisify(collection.update, collection)(query, update, { })
+        this.incrementWriteCount()
+    }
+
+    public async insertOne(collectionName: string, record: any): Promise<void>
+    {
+        const collection = this.getCollection(collectionName)
+        await promisify(collection.insert, collection)(record)
         this.incrementWriteCount()
     }
 
@@ -33,8 +40,15 @@ export default class NedbClient implements IDbClient
 
     private getCollection(name: string): Datastore
     {
-        return this.collections.find(x => x.filename === name)
-            || new Datastore({ filename: join(this.baseDir, name), autoload: true })
+        const filename = join(this.baseDir, name)
+        let collection = this.collections.find(x => x.filename === filename)
+        if (!collection)
+        {
+            collection = new Datastore({ filename, autoload: true })
+            this.collections.push(collection!)
+        }
+
+        return collection!
     }
 
     private incrementWriteCount()
@@ -46,6 +60,7 @@ export default class NedbClient implements IDbClient
         {
             for (let collection of this.collections)
                 collection.persistence.compactDatafile()
+            this.writeCount = 0
             logger.debugLog("Compacted NeDB collections")
         }
     }

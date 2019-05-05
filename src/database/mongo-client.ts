@@ -6,10 +6,16 @@ export default class MongoClient implements IDbClient
     private connectionString: string
     public isMongo = true
 
-    public async upsertOne(collectionName: string, query: any, record: any)
+    public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
         await (await this.getCollection(collectionName))
-            .replaceOne(query, record, { upsert: true })
+            .updateOne(query, update)
+    }
+
+    public async insertOne(collectionName: string, record: any): Promise<void>
+    {
+        await (await this.getCollection(collectionName))
+            .insertOne(record)
     }
 
     public async findOne(collectionName: string, query: any)

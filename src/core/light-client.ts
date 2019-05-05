@@ -40,7 +40,7 @@ export default class LightClient implements ILightClient
     }
 
     constructor(
-        public dbConnectionString: string = "nedb://nedb-data"
+        public dbConnectionString: string
     )
     {
         this.djs = new DjsClient({
