@@ -1,11 +1,12 @@
 import getDbClient, { IDbClient } from "../database/db-client";
-import Record from "./record";
+import Serializable from "./serializable";
 import logger from "../utilities/logger";
 
-export default abstract class Document extends Record
+export default abstract class Document extends Serializable
 {
     private dbClient: IDbClient
     private updateFields: any = {}
+    private isNewRecord = false
 
     public async save()
     {
@@ -55,6 +56,9 @@ export default abstract class Document extends Record
             throw "Error loading data, please contact the host"
         }
     }
+
+    public toRecord(): any { return this.record }
+    public loadRecord(record: any): void { this.record = record }
 
     constructor(
         public id: string,
