@@ -32,7 +32,7 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
 
     public async initialize(token: string)
     {
-        super.initialize(token)
+        await super.initialize(token)
 
         this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
