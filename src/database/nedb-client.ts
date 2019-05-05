@@ -47,8 +47,15 @@ export default class NedbClient implements IDbClient
 
     private getCollection(name: string): Datastore
     {
-        return this.collections.find(x => x.filename === name)
-            || new Datastore({ filename: join(this.baseDir, name), autoload: true })
+        const filename = join(this.baseDir, name)
+        let collection = this.collections.find(x => x.filename === filename)
+        if (!collection)
+        {
+            collection = new Datastore({ filename, autoload: true })
+            this.collections.push(collection!)
+        }
+
+        return collection!
     }
 
     private incrementWriteCount()
