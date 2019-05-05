@@ -51,7 +51,7 @@ export default class LightClient implements ILightClient
         initializeDb(dbConnectionString)
 
         Error.stackTraceLimit = Infinity
-        process.on("uncaughtException", err => Logger.debugLog(`Unhandled exception!\n${err.message}\n${err.stack}`, true))
+        process.on("uncaughtException", err => Logger.debugLogError("Unhandled exception!", err))
         process.on("exit", () => Logger.debugLog("Shutdown"))
         process.on("SIGINT", () => process.exit())
     }

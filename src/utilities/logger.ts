@@ -3,14 +3,21 @@ import * as SimpleFileWriter from "simple-file-writer"
 const consoleLogWriter = new SimpleFileWriter(process.cwd() + "/console.log")
 const debugLogWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
 
-function doLog(message: string, error: boolean, debug: boolean)
+function doLog(message: string, debug: boolean, error?: Error | boolean)
 {
     const prefix = error ? "[ERROR]" : debug ? "[DEBUG]" : "[INFO]"
     let logStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
 
     if (!debug)
-        if (error)
-            console.error(logStr)
+        if (error instanceof Error)
+        {
+            let errorString = ""
+            if (error.message)
+                errorString += `\n${error.message}`
+            if (error.stack)
+                errorString += `\n${error.stack}`
+            console.error(logStr + errorString)
+        }
         else
             console.log(logStr)
 
@@ -23,6 +30,8 @@ function doLog(message: string, error: boolean, debug: boolean)
 }
 
 export default {
-    consoleLog: (message: string, isError: boolean = false) => doLog(message, isError, false),
-    debugLog: (message: string, isError: boolean = false) => doLog(message, isError, true)
+    consoleLog: (message: string) => doLog(message, false),
+    debugLog: (message: string) => doLog(message, true),
+    consoleLogError: (message: string, error?: Error) => doLog(message, false, error || true),
+    debugLogError: (message: string, error?: Error) => doLog(message, true, error || true)
 }

@@ -51,8 +51,9 @@ export default abstract class Document extends Serializable
             this.loadRecord(recordProxy)
             this.isNewRecord = !record
         }
-        catch{
-            logger.consoleLog(`Error loading document for Guild ${this.id}`)
+        catch (e)
+        {
+            logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
             throw "Error loading data, please contact the host"
         }
     }
