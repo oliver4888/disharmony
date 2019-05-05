@@ -8,6 +8,7 @@ import LightClient, { ILightClient } from "./core/light-client";
 import getWorker from "./utilities/fork-worker"
 import loadCredentials from "./utilities/load-credentials"
 import NotifyPropertyChanged from "./utilities/notify-property-changed"
+import SubDocument from "./models/sub-document"
 
 export
 {
@@ -24,4 +25,5 @@ export
     getWorker as forkWorkerClient,
     loadCredentials,
     NotifyPropertyChanged,
+    SubDocument,
 }
