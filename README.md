@@ -26,9 +26,9 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 - Reduce the amount of similar code between bots
 
 ## Examples
-- [Role Assigner](https://github.com/benji7425/discord-bot-role-assigner)
-- [RSS Fetcher](https://github.com/benji7425/discord-bot-rss-feed)
-- [Activity Monitor](https://github.com/benji7425/discord-bot-activity-monitor/)
+- [Role Assigner](https://github.com/benji7425/discord-role-assigner)
+- [RSS Fetcher](https://github.com/benji7425/discord-rss-fetcher)
+- [Activity Monitor](https://github.com/benji7425/discord-activity-monitor/)
 
 ## Development
 ### Prerequisites
