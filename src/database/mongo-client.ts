@@ -1,4 +1,4 @@
-import { MongoClient as MongoClientActual, Collection } from "mongodb"
+import { Collection, MongoClient as MongoClientActual } from "mongodb"
 import { IDbClient } from "./db-client"
 
 export default class MongoClient implements IDbClient

@@ -1,13 +1,13 @@
 import { Message as DjsMessage, RichEmbed, TextChannel } from "discord.js"
-import BotGuild from "./guild";
-import BotGuildMember from "./guild-member";
 import { IClient } from "../../core/client";
 import IDjsExtension from "./djs-extension";
+import BotGuild from "./guild";
+import BotGuildMember from "./guild-member";
 
 export default class BotMessage implements IDjsExtension<DjsMessage>
 {
-    readonly guild: BotGuild
-    readonly member: BotGuildMember
+    public readonly guild: BotGuild
+    public readonly member: BotGuildMember
     public get content() { return this.djs.content }
     public get channelId() { return this.djs.channel.id }
     public get mentions() { return this.djs.mentions }

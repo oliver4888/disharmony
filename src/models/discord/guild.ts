@@ -1,7 +1,7 @@
 import { Guild as DjsGuild } from "discord.js"
 import Document from "../document";
-import BotGuildMember from "./guild-member";
 import IDjsExtension from "./djs-extension";
+import BotGuildMember from "./guild-member";
 
 export default class BotGuild extends Document implements IDjsExtension<DjsGuild>
 {

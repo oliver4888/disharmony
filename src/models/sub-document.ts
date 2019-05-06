@@ -1,7 +1,7 @@
-import { NotifyPropertyChanged } from "..";
 import { SimpleEventDispatcher } from "strongly-typed-events";
-import Serializable from "./serializable";
+import { NotifyPropertyChanged } from "..";
 import Document from "./document"
+import Serializable from "./serializable";
 
 export default abstract class SubDocument extends Serializable implements NotifyPropertyChanged
 {
@@ -12,7 +12,7 @@ export default abstract class SubDocument extends Serializable implements Notify
         return new Proxy(proxyTarget, {
             get: (target: any, prop) =>
             {
-                //if prop is array index, create T from data if not already created 
+                // if prop is array index, create T from data if not already created
                 if (typeof prop === "string" && !isNaN(Number(prop)) && !(target[prop] instanceof SubDocument))
                 {
                     const subDoc = new ctor()
@@ -28,7 +28,7 @@ export default abstract class SubDocument extends Serializable implements Notify
                 if (typeof prop === "string" && !isNaN(Number(prop)))
                     parent.addSetOperator(`${serializeName}.${prop}`, (target[prop] as Document).toRecord())
                 return true
-            }
+            },
         })
     }
 }

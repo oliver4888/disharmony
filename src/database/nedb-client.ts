@@ -1,8 +1,8 @@
 import * as Datastore from "nedb-core"
 import { join } from "path"
-import { IDbClient } from "./db-client"
 import { promisify } from "typed-promisify"
 import logger from "../utilities/logger";
+import { IDbClient } from "./db-client"
 
 export default class NedbClient implements IDbClient
 {
@@ -55,10 +55,10 @@ export default class NedbClient implements IDbClient
     {
         this.writeCount++
 
-        //compact the data file every 10 accesses
+        // compact the data file every 10 accesses
         if (this.writeCount > 10)
         {
-            for (let collection of this.collections)
+            for (const collection of this.collections)
                 collection.persistence.compactDatafile()
             this.writeCount = 0
             logger.debugLog("Compacted NeDB collections")

@@ -1,5 +1,5 @@
-import { PermissionLevel } from "../../commands/command";
 import { GuildMember as DjsGuildMember } from "discord.js";
+import { PermissionLevel } from "../../commands/command";
 import Document from "../document";
 import IDjsExtension from "./djs-extension";
 
