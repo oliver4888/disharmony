@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "test": "npm run build && node ./test-runner.js"
+    "test": "npm run build && node ./test-runner.js",
+    "lint": "./node_modules/.bin/tslint --project ."
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "nedb-core": "^3.0.6",
     "simple-file-writer": "^2.0.0",
     "strongly-typed-events": "^1.4.10",
+    "tslint": "^5.16.0",
     "typed-promisify": "^0.4.0"
   },
   "devDependencies": {
