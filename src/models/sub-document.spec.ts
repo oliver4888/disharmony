@@ -1,8 +1,8 @@
-import { Test, AsyncTest, Expect, Setup } from "alsatian"
-import { Mock, It, Times, IMock } from "typemoq"
+import { AsyncTest, Expect, Setup, Test } from "alsatian"
+import { IMock, It, Mock, Times } from "typemoq"
 import { SubDocument } from "..";
-import Document from "./document";
 import { IDbClient } from "../database/db-client";
+import Document from "./document";
 
 class TestDocument extends Document
 {
@@ -31,13 +31,13 @@ export default class SubDocumentTests
     @Test()
     public array_proxy_returns_class_instance_from_record_array_item()
     {
-        //ARRANGE
+        // ARRANGE
         const parent = new TestDocument("id", this.dbClient.object)
 
-        //ACT
+        // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
 
-        //ASSERT
+        // ASSERT
         Expect(sut[0].recordedString).toBe("record")
         Expect(sut[0].ephemeralString).toBe("loadRecord")
     }
@@ -45,31 +45,31 @@ export default class SubDocumentTests
     @Test()
     public parent_document_updates_db_when_array_item_set()
     {
-        //ARRANGE
+        // ARRANGE
         const parent = new TestDocument("id", this.dbClient.object)
 
-        //ACT
+        // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
         const newEntry = new TestSubDocument()
         newEntry.recordedString = "updatedRecord"
         sut[0] = newEntry
         parent.save()
 
-        //ASSERT
+        // ASSERT
         this.dbClient.verify(x => x.updateOne(It.isAnyString(), It.isAny(), { $set: { "sub.0": { recordedString: "updatedRecord" } } }), Times.once())
     }
 
     @Test()
     public same_instance_returned_when_repeat_access()
     {
-        //ARRANGE
+        // ARRANGE
         const parent = new TestDocument("id", this.dbClient.object)
 
-        //ACT
+        // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
         sut[0].ephemeralString = "modified"
 
-        //ASSERT
+        // ASSERT
         Expect(sut[0].ephemeralString).toBe("modified")
     }
 }

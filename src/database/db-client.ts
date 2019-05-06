@@ -1,6 +1,6 @@
+import logger from "../utilities/logger";
 import MongoClient from "./mongo-client"
 import NedbClient from "./nedb-client"
-import logger from "../utilities/logger";
 
 let dbClient: IDbClient
 
@@ -22,7 +22,7 @@ export interface IDbClient
 
 export function initializeDb(connectionString: string)
 {
-    let protocol = connectionString.match(/^.+:\/\//)![0]
+    const protocol = connectionString.match(/^.+:\/\//)![0]
 
     if (protocol)
     {

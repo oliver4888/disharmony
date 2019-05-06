@@ -1,5 +1,5 @@
 import { Message as DjsMessage } from "discord.js";
-import { Client, BotMessage, IClient } from "..";
+import { BotMessage, Client, IClient } from "..";
 import getCommandInvoker, { RejectionReason } from "../commands/command-parser";
 
 export default async function handleMessage<TMessage extends BotMessage>(
@@ -7,7 +7,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
     djsMessage: DjsMessage,
     innerGetCommandInvoker?: (client: IClient, message: BotMessage) => Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>)
 {
-    //ignore messages from self
+    // ignore messages from self
     if (djsMessage.member.id === djsMessage.member.guild.me.id)
         return
 

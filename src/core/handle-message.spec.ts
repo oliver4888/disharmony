@@ -1,9 +1,9 @@
-import { AsyncTest, Setup, Expect } from "alsatian";
-import handleMessage from "./handle-message";
-import { IMock, Mock, Times, It, MockBehavior } from "typemoq";
-import { Client, BotMessage, PermissionLevel, IClient } from "..";
+import { AsyncTest, Expect, Setup } from "alsatian";
 import { Message as DjsMessage } from "discord.js";
+import { IMock, It, Mock, MockBehavior, Times } from "typemoq";
+import { BotMessage, Client, IClient, PermissionLevel } from "..";
 import { RejectionReason } from "../commands/command-parser";
+import handleMessage from "./handle-message";
 
 export default class HandleMessageTests
 {
@@ -18,7 +18,7 @@ export default class HandleMessageTests
             {
                 return {
                     id: memberId,
-                    guild: { me: { id: "bot-id" }, commandPrefix: null }
+                    guild: { me: { id: "bot-id" }, commandPrefix: null },
                 } as any
             })
         this.djsMessage.setup(x => x.guild)
@@ -26,7 +26,7 @@ export default class HandleMessageTests
             {
                 return {
                     id: "guild-id",
-                    commandPrefix: null
+                    commandPrefix: null,
                 } as any
             })
     }
@@ -45,13 +45,13 @@ export default class HandleMessageTests
     @AsyncTest()
     public async doesnt_reply_or_dispatch_when_message_from_self()
     {
-        //ARRANGE
+        // ARRANGE
         this.setMessageMember("bot-id")
 
-        //ACT
+        // ACT
         await handleMessage(this.client.object, this.djsMessage.object)
 
-        //ASSERT
+        // ASSERT
         this.djsMessage.verify(x => x.reply(It.isAny()), Times.never())
         this.client.verify(x => x.dispatchMessage(It.isAny()), Times.never())
     }
@@ -59,26 +59,25 @@ export default class HandleMessageTests
     @AsyncTest()
     public async dispatches_when_non_command_message()
     {
-        //ARRANGE
+        // ARRANGE
         this.djsMessage.setup(x => x.content)
             .returns(() => "just an ordinary chat message")
 
-        //ACT
+        // ACT
         await handleMessage(this.client.object, this.djsMessage.object)
 
-        //ASSERT
+        // ASSERT
         this.client.verify(x => x.dispatchMessage(It.isAny()), Times.once())
     }
 
     @AsyncTest()
     public async replies_and_dispatches_when_command_in_message()
     {
-        //ARRANGE
+        // ARRANGE
         const self = this
         class Message
         {
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
-            constructor(_: DjsMessage) { }
         }
 
         this.client.setup(x => x.messageCtor)
@@ -88,10 +87,10 @@ export default class HandleMessageTests
             () => Promise.resolve(
                 (): any => Promise.resolve("result"))
 
-        //ACT
+        // ACT
         await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)
 
-        //ASSERT
+        // ASSERT
         this.djsMessage.verify(x => x.reply("result"), Times.once())
         this.client.verify(x => x.dispatchMessage(It.isAny()), Times.once())
     }
@@ -99,12 +98,11 @@ export default class HandleMessageTests
     @AsyncTest()
     public async replies_and_dispatches_when_command_errors()
     {
-        //ARRANGE
+        // ARRANGE
         const self = this
         class Message
         {
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
-            constructor(_: DjsMessage) { }
         }
 
         this.client.setup(x => x.messageCtor)
@@ -114,10 +112,10 @@ export default class HandleMessageTests
             () => Promise.resolve(
                 (): any => { throw RejectionReason.MissingPermission })
 
-        //ACT
+        // ACT
         await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)
 
-        //ASSERT
+        // ASSERT
         this.djsMessage.verify(x => x.reply(It.isAnyString()), Times.once())
         this.client.verify(x => x.dispatchMessage(It.isAny()), Times.once())
     }

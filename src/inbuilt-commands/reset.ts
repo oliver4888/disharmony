@@ -1,6 +1,6 @@
-import BotMessage from "../models/discord/message"
-import { IClient } from "../core/client"
 import Command, { PermissionLevel } from "../commands/command"
+import { IClient } from "../core/client"
+import BotMessage from "../models/discord/message"
 
 async function invoke(_: string[], message: BotMessage, client: IClient)
 {
@@ -26,10 +26,10 @@ async function invoke(_: string[], message: BotMessage, client: IClient)
     })
 }
 
-module.exports = new Command(
+export default new Command(
     /*name*/            "reset",
     /*description*/     "Reset all data for this Discord server. WARNING: YOU WILL LOSE ALL YOUR SETTINGS!",
     /*syntax*/          "reset",
     /*permissionLevel*/ PermissionLevel.Admin,
-    /*invoke*/          invoke
+    /*invoke*/          invoke,
 )

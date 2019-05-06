@@ -1,8 +1,8 @@
 import { AsyncTest, Expect, Setup } from "alsatian";
-import getCommandInvoker, { RejectionReason } from "./command-parser";
 import { IMock, Mock } from "typemoq";
-import { IClient, BotMessage, BotGuild, BotGuildMember } from "..";
+import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
 import Command, { PermissionLevel } from "./command";
+import getCommandInvoker, { RejectionReason } from "./command-parser";
 
 export class CommandParserTests
 {
@@ -45,116 +45,116 @@ export class CommandParserTests
     @AsyncTest()
     public async null_invoker_when_no_command_syntax_in_message()
     {
-        //ARRANGE
+        // ARRANGE
         this.message.setup(x => x.content)
             .returns(() => "just a normal chat message")
 
-        //ACT
+        // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
 
-        //ASSERT
+        // ASSERT
         Expect(invoker).toBeNull()
     }
 
     @AsyncTest()
     public async null_invoker_when_non_existant_command_in_message()
     {
-        //ARRANGE
+        // ARRANGE
         this.message.setup(x => x.content)
             .returns(() => "<@botid> invalidcommand")
 
-        //ACT
+        // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
 
-        //ASSERT
+        // ASSERT
         Expect(invoker).toBeNull()
     }
 
     @AsyncTest()
     public async missing_permission_thrown_when_user_permission_level_too_low()
     {
-        //ARRANGE
+        // ARRANGE
         this.command.permissionLevel = PermissionLevel.Admin
 
         this.message.setup(x => x.content)
             .returns(() => "<@botid> valid")
 
-        //ACT
+        // ACT
         let error: any
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
-        //ASSERT
+        // ASSERT
         Expect(error).toBe(RejectionReason.MissingPermission)
     }
 
     @AsyncTest()
     public async incorrect_syntax_thrown_when_syntax_incorrect()
     {
-        //ARRANGE
+        // ARRANGE
         this.command.syntax = "valid param1 param2"
 
         this.message.setup(x => x.content)
             .returns(() => "<@botid> valid")
 
-        //ACT
+        // ACT
         let error: any
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
-        //ASSERT
+        // ASSERT
         Expect(error).toBe(RejectionReason.IncorrectSyntax)
     }
 
     @AsyncTest()
     public async returns_working_command_invoker_when_valid_command_in_message()
     {
-        //ARRANGE
+        // ARRANGE
         this.command.invoke = async () => "invoked"
 
         this.message.setup(x => x.content)
             .returns(() => "<@botid> valid")
 
-        //ACT
+        // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
         const result = await invoker!(this.client, this.message.object)
 
-        //ASSERT
+        // ASSERT
         Expect(result).toBe("invoked")
     }
 
     @AsyncTest()
     public async error_returned_when_invoked_command_throws()
     {
-        //ARRANGE
-        this.command.invoke = async () => { throw "its borked" }
+        // ARRANGE
+        this.command.invoke = async () => { throw new Error("its borked") }
 
         this.message.setup(x => x.content)
             .returns(() => "<@botid> valid")
 
-        //ACT
+        // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
         const result = await invoker!(this.client, this.message.object)
 
-        //ASSERT
+        // ASSERT
         Expect(result).toBe("its borked")
     }
 
     @AsyncTest()
     public async command_recognised_when_guild_has_command_prefix()
     {
-        //ARRANGE
+        // ARRANGE
         this.guild = Mock.ofType() as IMock<BotGuild>
         this.guild.setup(x => x.commandPrefix)
             .returns(() => "!")
-        
+
         this.message.setup(x => x.guild)
             .returns(() => this.guild.object)
         this.message.setup(x => x.content)
             .returns(() => "!valid")
-        
-        //ACT
+
+        // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
 
-        //ASSERT
+        // ASSERT
         Expect(invoker).toBeDefined()
     }
 }

@@ -1,13 +1,13 @@
-import { Message as DjsMessage, Channel as DjsChannel } from "discord.js"
-import { SimpleEventDispatcher, SignalDispatcher, ISimpleEvent } from "strongly-typed-events"
+import { Channel as DjsChannel, Message as DjsMessage } from "discord.js"
+import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
+import BotGuildMember from "../models/discord/guild-member";
+import BotMessage from "../models/discord/message";
 import Stats from "../models/internal/stats";
 import logger from "../utilities/logger";
-import BotMessage from "../models/discord/message";
-import BotGuildMember from "../models/discord/guild-member";
-import LightClient, { ILightClient } from "./light-client";
 import handleMessage from "./handle-message";
+import LightClient, { ILightClient } from "./light-client";
 
 export interface IClient extends ILightClient
 {
@@ -18,7 +18,7 @@ export interface IClient extends ILightClient
     stats: Stats
 }
 
-type MessageConstructor<TMessage extends BotMessage> = { new(djsMessage: DjsMessage): TMessage }
+type MessageConstructor<TMessage extends BotMessage> = new(djsMessage: DjsMessage) => TMessage
 
 export default class Client<TMessage extends BotMessage> extends LightClient implements IClient
 {
@@ -57,4 +57,3 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
         this.stats = new Stats(this.djs)
     }
 }
-

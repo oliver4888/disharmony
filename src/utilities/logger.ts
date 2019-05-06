@@ -1,3 +1,4 @@
+// tslint:disable: no-console
 import * as SimpleFileWriter from "simple-file-writer"
 
 const consoleLogWriter = new SimpleFileWriter(process.cwd() + "/console.log")
@@ -33,5 +34,5 @@ export default {
     consoleLog: (message: string) => doLog(message, false),
     debugLog: (message: string) => doLog(message, true),
     consoleLogError: (message: string, error?: Error) => doLog(message, false, error || true),
-    debugLogError: (message: string, error?: Error) => doLog(message, true, error || true)
+    debugLogError: (message: string, error?: Error) => doLog(message, true, error || true),
 }

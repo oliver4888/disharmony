@@ -1,6 +1,6 @@
 import getDbClient, { IDbClient } from "../database/db-client";
-import Serializable from "./serializable";
 import logger from "../utilities/logger";
+import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
 {
@@ -46,7 +46,7 @@ export default abstract class Document extends Serializable
                         this.addSetOperator(prop, value)
 
                     return true
-                }
+                },
             })
             this.loadRecord(recordProxy)
             this.isNewRecord = !record
@@ -54,7 +54,7 @@ export default abstract class Document extends Serializable
         catch (e)
         {
             logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
-            throw "Error loading data, please contact the host"
+            throw new Error("Error loading data, please contact the host")
         }
     }
 
@@ -63,7 +63,7 @@ export default abstract class Document extends Serializable
 
     constructor(
         public id: string,
-        dbClient?: IDbClient
+        dbClient?: IDbClient,
     )
     {
         super()

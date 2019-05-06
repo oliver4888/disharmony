@@ -1,5 +1,5 @@
-import { Test, AsyncTest, Expect, Setup } from "alsatian"
-import { Mock, It, Times, IMock } from "typemoq"
+import { AsyncTest, Expect, Setup, Test } from "alsatian"
+import { IMock, It, Mock, Times } from "typemoq"
 import { IDbClient } from "../database/db-client";
 import Document from "./document";
 
@@ -16,7 +16,7 @@ export class DocumentTests
     @Test()
     public db_client_receives_insert_when_new_serializable_saved()
     {
-        //ARRANGE
+        // ARRANGE
         const dbClientObject = this.dbClient.object
         class Derived extends Document
         {
@@ -28,17 +28,17 @@ export class DocumentTests
             }
         }
 
-        //ACT
+        // ACT
         new Derived().save()
 
-        //ASSERT
+        // ASSERT
         this.dbClient.verify(x => x.insertOne("Derived", { _id: "id", a: 1 }), Times.once())
     }
 
     @AsyncTest()
     public async db_client_receives_update_when_serializable_updated_and_saved()
     {
-        //ARRANGE
+        // ARRANGE
         const dbClientObject = this.dbClient.object
         class Derived extends Document
         {
@@ -55,20 +55,20 @@ export class DocumentTests
             .setup(x => x.findOne("Derived", It.isAny()))
             .returns(() => Promise.resolve({ num: 1 }))
 
-        //ACT
+        // ACT
         const sut = new Derived()
         await sut.loadDocument()
         sut.num = 2
         sut.save()
 
-        //ASSERT
+        // ASSERT
         this.dbClient.verify(x => x.updateOne("Derived", { _id: "id" }, { $set: { num: 2 } }), Times.once())
     }
 
     @AsyncTest()
     public async serializable_record_set_to_db_value_when_serializable_loads_record()
     {
-        //ARRANGE
+        // ARRANGE
         const dbClientObject = this.dbClient.object
         class Derived extends Document
         {
@@ -80,18 +80,18 @@ export class DocumentTests
             .setup(x => x.findOne("Derived", It.isAny()))
             .returns(() => Promise.resolve({ a: 1 }))
 
-        //ACT
+        // ACT
         const sut = new Derived()
         await sut.loadDocument()
 
-        //ASSERT
+        // ASSERT
         Expect(sut.exposedRecord).toEqual({ a: 1 })
     }
 
     @AsyncTest()
     public async load_document_throws_if_error_returned_when_serializable_loads_record()
     {
-        //ARRANGE
+        // ARRANGE
         const dbClientObject = this.dbClient.object
         class Derived extends Document
         {
@@ -103,10 +103,10 @@ export class DocumentTests
             .setup(x => x.findOne("Derived", It.isAny()))
             .returns(() => Promise.reject("error"))
 
-        //ACT
+        // ACT
         const sut = new Derived()
 
-        //ASSERT
+        // ASSERT
         await Expect(async () => await sut.loadDocument()).toThrowAsync()
     }
 }

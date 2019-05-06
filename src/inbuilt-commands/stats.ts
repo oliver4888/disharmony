@@ -1,6 +1,6 @@
-import BotMessage from "../models/discord/message"
-import { IClient } from "../core/client"
 import Command, { PermissionLevel } from "../commands/command"
+import { IClient } from "../core/client"
+import BotMessage from "../models/discord/message"
 
 function invoke(_: string[], __: BotMessage, client: IClient)
 {
@@ -9,14 +9,14 @@ function invoke(_: string[], __: BotMessage, client: IClient)
         **Server count:** ${client.stats.guildCount}
         **Cached users:** ${client.stats.userCount}
         **Uptime:** ${client.stats.uptimeStr}
-        `
+        `,
     )
 }
 
-module.exports = new Command(
+export default new Command(
     /*name*/            "stats",
     /*description*/     "Returns some stats about the bot",
     /*syntax*/          "stats",
     /*permissionLevel*/ PermissionLevel.Anyone,
-    /*invoke*/          invoke
+    /*invoke*/          invoke,
 )

@@ -1,7 +1,7 @@
-import getDbClient, { initializeDb, IDbClient } from "../database/db-client";
 import { Client as DjsClient } from "discord.js";
-import Logger from "../utilities/logger";
+import getDbClient, { IDbClient, initializeDb } from "../database/db-client";
 import IDjsExtension from "../models/discord/djs-extension";
+import Logger from "../utilities/logger";
 
 export interface ILightClient extends IDjsExtension<DjsClient>
 {
@@ -22,7 +22,7 @@ export default class LightClient implements ILightClient
     {
         this.djs.on("debug", this.onDebug)
 
-        //remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
+        // remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.djs.login(token.replace(/\r?\n|\r/g, ""))
         Logger.consoleLog(`Registered bot ${this.djs.user.username}`)
     }
@@ -35,17 +35,17 @@ export default class LightClient implements ILightClient
     private onDebug(msg: string)
     {
         msg = msg.replace(/Authenticated using token [^ ]+/, "Authenticated using token [redacted]")
-        if (!/[Hh]eartbeat/.exec(msg)) //ignore regular heartbeat messages that would bloat the log file
+        if (!/[Hh]eartbeat/.exec(msg)) // ignore regular heartbeat messages that would bloat the log file
             Logger.debugLog(msg)
     }
 
     constructor(
-        public dbConnectionString: string
+        public dbConnectionString: string,
     )
     {
         this.djs = new DjsClient({
             messageCacheMaxSize: 16,
-            disabledEvents: ["TYPING_START"]
+            disabledEvents: ["TYPING_START"],
         })
 
         initializeDb(dbConnectionString)
