@@ -1,0 +1,6 @@
+steps:
+  - command: "npm install\nnpm run lint"
+    label: ":lint-roller: Lint"
+
+  - command: "npm install --prune\nnpm run build\nnpm run test"
+    label: ":hammer: Build + test"
