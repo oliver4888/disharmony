@@ -1,3 +1,4 @@
+// tslint:disable: no-floating-promises
 import { AsyncTest, Expect, Setup } from "alsatian";
 import { Message as DjsMessage } from "discord.js";
 import { IMock, It, Mock, MockBehavior, Times } from "typemoq";

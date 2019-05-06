@@ -4,10 +4,9 @@ import { IClient } from "../core/client"
 import BotGuildMember from "../models/discord/guild-member";
 import BotMessage from "../models/discord/message"
 
-function invoke(params: string[], message: BotMessage, client: IClient): Promise<void>
+async function invoke(params: string[], message: BotMessage, client: IClient): Promise<void>
 {
-    message.reply(createHelpEmbed(client, message.guild.me, message.member))
-    return Promise.resolve()
+    await message.reply(createHelpEmbed(client, message.guild.me, message.member))
 }
 
 function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMember): RichEmbed

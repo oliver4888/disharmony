@@ -12,6 +12,7 @@
         "one-variable-per-declaration": false,
         "max-classes-per-file": false,
         "interface-name": false,
-        "arrow-parens": false
+        "arrow-parens": false,
+        "no-floating-promises": true
     }
 }

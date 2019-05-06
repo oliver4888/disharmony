@@ -1,3 +1,4 @@
+// tslint:disable: no-floating-promises
 import { AsyncTest, Expect, Setup, Test } from "alsatian"
 import { IMock, It, Mock, Times } from "typemoq"
 import { IDbClient } from "../database/db-client";

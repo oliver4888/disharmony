@@ -23,7 +23,7 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
             {
                 await invokeMessage.guild.loadDocument()
                 const out = await command.invoke(details.params, invokeMessage, invokeClient);
-                invokeMessage.guild.save();
+                await invokeMessage.guild.save();
                 return out as string;
             }
             catch (err) { return err.message || err; }

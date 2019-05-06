@@ -20,13 +20,13 @@ export default async function handleMessage<TMessage extends BotMessage>(
         {
             const result = await commandInvoker(client, message)
             if (result)
-                message.reply(result)
+                await message.reply(result)
         }
     }
     catch (reason)
     {
         if (reason in RejectionReason)
-            message.reply(getRejectionMsg(reason))
+            await message.reply(getRejectionMsg(reason))
     }
 
     client.dispatchMessage(message)

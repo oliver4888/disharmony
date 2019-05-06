@@ -5,7 +5,7 @@ import Config from "../models/internal/config"
 async function invoke(params: string[], message: BotMessage)
 {
     const config = await new Config("config");
-    config.loadDocument()
+    await config.loadDocument()
 
     if (params[0] in config)
         // convert to a Number if value is number-y
@@ -13,7 +13,7 @@ async function invoke(params: string[], message: BotMessage)
     else
         throw new Error("Unknown config key")
 
-    config.save()
+    await config.save()
     return `Updated value for key ${params[0]}`
 }
 
