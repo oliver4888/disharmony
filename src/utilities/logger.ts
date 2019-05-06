@@ -9,7 +9,7 @@ function doLog(message: string, debug: boolean, error?: Error | boolean)
     const prefix = error ? "[ERROR]" : debug ? "[DEBUG]" : "[INFO]"
     let logStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
 
-    if (!debug)
+    if (debug)
         if (error instanceof Error)
         {
             let errorString = ""
