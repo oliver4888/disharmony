@@ -4,6 +4,7 @@ import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
 import BotGuildMember from "../models/discord/guild-member";
 import BotMessage from "../models/discord/message";
+import Config from "../models/internal/config";
 import Stats from "../models/internal/stats";
 import logger from "../utilities/logger";
 import handleMessage from "./handle-message";
@@ -50,10 +51,10 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
         public serviceName: string,
         public commands: Command[],
         public messageCtor: MessageConstructor<TMessage>,
-        dbConnectionString: string,
+        public config: Config,
     )
     {
-        super(dbConnectionString)
+        super(config.dbConnectionString)
         this.stats = new Stats(this.djs)
     }
 }

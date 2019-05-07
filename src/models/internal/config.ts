@@ -1,8 +1,6 @@
-import Document from "../document"
-
-export default class Config extends Document
+export default class Config
 {
-    [index: string]: any
-    public get askTimeoutMs() { return this.record.askTimeoutMs }
-    public set askTimeoutMs(value: number) { this.record.askTimeoutMs = value }
+    public dbConnectionString: string
+    public token: string
+    public askTimeoutMs: number // Todo: not actually used
 }
