@@ -1,6 +1,13 @@
-export default class Config
+interface HeartbeatConfig
 {
-    public dbConnectionString: string
-    public token: string
-    public askTimeoutMs: number // Todo: not actually used
+    url: string
+    intervalSec: number
+}
+
+export default interface Config
+{
+    dbConnectionString: string
+    token: string
+    heartbeat?: HeartbeatConfig
+    askTimeoutMs: number // Todo: not actually used
 }

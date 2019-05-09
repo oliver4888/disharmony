@@ -1,5 +1,7 @@
 import { Channel as DjsChannel, Message as DjsMessage } from "discord.js"
+import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
+import { Logger } from "..";
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
 import BotGuildMember from "../models/discord/guild-member";
@@ -19,7 +21,7 @@ export interface IClient extends ILightClient
     stats: Stats
 }
 
-type MessageConstructor<TMessage extends BotMessage> = new(djsMessage: DjsMessage) => TMessage
+type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessage) => TMessage
 
 export default class Client<TMessage extends BotMessage> extends LightClient implements IClient
 {
@@ -40,11 +42,37 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
         this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
         this.djs.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
         this.commands = this.commands.concat(inbuiltCommands)
+
+        if (this.config.heartbeat)
+            this.setHeartbeatInterval()
     }
 
     public dispatchMessage(message: TMessage)
     {
         this.onMessage.dispatch(message)
+    }
+
+    private setHeartbeatInterval()
+    {
+        const interval = this.config.heartbeat!.intervalSec * 1000
+        this.sendHeartbeat(true)
+            .then(() => setInterval(this.sendHeartbeat.bind(this), interval))
+            .catch(() => Logger.debugLogError("Error sending initial heartbeat, interval setup abandoned"))
+    }
+
+    private async sendHeartbeat(rethrow?: boolean)
+    {
+        try
+        {
+            await RequestPromise.get(this.config.heartbeat!.url)
+        }
+        catch (err)
+        {
+            Logger.debugLogError("Error sending heartbeat", err)
+
+            if (rethrow)
+                throw err
+        }
     }
 
     constructor(
