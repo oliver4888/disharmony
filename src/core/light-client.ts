@@ -1,13 +1,14 @@
 import { Client as DjsClient } from "discord.js";
 import getDbClient, { IDbClient, initializeDb } from "../database/db-client";
 import IDjsExtension from "../models/discord/djs-extension";
+import Config from "../models/internal/config";
 import Logger from "../utilities/logger";
 
 export interface ILightClient extends IDjsExtension<DjsClient>
 {
     readonly botId: string
     readonly dbClient: IDbClient
-    readonly dbConnectionString: string
+    readonly config: Config
     initialize(token: string): Promise<void>
 }
 
@@ -40,7 +41,7 @@ export default class LightClient implements ILightClient
     }
 
     constructor(
-        public dbConnectionString: string,
+        public config: Config,
     )
     {
         this.djs = new DjsClient({
@@ -48,7 +49,7 @@ export default class LightClient implements ILightClient
             disabledEvents: ["TYPING_START"],
         })
 
-        initializeDb(dbConnectionString)
+        initializeDb(config.dbConnectionString)
 
         Error.stackTraceLimit = Infinity
         process.on("uncaughtException", err => Logger.debugLogError("Unhandled exception!", err))

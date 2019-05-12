@@ -17,7 +17,6 @@ export interface IClient extends ILightClient
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
     readonly onMessage: ISimpleEvent<BotMessage>
-    readonly config: Config
     stats: Stats
 }
 
@@ -78,10 +77,10 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     constructor(
         public commands: Command[],
         public messageCtor: MessageConstructor<TMessage>,
-        public config: Config,
+        config: Config,
     )
     {
-        super(config.dbConnectionString)
+        super(config)
         this.stats = new Stats(this.djs)
     }
 }
