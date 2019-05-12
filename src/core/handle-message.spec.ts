@@ -78,6 +78,7 @@ export default class HandleMessageTests
         const self = this
         class Message
         {
+            public guild = { hasPermissions: (_: any) => true }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
 
@@ -103,6 +104,7 @@ export default class HandleMessageTests
         const self = this
         class Message
         {
+            public guild = { hasPermissions: (_: any) => true }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
 
@@ -119,5 +121,61 @@ export default class HandleMessageTests
         // ASSERT
         this.djsMessage.verify(x => x.reply(It.isAnyString()), Times.once())
         this.client.verify(x => x.dispatchMessage(It.isAny()), Times.once())
+    }
+
+    @AsyncTest()
+    public async replies_and_dispatches_when_guild_missing_permission()
+    {
+        // ARRANGE
+        const self = this
+        class Message
+        {
+            public guild = { hasPermissions: (_: any) => false }
+            public reply(msg: string) { self.djsMessage.object.reply(msg) }
+        }
+
+        this.client.setup(x => x.messageCtor)
+            .returns(() => Message as any)
+
+        const getCommandInvokerFunc =
+            () => Promise.resolve(
+                (): any => Promise.resolve("result"))
+
+        // ACT
+        await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)
+
+        // ASSERT
+        this.djsMessage.verify(x => x.reply(It.isAnyString()), Times.once())
+        this.client.verify(x => x.dispatchMessage(It.isAny()), Times.once())
+    }
+
+    @AsyncTest()
+    public async doesnt_invoke_command_when_guild_missing_permissions()
+    {
+        // ARRANGE
+        const self = this
+        class Message
+        {
+            public guild = { hasPermissions: (_: any) => false }
+            public reply(msg: string) { self.djsMessage.object.reply(msg) }
+        }
+
+        this.client.setup(x => x.messageCtor)
+            .returns(() => Message as any)
+
+        let commandInvoked = false
+        const getCommandInvokerFunc =
+            () => Promise.resolve(
+                (): any =>
+                {
+                    commandInvoked = true;
+                    Promise.resolve("result")
+                })
+
+        // ACT
+        await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)
+
+        // ASSERT
+        Expect(commandInvoked).toBe(false)
     }
 }
