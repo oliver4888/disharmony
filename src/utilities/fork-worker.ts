@@ -1,11 +1,11 @@
 import * as Cluster from "cluster"
 import { Logger } from "..";
 
-export default function(modulePath: string, token: string, dbConnectionString: string)
+export default function(modulePath: string, configPath: string)
 {
     Cluster.setupMaster({
         exec: modulePath,
-        args: [token, dbConnectionString],
+        args: [configPath],
     })
     const worker = Cluster.fork()
     addKillAndExitHooks(worker)

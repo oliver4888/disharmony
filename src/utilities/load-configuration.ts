@@ -2,7 +2,7 @@ import { existsSync } from "fs"
 import { resolve } from "path"
 import Config from "../models/internal/config";
 
-export default function (configPath: string = "./config.json"): { config: Config, isLocalDb: boolean }
+export default function (configPath: string = "./config.json")
 {
     let config
     if (existsSync(configPath))
@@ -16,6 +16,7 @@ export default function (configPath: string = "./config.json"): { config: Config
     return {
         config,
         isLocalDb: config.dbConnectionString.startsWith("nedb://"),
+        configPath,
     }
 }
 
