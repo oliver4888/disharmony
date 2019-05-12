@@ -111,7 +111,7 @@ export default class HandleMessageTests
 
         const getCommandInvokerFunc =
             () => Promise.resolve(
-                (): any => { throw RejectionReason.MissingPermission })
+                (): any => { throw RejectionReason.UserMissingPermissions })
 
         // ACT
         await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)

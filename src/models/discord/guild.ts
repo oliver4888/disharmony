@@ -1,4 +1,4 @@
-import { Guild as DjsGuild } from "discord.js"
+import { Guild as DjsGuild, PermissionResolvable } from "discord.js"
 import Document from "../document";
 import IDjsExtension from "./djs-extension";
 import BotGuildMember from "./guild-member";
@@ -9,6 +9,11 @@ export default class BotGuild extends Document implements IDjsExtension<DjsGuild
 
     public get name() { return this.djs.name }
     public get commandPrefix() { return this.record.commandPrefix }
+
+    public hasPermissions(permissions: number): boolean
+    {
+        return (this.djs.me.permissions.missing(permissions) as PermissionResolvable[]).length === 0
+    }
 
     constructor(
         public readonly djs: DjsGuild)

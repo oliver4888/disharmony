@@ -13,7 +13,7 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
         return null
 
     if (!isUserPermitted(message, command))
-        throw RejectionReason.MissingPermission
+        throw RejectionReason.UserMissingPermissions
     else if (details.params.length < (command.syntax.match(/ [^ \[]+/g) || []).length)
         throw RejectionReason.IncorrectSyntax
     else
@@ -50,6 +50,7 @@ function getCommandDetails(message: BotMessage, client: IClient)
 
 export enum RejectionReason
 {
-    MissingPermission,
+    UserMissingPermissions,
+    BotMissingGuildPermissions,
     IncorrectSyntax,
 }

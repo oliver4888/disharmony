@@ -14,10 +14,10 @@ import LightClient, { ILightClient } from "./light-client";
 
 export interface IClient extends ILightClient
 {
-    readonly serviceName: string
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
     readonly onMessage: ISimpleEvent<BotMessage>
+    readonly config: Config
     stats: Stats
 }
 
@@ -76,7 +76,6 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
     }
 
     constructor(
-        public serviceName: string,
         public commands: Command[],
         public messageCtor: MessageConstructor<TMessage>,
         public config: Config,

@@ -84,7 +84,7 @@ export class CommandParserTests
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
         // ASSERT
-        Expect(error).toBe(RejectionReason.MissingPermission)
+        Expect(error).toBe(RejectionReason.UserMissingPermissions)
     }
 
     @AsyncTest()

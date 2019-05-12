@@ -21,7 +21,10 @@ export default function (configPath: string = "./config.json"): { config: Config
 
 function isConfigValid(config: Config)
 {
+    // Todo: use a JSON schema for the below
     // Ensure the user hasn't typed non-strings into these json fields
     return config.dbConnectionString && typeof config.dbConnectionString === "string"
         && config.token && typeof config.token === "string"
+        && config.serviceName && typeof config.serviceName === "string"
+        && config.requiredPermissions && typeof config.requiredPermissions === "number"
 }
