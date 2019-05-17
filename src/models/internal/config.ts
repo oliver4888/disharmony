@@ -1,11 +1,26 @@
 /** Configuration details for the heartbeat feature */
-interface HeartbeatConfig
+export interface HeartbeatConfig
 {
     /** URL to send the heartbeat to */
     url: string
 
     /** How often to send the heartbeat */
     intervalSec: number
+}
+
+// tslint:disable-next-line: no-empty-interface
+export interface NedbClientConfig
+{
+    // Todo
+}
+
+export interface MongoClientConfig
+{
+    /** Number of times to try reconnect when disconnected from MongoDB */
+    reconnectTries: number
+
+    /** Milliseconds to wait between reconnect retries */
+    reconnectInterval: number
 }
 
 export default interface Config
@@ -27,4 +42,7 @@ export default interface Config
 
     /** Timeout duration to wait for a response after asking a question */
     askTimeoutMs: number // Todo: not actually used
+
+    /** Configuration object for the chosen database client; defaults will be used if not provided */
+    dbClientConfig?: NedbClientConfig | MongoClientConfig
 }

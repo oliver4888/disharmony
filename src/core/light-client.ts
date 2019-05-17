@@ -1,5 +1,5 @@
 import { Client as DjsClient } from "discord.js";
-import getDbClient, { IDbClient } from "../database/db-client";
+import getDbClient, { CriticalError as CriticalDbError, IDbClient } from "../database/db-client";
 import IDjsExtension from "../models/discord/djs-extension";
 import Document from "../models/document"
 import Config from "../models/internal/config";
@@ -41,6 +41,12 @@ export default class LightClient implements ILightClient
             Logger.debugLog(msg)
     }
 
+    private onCriticalDbError(error: CriticalDbError)
+    {
+        (Logger.consoleLogError(`Critical database error, shutting down: ${error.toString()}`) as Promise<void>)
+            .then(() => process.exit(1)).catch(() => process.exit(1))
+    }
+
     constructor(
         public config: Config,
     )
@@ -50,7 +56,7 @@ export default class LightClient implements ILightClient
             disabledEvents: ["TYPING_START"],
         })
 
-        Document.dbClient = getDbClient(config.dbConnectionString)
+        Document.dbClient = getDbClient(config.dbConnectionString, this.onCriticalDbError, config.dbClientConfig)
 
         Error.stackTraceLimit = Infinity
         process.on("uncaughtException", err => Logger.debugLogError("Unhandled exception!", err))
