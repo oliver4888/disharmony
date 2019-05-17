@@ -1,9 +1,12 @@
-import { Collection, MongoClient as MongoClientActual } from "mongodb"
+import { Collection, Db, MongoClient as MongoClientActual } from "mongodb"
 import { IDbClient } from "./db-client"
 
 export default class MongoClient implements IDbClient
 {
+    private connectionPromise: Promise<void>
     private connectionString: string
+    private client: MongoClientActual
+    private db: Db
     public isMongo = true
 
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
@@ -32,12 +35,19 @@ export default class MongoClient implements IDbClient
 
     public async getCollection(collectionName: string): Promise<Collection>
     {
-        const client = await MongoClientActual.connect(this.connectionString, { useNewUrlParser: true })
-        return client.db().collection(collectionName)
+        await this.connectionPromise
+        return this.db.collection(collectionName)
+    }
+
+    private async connectDb()
+    {
+        this.client = await MongoClientActual.connect(this.connectionString, { useNewUrlParser: true })
+        this.db = this.client.db()
     }
 
     constructor(connectionString: string)
     {
         this.connectionString = connectionString
+        this.connectionPromise = this.connectDb().catch(err => { throw new Error("Failed to connect to database" + err ? err.message || err : "") })
     }
 }
