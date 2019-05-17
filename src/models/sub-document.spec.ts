@@ -1,6 +1,6 @@
 // tslint:disable: no-floating-promises
-import { AsyncTest, Expect, Setup, Test } from "alsatian"
-import { IMock, It, Mock, Times } from "typemoq"
+import { Expect, Test } from "alsatian"
+import { It, Mock, Times } from "typemoq"
 import { SubDocument } from "..";
 import { IDbClient } from "../database/db-client";
 import Document from "./document";
@@ -33,7 +33,8 @@ export default class SubDocumentTests
     public array_proxy_returns_class_instance_from_record_array_item()
     {
         // ARRANGE
-        const parent = new TestDocument("id", this.dbClient.object)
+        Document.dbClient = this.dbClient.object
+        const parent = new TestDocument("id")
 
         // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
@@ -47,7 +48,8 @@ export default class SubDocumentTests
     public parent_document_updates_db_when_array_item_set()
     {
         // ARRANGE
-        const parent = new TestDocument("id", this.dbClient.object)
+        Document.dbClient = this.dbClient.object
+        const parent = new TestDocument("id")
 
         // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
@@ -64,7 +66,8 @@ export default class SubDocumentTests
     public same_instance_returned_when_repeat_access()
     {
         // ARRANGE
-        const parent = new TestDocument("id", this.dbClient.object)
+        Document.dbClient = this.dbClient.object
+        const parent = new TestDocument("id")
 
         // ACT
         const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)

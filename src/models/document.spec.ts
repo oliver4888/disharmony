@@ -18,12 +18,12 @@ export class DocumentTests
     public db_client_receives_insert_when_new_serializable_saved()
     {
         // ARRANGE
-        const dbClientObject = this.dbClient.object
+        Document.dbClient = this.dbClient.object
         class Derived extends Document
         {
             constructor()
             {
-                super("id", dbClientObject)
+                super("id")
                 this.record = { a: 1 }
                 this.isNewRecord = true
             }
@@ -40,14 +40,14 @@ export class DocumentTests
     public async db_client_receives_update_when_serializable_updated_and_saved()
     {
         // ARRANGE
-        const dbClientObject = this.dbClient.object
+        Document.dbClient = this.dbClient.object
         class Derived extends Document
         {
             public get num() { return this.record.num }
             public set num(value: number) { this.record.num = value }
             constructor()
             {
-                super("id", dbClientObject)
+                super("id")
                 this.isNewRecord = false
             }
         }
@@ -70,11 +70,11 @@ export class DocumentTests
     public async serializable_record_set_to_db_value_when_serializable_loads_record()
     {
         // ARRANGE
-        const dbClientObject = this.dbClient.object
+        Document.dbClient = this.dbClient.object
         class Derived extends Document
         {
             get exposedRecord() { return this.record }
-            constructor() { super("id", dbClientObject) }
+            constructor() { super("id") }
         }
 
         this.dbClient
@@ -93,11 +93,11 @@ export class DocumentTests
     public async load_document_throws_if_error_returned_when_serializable_loads_record()
     {
         // ARRANGE
-        const dbClientObject = this.dbClient.object
+        Document.dbClient = this.dbClient.object
         class Derived extends Document
         {
             get exposedRecord() { return this.record }
-            constructor() { super("id", dbClientObject) }
+            constructor() { super("id") }
         }
 
         this.dbClient
