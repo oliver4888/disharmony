@@ -41,7 +41,7 @@ export default interface Config
     requiredPermissions: number
 
     /** Timeout duration to wait for a response after asking a question */
-    askTimeoutMs: number // Todo: not actually used
+    askTimeoutMs: number
 
     /** Configuration object for the chosen database client; defaults will be used if not provided */
     dbClientConfig?: NedbClientConfig | MongoClientConfig

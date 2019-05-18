@@ -25,17 +25,29 @@ export default class BotMessage implements IDjsExtension<DjsMessage>
         const channel = client.channels.get(channelID) as TextChannel
         await channel.send(question)
 
-        return new Promise<BotMessage>((resolve) =>
+        return new Promise<BotMessage>((resolve, reject) =>
         {
+            let timeout: NodeJS.Timer | null
+
             let resolver: (msg: BotMessage) => void
             resolver = msg =>
             {
                 if (!askee || msg.member.id === askee.id)
                 {
+                    if (timeout)
+                        clearTimeout(timeout)
                     client.onMessage.unsub(resolver)
                     resolve(msg)
                 }
             }
+
+            const rejecter = () =>
+            {
+                client.onMessage.unsub(resolver)
+                reject("Response timeout")
+            }
+
+            timeout = setTimeout(rejecter, client.config.askTimeoutMs || 3000)
             client.onMessage.sub(resolver)
         })
     }
