@@ -19,16 +19,12 @@ export default abstract class Document extends Serializable
         else if (Object.keys(this.updateFields).length > 0)
             await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
         this.updateFields = {}
+        this.isNewRecord = false
     }
 
     public async deleteRecord()
     {
         await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
-    }
-
-    public addSetOperator(field: string, value: any)
-    {
-        this.updateFields[field] = value
     }
 
     public async loadDocument()
@@ -48,14 +44,23 @@ export default abstract class Document extends Serializable
                     return true
                 },
             })
-            this.loadRecord(recordProxy)
+
             this.isNewRecord = !record
+            this.loadRecord(recordProxy)
+
+            if (this.isNewRecord)
+                await this.save()
         }
         catch (e)
         {
             logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
             throw new Error("Error loading data, please contact the host")
         }
+    }
+
+    public addSetOperator(field: string, value: any)
+    {
+        this.updateFields[field] = value
     }
 
     public toRecord(): any { return this.record }
