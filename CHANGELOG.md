@@ -1,4 +1,8 @@
 # Changelog
+## v0.8.2
+### Fixed
+- Prepared `$set` operator fields not being cleared after an `insert`
+
 ## v0.8.1
 ### Added
 - Configuration object support for Mongo and NeDB clients
