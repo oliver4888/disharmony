@@ -1,4 +1,12 @@
 # Changelog
+## v0.8.1
+### Added
+- Configuration object support for Mongo and NeDB clients
+- Configurable timeout to `Message.ask`
+
+### Fixed
+- MongoDB integration not reusing exising Db connection
+
 ## v0.8.0
 ### Added
 - Configuration file support, defaults to *./config.json*
