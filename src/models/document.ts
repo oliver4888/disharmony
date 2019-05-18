@@ -1,29 +1,30 @@
-import getDbClient, { IDbClient } from "../database/db-client";
+import { IDbClient } from "../database/db-client";
 import logger from "../utilities/logger";
 import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
 {
-    private dbClient: IDbClient
     private updateFields: any = {}
     protected isNewRecord = false
+
+    public static dbClient: IDbClient
 
     public async save()
     {
         this.record._id = this.id
 
         if (this.isNewRecord)
-            await this.dbClient.insertOne(this.constructor.name, this.toRecord())
+            await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
         else if (Object.keys(this.updateFields).length > 0)
         {
-            await this.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
+            await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
             this.updateFields = {}
         }
     }
 
     public async deleteRecord()
     {
-        await this.dbClient.deleteOne(this.constructor.name, { _id: this.id })
+        await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
     }
 
     public addSetOperator(field: string, value: any)
@@ -35,7 +36,7 @@ export default abstract class Document extends Serializable
     {
         try
         {
-            const record = await this.dbClient.findOne(this.constructor.name, { _id: this.id })
+            const record = await Document.dbClient.findOne(this.constructor.name, { _id: this.id })
             const recordProxy = new Proxy(record || {}, {
                 get: (target, prop) => target[prop],
                 set: (target, prop, value) =>
@@ -63,10 +64,8 @@ export default abstract class Document extends Serializable
 
     constructor(
         public id: string,
-        dbClient?: IDbClient,
     )
     {
         super()
-        this.dbClient = dbClient || getDbClient()
     }
 }

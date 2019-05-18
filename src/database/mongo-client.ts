@@ -1,9 +1,16 @@
-import { Collection, MongoClient as MongoClientActual } from "mongodb"
-import { IDbClient } from "./db-client"
+import { Collection, Db, MongoClient as MongoClientActual } from "mongodb"
+import { Logger } from "..";
+import { MongoClientConfig } from "../models/internal/config";
+import { CriticalError, IDbClient } from "./db-client"
 
 export default class MongoClient implements IDbClient
 {
+    private connectionPromise: Promise<void>
+    private reconnectFailTimeout: NodeJS.Timeout | null
     private connectionString: string
+    private client: MongoClientActual
+    private db: Db
+
     public isMongo = true
 
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
@@ -32,12 +39,48 @@ export default class MongoClient implements IDbClient
 
     public async getCollection(collectionName: string): Promise<Collection>
     {
-        const client = await MongoClientActual.connect(this.connectionString, { useNewUrlParser: true })
-        return client.db().collection(collectionName)
+        await this.connectionPromise
+        return this.db.collection(collectionName)
     }
 
-    constructor(connectionString: string)
+    private async connectDb()
+    {
+        /* Don't buffer entries during downtime as if the database is down we will present a "try again soon"
+           message to the user. It would be confusing if their change then did actually go through. */
+        this.client = await MongoClientActual.connect(this.connectionString, {
+            useNewUrlParser: true,
+            autoReconnect: true,
+            reconnectTries: this.mongoClientConfig.reconnectTries,
+            reconnectInterval: this.mongoClientConfig.reconnectInterval,
+            bufferMaxEntries: 0,
+        })
+        this.db = this.client.db()
+        this.db.on("close", this.onClose.bind(this))
+        this.db.on("reconnect", this.onReconnect.bind(this))
+    }
+
+    private onClose(err?: Error)
+    {
+        Logger.consoleLogError(`MongoDB connection lost`, err)
+        const onReconnectFail = () => this.onCriticalError(CriticalError.ReconnectFail)
+        this.reconnectFailTimeout = setTimeout(onReconnectFail, this.mongoClientConfig.reconnectInterval * this.mongoClientConfig.reconnectTries)
+    }
+
+    private onReconnect(obj: any)
+    {
+        Logger.consoleLog("MongoDB connection re-established")
+        if (this.reconnectFailTimeout)
+            clearTimeout(this.reconnectFailTimeout)
+        this.reconnectFailTimeout = null
+    }
+
+    constructor(
+        connectionString: string,
+        private onCriticalError: (err: CriticalError) => void,
+        private mongoClientConfig: MongoClientConfig = { reconnectInterval: 1000, reconnectTries: 30 },
+    )
     {
         this.connectionString = connectionString
+        this.connectionPromise = this.connectDb().catch(err => { throw new Error("Failed to connect to database" + err ? err.message || err : "") })
     }
 }
