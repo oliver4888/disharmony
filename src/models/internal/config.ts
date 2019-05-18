@@ -8,10 +8,10 @@ export interface HeartbeatConfig
     intervalSec: number
 }
 
-// tslint:disable-next-line: no-empty-interface
 export interface NedbClientConfig
 {
-    // Todo
+    /** Number of database writes after which the file should be compacted */
+    compactionWriteCount: number
 }
 
 export interface MongoClientConfig

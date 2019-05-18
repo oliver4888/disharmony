@@ -1,7 +1,8 @@
 import * as Datastore from "nedb-core"
 import { join } from "path"
 import { promisify } from "typed-promisify"
-import logger from "../utilities/logger";
+import { NedbClientConfig } from "../models/internal/config";
+import Logger from "../utilities/logger";
 import { IDbClient } from "./db-client"
 
 export default class NedbClient implements IDbClient
@@ -15,7 +16,7 @@ export default class NedbClient implements IDbClient
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
         const collection = this.getCollection(collectionName)
-        await promisify(collection.update, collection)(query, update, { })
+        await promisify(collection.update, collection)(query, update, {})
         this.incrementWriteCount()
     }
 
@@ -55,17 +56,18 @@ export default class NedbClient implements IDbClient
     {
         this.writeCount++
 
-        // compact the data file every 10 accesses
-        if (this.writeCount > 10)
+        if (this.writeCount > this.nedbClientConfig.compactionWriteCount)
         {
             for (const collection of this.collections)
                 collection.persistence.compactDatafile()
             this.writeCount = 0
-            logger.debugLog("Compacted NeDB collections")
+            Logger.debugLog("Compacted NeDB collections")
         }
     }
 
-    constructor(connectionString: string)
+    constructor(
+        connectionString: string,
+        private nedbClientConfig: NedbClientConfig = { compactionWriteCount: 100 })
     {
         this.baseDir = /^nedb:\/\/(.+)/.exec(connectionString)![1]
     }
