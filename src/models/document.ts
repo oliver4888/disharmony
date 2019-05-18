@@ -4,8 +4,9 @@ import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
 {
-    private updateFields: any = {}
     protected isNewRecord = false
+
+    public updateFields: any = {}
 
     public static dbClient: IDbClient
 
