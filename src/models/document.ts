@@ -19,6 +19,8 @@ export default abstract class Document extends Serializable
             await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
         else if (Object.keys(this.updateFields).length > 0)
             await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
+        else
+            await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, this.toRecord())
         this.updateFields = {}
         this.isNewRecord = false
     }
