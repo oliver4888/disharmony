@@ -10,6 +10,7 @@ export default abstract class Document extends Serializable
 
     public static dbClient: IDbClient
 
+    /** Save record modifications back to the database, or insert the record for the first time */
     public async save()
     {
         this.record._id = this.id
@@ -22,11 +23,13 @@ export default abstract class Document extends Serializable
         this.isNewRecord = false
     }
 
+    /** Delete the corresponding database record */
     public async deleteRecord()
     {
         await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
     }
 
+    /** Load the corresponding document from the database (basec off this document's .id) */
     public async loadDocument()
     {
         try
@@ -58,6 +61,7 @@ export default abstract class Document extends Serializable
         }
     }
 
+    /** Add a field to the $set operator used in the next update */
     public addSetOperator(field: string, value: any)
     {
         this.updateFields[field] = value
