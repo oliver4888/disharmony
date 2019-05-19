@@ -14,6 +14,34 @@ export class DocumentTests
         this.dbClient = Mock.ofType<IDbClient>()
     }
 
+    @AsyncTest()
+    public async db_client_receives_insert_when_load_document_called_for_new_record()
+    {
+        // ARRANGE
+        Document.dbClient = this.dbClient.object
+        class Derived extends Document
+        {
+            public get num() { return this.record.num }
+            public set num(value: number) { this.record.num = value }
+            constructor()
+            {
+                super("id")
+                this.isNewRecord = true
+            }
+        }
+
+        this.dbClient
+            .setup(x => x.findOne(It.isAnyString(), It.isAny()))
+            .returns(() => Promise.resolve(null))
+
+        // ACT
+        const sut = new Derived()
+        await sut.loadDocument()
+
+        // ASSERT
+        this.dbClient.verify(x => x.insertOne("Derived", { _id: "id" }), Times.once())
+    }
+
     @Test()
     public db_client_receives_insert_when_new_serializable_saved()
     {
@@ -64,6 +92,59 @@ export class DocumentTests
 
         // ASSERT
         this.dbClient.verify(x => x.updateOne("Derived", { _id: "id" }, { $set: { num: 2 } }), Times.once())
+    }
+
+    @AsyncTest()
+    public async db_client_receives_replace_when_neither_update_nor_insert_valid()
+    {
+        // ARRANGE
+        Document.dbClient = this.dbClient.object
+        class Derived extends Document
+        {
+            constructor()
+            {
+                super("id")
+                this.record = { arr: [0, 1, 2] }
+                this.isNewRecord = false
+            }
+        }
+
+        const sut = new Derived();
+
+        // ACT
+        // In-place array modifications aren't detectable, so won't be included as a $set operator
+        (sut as any).record.arr.splice(0, 1)
+        await sut.save()
+
+        // ASSERT
+        this.dbClient.verify(x => x.replaceOne("Derived", { _id: "id" }, { _id: "id", arr: [1, 2] }), Times.once())
+    }
+
+    @AsyncTest()
+    public async db_client_in_ready_state_when_save_complete()
+    {
+        // ARRANGE
+        Document.dbClient = this.dbClient.object
+        class Derived extends Document
+        {
+            constructor()
+            {
+                super("id")
+                this.record = { a: 1 }
+                this.isNewRecord = true
+            }
+        }
+
+        const sut = new Derived()
+        sut.updateFields = { whatever: "abc" };
+        (sut as any).isNewRecord = true
+
+        // ACT
+        await sut.save()
+
+        // ASSERT
+        Expect(Object.keys(sut.updateFields).length).toBe(0)
+        Expect((sut as any).isNewRecord).toBe(false)
     }
 
     @AsyncTest()

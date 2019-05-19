@@ -76,4 +76,21 @@ export default class SubDocumentTests
         // ASSERT
         Expect(sut[0].ephemeralString).toBe("modified")
     }
+
+    @Test()
+    public error_thrown_when_setting_index_and_parent_pending_field_write()
+    {
+        // ARRANGE
+        Document.dbClient = this.dbClient.object
+        const parent = new TestDocument("id")
+        parent.updateFields = { sub: [] }
+
+        // ACT
+        const sut = SubDocument.getArrayProxy([{ recordedString: "record" }], parent, "sub", TestSubDocument)
+        const newEntry = new TestSubDocument()
+        newEntry.recordedString = "updatedRecord"
+
+        // ASSERT
+        Expect(() => sut[0] = newEntry).toThrow()
+    }
 }
