@@ -1,7 +1,12 @@
 # Changelog
+## v0.8.3
+### Fixed
+- Writes to subdocuments conflicting with array container mutation
+- Direct array mutations not being written to the database
+
 ## v0.8.2
 ### Fixed
-- Prepared `$set` operator fields not being cleared after an `insert`
+- Fields includud in `$set` operator not being cleared after an `insert`
 
 ## v0.8.1
 ### Added
