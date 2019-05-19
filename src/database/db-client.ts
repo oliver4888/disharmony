@@ -24,10 +24,11 @@ export default function getDbClient(connectionString: string, onCriticalError: (
 
 export interface IDbClient
 {
-    updateOne(collectionName: string, query: any, update: any, allowBuffering?: boolean): Promise<void>
+    updateOne(collectionName: string, query: any, update: any): Promise<void>
     insertOne(collectionName: string, record: any, allowBuffering?: boolean): Promise<void>
     findOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<any>
     deleteOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<void>
+    replaceOne(collectionName: string, query: any, record: any): Promise<void>
     isMongo: boolean
 }
 

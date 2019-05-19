@@ -37,6 +37,12 @@ export default class MongoClient implements IDbClient
             .deleteOne(query)
     }
 
+    public async replaceOne(collectionName: string, query: any, record: any)
+    {
+        await (await this.getCollection(collectionName))
+            .replaceOne(query, record)
+    }
+
     public async getCollection(collectionName: string): Promise<Collection>
     {
         await this.connectionPromise

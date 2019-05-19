@@ -4,11 +4,13 @@ import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
 {
-    private updateFields: any = {}
     protected isNewRecord = false
+
+    public updateFields: any = {}
 
     public static dbClient: IDbClient
 
+    /** Save record modifications back to the database, or insert the record for the first time */
     public async save()
     {
         this.record._id = this.id
@@ -17,19 +19,19 @@ export default abstract class Document extends Serializable
             await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
         else if (Object.keys(this.updateFields).length > 0)
             await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
+        else
+            await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, this.toRecord())
         this.updateFields = {}
+        this.isNewRecord = false
     }
 
+    /** Delete the corresponding database record */
     public async deleteRecord()
     {
         await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
     }
 
-    public addSetOperator(field: string, value: any)
-    {
-        this.updateFields[field] = value
-    }
-
+    /** Load the corresponding document from the database (basec off this document's .id) */
     public async loadDocument()
     {
         try
@@ -47,14 +49,24 @@ export default abstract class Document extends Serializable
                     return true
                 },
             })
-            this.loadRecord(recordProxy)
+
             this.isNewRecord = !record
+            this.loadRecord(recordProxy)
+
+            if (this.isNewRecord)
+                await this.save()
         }
         catch (e)
         {
             logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
             throw new Error("Error loading data, please contact the host")
         }
+    }
+
+    /** Add a field to the $set operator used in the next update */
+    public addSetOperator(field: string, value: any)
+    {
+        this.updateFields[field] = value
     }
 
     public toRecord(): any { return this.record }

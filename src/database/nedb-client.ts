@@ -39,6 +39,11 @@ export default class NedbClient implements IDbClient
         await promisify(collection.remove, collection)(query)
     }
 
+    public async replaceOne(collectionName: string, query: any, record: any)
+    {
+        return this.updateOne(collectionName, query, record)
+    }
+
     private getCollection(name: string): Datastore
     {
         const filename = join(this.baseDir, name)
