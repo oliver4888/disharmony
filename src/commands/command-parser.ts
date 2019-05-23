@@ -1,7 +1,8 @@
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message";
 import Command from "./command"
-import { RejectionReason } from "./command-error";
+import { CommandError, RejectionReason } from "./command-error";
+import CommandRejection from "./command-rejection";
 
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
@@ -14,20 +15,29 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
         return null
 
     if (!isUserPermitted(message, command))
-        throw RejectionReason.UserMissingPermissions
+        throw new CommandError(RejectionReason.UserMissingPermissions)
     else if (details.params.length < (command.syntax.match(/ [^ \[]+/g) || []).length)
-        throw RejectionReason.IncorrectSyntax
+        throw new CommandError(RejectionReason.IncorrectSyntax)
     else
         return async (invokeClient: IClient, invokeMessage: BotMessage) =>
         {
+            await invokeMessage.guild.loadDocument()
+            let out
+
             try
             {
-                await invokeMessage.guild.loadDocument()
-                const out = await command.invoke(details.params, invokeMessage, invokeClient);
-                await invokeMessage.guild.save();
-                return out as string;
+                out = await command.invoke(details.params, invokeMessage, invokeClient)
             }
-            catch (err) { return err.message || err; }
+            catch (e)
+            {
+                if (e instanceof CommandRejection)
+                    out = e.message
+                else
+                    throw e
+            }
+
+            await invokeMessage.guild.save()
+            return out as string
         }
 }
 

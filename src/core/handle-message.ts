@@ -31,7 +31,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
     catch (err)
     {
         const isFriendly = err instanceof FriendlyError && err.friendlyMessage
-        await message.reply(isFriendly ? err.friendlyMessage : "An unknown error has occured")
+        await message.reply(isFriendly ? err.friendlyMessage : "An unknown error has occured.")
     }
 
     client.dispatchMessage(message)
