@@ -12,6 +12,7 @@ export default class NedbClient implements IDbClient
     private collections: Datastore[] = new Array<Datastore>()
 
     public isMongo = false
+    public isReconnecting = false
 
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {

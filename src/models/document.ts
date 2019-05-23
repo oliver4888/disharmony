@@ -1,5 +1,6 @@
 import { IDbClient } from "../database/db-client";
 import logger from "../utilities/logger";
+import { DocumentError, DocumentErrorReason } from "./document-error";
 import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
@@ -15,6 +16,8 @@ export default abstract class Document extends Serializable
     {
         this.record._id = this.id
 
+        this.throwIfReconnecting()
+
         if (this.isNewRecord)
             await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
         else if (Object.keys(this.updateFields).length > 0)
@@ -28,12 +31,14 @@ export default abstract class Document extends Serializable
     /** Delete the corresponding database record */
     public async deleteRecord()
     {
+        this.throwIfReconnecting()
         await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
     }
 
     /** Load the corresponding document from the database (basec off this document's .id) */
     public async loadDocument()
     {
+        this.throwIfReconnecting()
         try
         {
             const record = await Document.dbClient.findOne(this.constructor.name, { _id: this.id })
@@ -61,6 +66,11 @@ export default abstract class Document extends Serializable
             logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
             throw new Error("Error loading data, please contact the host")
         }
+    }
+
+    private throwIfReconnecting()
+    {
+        throw new DocumentError(DocumentErrorReason.DatabaseReconnecting)
     }
 
     /** Add a field to the $set operator used in the next update */

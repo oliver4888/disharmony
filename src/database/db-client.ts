@@ -30,6 +30,7 @@ export interface IDbClient
     deleteOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<void>
     replaceOne(collectionName: string, query: any, record: any): Promise<void>
     isMongo: boolean
+    isReconnecting: boolean
 }
 
 export enum CriticalError
