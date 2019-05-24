@@ -45,6 +45,11 @@ export default class NedbClient implements IDbClient
         return this.updateOne(collectionName, query, record)
     }
 
+    public closeConnection()
+    {
+        return Promise.resolve()
+    }
+
     private getCollection(name: string): Datastore
     {
         const filename = join(this.baseDir, name)

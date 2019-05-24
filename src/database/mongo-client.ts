@@ -50,6 +50,11 @@ export default class MongoClient implements IDbClient
         return this.db.collection(collectionName)
     }
 
+    public closeConnection()
+    {
+        return this.client.close()
+    }
+
     private async connectDb()
     {
         /* Don't buffer entries during downtime as if the database is down we will present a "try again soon"

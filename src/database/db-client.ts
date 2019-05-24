@@ -29,6 +29,9 @@ export interface IDbClient
     findOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<any>
     deleteOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<void>
     replaceOne(collectionName: string, query: any, record: any): Promise<void>
+
+    closeConnection(): Promise<void>
+
     isMongo: boolean
     isReconnecting: boolean
 }
