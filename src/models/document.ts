@@ -86,7 +86,8 @@ export default abstract class Document extends Serializable
 
     private throwIfReconnecting()
     {
-        throw new DocumentError(DocumentErrorReason.DatabaseReconnecting)
+        if (Document.dbClient.isReconnecting)
+            throw new DocumentError(DocumentErrorReason.DatabaseReconnecting)
     }
 
     /** Add a field to the $set operator used in the next update */

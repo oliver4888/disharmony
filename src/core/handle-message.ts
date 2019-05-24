@@ -1,6 +1,6 @@
 import { Message as DjsMessage } from "discord.js";
 import { BotMessage, Client, IClient } from "..";
-import { RejectionReason } from "../commands/command-error";
+import { CommandError, RejectionReason } from "../commands/command-error";
 import getCommandInvoker from "../commands/command-parser";
 import { FriendlyError } from "./friendly-error";
 
@@ -21,7 +21,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
         if (commandInvoker)
         {
             if (!message.guild.hasPermissions(client.config.requiredPermissions))
-                throw RejectionReason.BotMissingGuildPermissions
+                throw new CommandError(RejectionReason.BotMissingGuildPermissions)
 
             const result = await commandInvoker(client, message)
             if (result)
@@ -30,8 +30,8 @@ export default async function handleMessage<TMessage extends BotMessage>(
     }
     catch (err)
     {
-        const isFriendly = err instanceof FriendlyError && err.friendlyMessage
-        await message.reply(isFriendly ? err.friendlyMessage : "An unknown error has occured.")
+        if (err instanceof FriendlyError)
+            await message.reply(err.friendlyMessage || "An unknown error occurred.")
     }
 
     client.dispatchMessage(message)
