@@ -12,6 +12,7 @@ export class DocumentTests
     public setup()
     {
         this.dbClient = Mock.ofType<IDbClient>()
+        this.dbClient.setup(x => x.isReconnecting).returns(() => false)
     }
 
     @AsyncTest()
