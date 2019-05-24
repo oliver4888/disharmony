@@ -1,6 +1,8 @@
 import { Message as DjsMessage } from "discord.js";
 import { BotMessage, Client, IClient } from "..";
-import getCommandInvoker, { RejectionReason } from "../commands/command-parser";
+import { RejectionReason } from "../commands/command-error";
+import getCommandInvoker from "../commands/command-parser";
+import { FriendlyError } from "./friendly-error";
 
 export default async function handleMessage<TMessage extends BotMessage>(
     client: Client<TMessage>,
@@ -26,24 +28,11 @@ export default async function handleMessage<TMessage extends BotMessage>(
                 await message.reply(result)
         }
     }
-    catch (reason)
+    catch (err)
     {
-        if (reason in RejectionReason)
-            await message.reply(getRejectionMsg(reason))
+        const isFriendly = err instanceof FriendlyError && err.friendlyMessage
+        await message.reply(isFriendly ? err.friendlyMessage : "An unknown error has occured")
     }
 
     client.dispatchMessage(message)
-}
-
-function getRejectionMsg(reason: RejectionReason)
-{
-    switch (reason)
-    {
-        case RejectionReason.UserMissingPermissions:
-            return "You do not have permission to use this command."
-        case RejectionReason.IncorrectSyntax:
-            return "Incorrect syntax! See correct syntax with the `help` command."
-        case RejectionReason.BotMissingGuildPermissions:
-            return "The bot has not been granted the necessary permissions in this server. Please grant the permissions and try again. Details can be found in the readme you used to invite the bot to your server."
-    }
 }

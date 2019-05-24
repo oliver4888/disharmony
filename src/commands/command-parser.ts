@@ -1,6 +1,7 @@
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message";
 import Command from "./command"
+import { RejectionReason } from "./command-error";
 
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
@@ -46,11 +47,4 @@ function getCommandDetails(message: BotMessage, client: IClient)
             name: result[1],
             params: result[2] ? result[2].split(/ +/) : [],
         }
-}
-
-export enum RejectionReason
-{
-    UserMissingPermissions,
-    BotMissingGuildPermissions,
-    IncorrectSyntax,
 }

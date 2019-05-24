@@ -2,7 +2,8 @@ import { AsyncTest, Expect, Setup } from "alsatian";
 import { IMock, Mock } from "typemoq";
 import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
 import Command, { PermissionLevel } from "./command";
-import getCommandInvoker, { RejectionReason } from "./command-parser";
+import { RejectionReason } from "./command-error";
+import getCommandInvoker from "./command-parser";
 
 export class CommandParserTests
 {
