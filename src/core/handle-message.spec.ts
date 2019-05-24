@@ -3,7 +3,7 @@ import { AsyncTest, Expect, Setup } from "alsatian";
 import { Message as DjsMessage } from "discord.js";
 import { IMock, It, Mock, Times } from "typemoq";
 import { BotMessage, Client } from "..";
-import { CommandError, RejectionReason } from "../commands/command-error";
+import { CommandError, CommandErrorReason } from "../commands/command-error";
 import handleMessage from "./handle-message";
 
 export default class HandleMessageTests
@@ -113,7 +113,7 @@ export default class HandleMessageTests
 
         const getCommandInvokerFunc =
             () => Promise.resolve(
-                (): any => { throw new CommandError(RejectionReason.UserMissingPermissions) })
+                (): any => { throw new CommandError(CommandErrorReason.UserMissingPermissions) })
 
         // ACT
         await handleMessage(this.client.object, this.djsMessage.object, getCommandInvokerFunc)

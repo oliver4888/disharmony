@@ -1,6 +1,6 @@
 import { Message as DjsMessage } from "discord.js";
 import { BotMessage, Client, IClient } from "..";
-import { CommandError, RejectionReason } from "../commands/command-error";
+import { CommandError, CommandErrorReason } from "../commands/command-error";
 import getCommandInvoker from "../commands/command-parser";
 import { FriendlyError } from "./friendly-error";
 
@@ -21,7 +21,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
         if (commandInvoker)
         {
             if (!message.guild.hasPermissions(client.config.requiredPermissions))
-                throw new CommandError(RejectionReason.BotMissingGuildPermissions)
+                throw new CommandError(CommandErrorReason.BotMissingGuildPermissions)
 
             const result = await commandInvoker(client, message)
             if (result)

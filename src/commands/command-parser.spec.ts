@@ -2,7 +2,7 @@ import { AsyncTest, Expect, Setup } from "alsatian";
 import { IMock, Mock } from "typemoq";
 import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
 import Command, { PermissionLevel } from "./command";
-import { RejectionReason } from "./command-error";
+import { CommandErrorReason } from "./command-error";
 import getCommandInvoker from "./command-parser";
 
 export class CommandParserTests
@@ -85,7 +85,7 @@ export class CommandParserTests
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
         // ASSERT
-        Expect(error.reason).toBe(RejectionReason.UserMissingPermissions)
+        Expect(error.reason).toBe(CommandErrorReason.UserMissingPermissions)
     }
 
     @AsyncTest()
@@ -102,7 +102,7 @@ export class CommandParserTests
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
         // ASSERT
-        Expect(error.reason).toBe(RejectionReason.IncorrectSyntax)
+        Expect(error.reason).toBe(CommandErrorReason.IncorrectSyntax)
     }
 
     @AsyncTest()
