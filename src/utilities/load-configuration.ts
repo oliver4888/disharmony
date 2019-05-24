@@ -1,3 +1,4 @@
+import * as Joi from "@hapi/joi"
 import { existsSync } from "fs"
 import { resolve } from "path"
 import Config from "../models/internal/config";
@@ -20,12 +21,21 @@ export default function (configPath: string = "./config.json")
     }
 }
 
-function isConfigValid(config: Config)
+export function isConfigValid(config: Config)
 {
-    // Todo: use a JSON schema for the below
-    // Ensure the user hasn't typed non-strings into these json fields
-    return config.dbConnectionString && typeof config.dbConnectionString === "string"
-        && config.token && typeof config.token === "string"
-        && config.serviceName && typeof config.serviceName === "string"
-        && config.requiredPermissions && typeof config.requiredPermissions === "number"
+    const schema = Joi.object().keys({
+        dbConnectionString: Joi.string().required(),
+        token: Joi.string().required(),
+        serviceName: Joi.string().required(),
+        requiredPermissions: Joi.number().required(),
+        askTimeoutMs: Joi.number().required(),
+        heartbeat: Joi.object().optional().keys({
+            url: Joi.string().required(),
+            intervalSec: Joi.number().required(),
+        }),
+        dbClientConfig: Joi.object().optional(),
+    })
+
+    const { error } = Joi.validate(config, schema)
+    return !error
 }
