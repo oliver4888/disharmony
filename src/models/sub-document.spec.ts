@@ -1,6 +1,6 @@
 // tslint:disable: no-floating-promises
-import { Expect, Test } from "alsatian"
-import { It, Mock, Times } from "typemoq"
+import { Expect, Setup, Test } from "alsatian"
+import { IMock, It, Mock, Times } from "typemoq"
 import { SubDocument } from "..";
 import { IDbClient } from "../database/db-client";
 import Document from "./document";
@@ -27,7 +27,14 @@ class TestSubDocument extends SubDocument
 
 export default class SubDocumentTests
 {
-    public dbClient = Mock.ofType<IDbClient>()
+    public dbClient: IMock<IDbClient>
+
+    @Setup
+    public setup()
+    {
+        this.dbClient = Mock.ofType<IDbClient>()
+        this.dbClient.setup(x => x.isReconnecting).returns(() => false)
+    }
 
     @Test()
     public array_proxy_returns_class_instance_from_record_array_item()

@@ -12,6 +12,7 @@ export default class MongoClient implements IDbClient
     private db: Db
 
     public isMongo = true
+    public get isReconnecting() { return !this.reconnectFailTimeout }
 
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
@@ -72,7 +73,7 @@ export default class MongoClient implements IDbClient
         this.reconnectFailTimeout = setTimeout(onReconnectFail, this.mongoClientConfig.reconnectInterval * this.mongoClientConfig.reconnectTries)
     }
 
-    private onReconnect(obj: any)
+    private onReconnect()
     {
         Logger.consoleLog("MongoDB connection re-established")
         if (this.reconnectFailTimeout)

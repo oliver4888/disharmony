@@ -1,4 +1,5 @@
 import Command, { PermissionLevel } from "./commands/command";
+import CommandRejection from "./commands/command-rejection"
 import Client, { IClient } from "./core/client"
 import LightClient, { ILightClient } from "./core/light-client";
 import BotGuild from "./models/discord/guild";
@@ -26,4 +27,5 @@ export
     loadConfig,
     NotifyPropertyChanged,
     SubDocument,
+    CommandRejection,
 }

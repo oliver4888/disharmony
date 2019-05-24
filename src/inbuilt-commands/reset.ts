@@ -1,3 +1,4 @@
+import { CommandRejection } from "..";
 import Command, { PermissionLevel } from "../commands/command"
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message"
@@ -19,10 +20,10 @@ async function invoke(_: string[], message: BotMessage, client: IClient)
         if (response.content.toLowerCase() === "yes")
         {
             await message.guild.deleteRecord()
-            reject("Data for this server successfully deleted")
+            reject(new CommandRejection("Data for this server successfully deleted"))
         }
         else
-            reject("Data was not deleted")
+            reject(new CommandRejection("Data was not deleted"))
     })
 }
 

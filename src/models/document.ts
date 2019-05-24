@@ -1,5 +1,6 @@
 import { IDbClient } from "../database/db-client";
 import logger from "../utilities/logger";
+import { DocumentError, DocumentErrorReason } from "./document-error";
 import Serializable from "./serializable";
 
 export default abstract class Document extends Serializable
@@ -15,25 +16,45 @@ export default abstract class Document extends Serializable
     {
         this.record._id = this.id
 
-        if (this.isNewRecord)
-            await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
-        else if (Object.keys(this.updateFields).length > 0)
-            await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
-        else
-            await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, this.toRecord())
-        this.updateFields = {}
-        this.isNewRecord = false
+        this.throwIfReconnecting()
+
+        try
+        {
+            if (this.isNewRecord)
+                await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
+            else if (Object.keys(this.updateFields).length > 0)
+                await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
+            else
+                await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, this.toRecord())
+            this.updateFields = {}
+            this.isNewRecord = false
+        }
+        catch (e)
+        {
+            logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
+            throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
+        }
     }
 
     /** Delete the corresponding database record */
     public async deleteRecord()
     {
-        await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
+        this.throwIfReconnecting()
+        try
+        {
+            await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
+        }
+        catch (e)
+        {
+            logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
+            throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
+        }
     }
 
-    /** Load the corresponding document from the database (basec off this document's .id) */
+    /** Load the corresponding document from the database (based off this document's .id) */
     public async loadDocument()
     {
+        this.throwIfReconnecting()
         try
         {
             const record = await Document.dbClient.findOne(this.constructor.name, { _id: this.id })
@@ -58,9 +79,15 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            logger.consoleLogError(`Error loading document for Guild ${this.id}`, e)
-            throw new Error("Error loading data, please contact the host")
+            logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
+            throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
+    }
+
+    private throwIfReconnecting()
+    {
+        if (Document.dbClient.isReconnecting)
+            throw new DocumentError(DocumentErrorReason.DatabaseReconnecting)
     }
 
     /** Add a field to the $set operator used in the next update */

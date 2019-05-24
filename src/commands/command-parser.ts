@@ -1,6 +1,8 @@
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message";
 import Command from "./command"
+import { CommandError, CommandErrorReason } from "./command-error";
+import CommandRejection from "./command-rejection";
 
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
@@ -13,20 +15,29 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
         return null
 
     if (!isUserPermitted(message, command))
-        throw RejectionReason.UserMissingPermissions
+        throw new CommandError(CommandErrorReason.UserMissingPermissions)
     else if (details.params.length < (command.syntax.match(/ [^ \[]+/g) || []).length)
-        throw RejectionReason.IncorrectSyntax
+        throw new CommandError(CommandErrorReason.IncorrectSyntax)
     else
         return async (invokeClient: IClient, invokeMessage: BotMessage) =>
         {
+            await invokeMessage.guild.loadDocument()
+            let out
+
             try
             {
-                await invokeMessage.guild.loadDocument()
-                const out = await command.invoke(details.params, invokeMessage, invokeClient);
-                await invokeMessage.guild.save();
-                return out as string;
+                out = await command.invoke(details.params, invokeMessage, invokeClient)
             }
-            catch (err) { return err.message || err; }
+            catch (e)
+            {
+                if (e instanceof CommandRejection)
+                    out = e.message
+                else
+                    throw e
+            }
+
+            await invokeMessage.guild.save()
+            return out as string
         }
 }
 
@@ -46,11 +57,4 @@ function getCommandDetails(message: BotMessage, client: IClient)
             name: result[1],
             params: result[2] ? result[2].split(/ +/) : [],
         }
-}
-
-export enum RejectionReason
-{
-    UserMissingPermissions,
-    BotMissingGuildPermissions,
-    IncorrectSyntax,
 }

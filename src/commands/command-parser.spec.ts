@@ -2,7 +2,8 @@ import { AsyncTest, Expect, Setup } from "alsatian";
 import { IMock, Mock } from "typemoq";
 import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
 import Command, { PermissionLevel } from "./command";
-import getCommandInvoker, { RejectionReason } from "./command-parser";
+import { CommandErrorReason } from "./command-error";
+import getCommandInvoker from "./command-parser";
 
 export class CommandParserTests
 {
@@ -84,7 +85,7 @@ export class CommandParserTests
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
         // ASSERT
-        Expect(error).toBe(RejectionReason.UserMissingPermissions)
+        Expect(error.reason).toBe(CommandErrorReason.UserMissingPermissions)
     }
 
     @AsyncTest()
@@ -101,7 +102,7 @@ export class CommandParserTests
         await getCommandInvoker(this.client, this.message.object).catch(reason => error = reason)
 
         // ASSERT
-        Expect(error).toBe(RejectionReason.IncorrectSyntax)
+        Expect(error.reason).toBe(CommandErrorReason.IncorrectSyntax)
     }
 
     @AsyncTest()
@@ -122,7 +123,7 @@ export class CommandParserTests
     }
 
     @AsyncTest()
-    public async error_returned_when_invoked_command_throws()
+    public async error_rethrown_when_invoked_command_throws()
     {
         // ARRANGE
         this.command.invoke = async () => { throw new Error("its borked") }
@@ -132,10 +133,9 @@ export class CommandParserTests
 
         // ACT
         const invoker = await getCommandInvoker(this.client, this.message.object)
-        const result = await invoker!(this.client, this.message.object)
 
         // ASSERT
-        Expect(result).toBe("its borked")
+        await Expect(async() => await invoker!(this.client, this.message.object)).toThrowAsync()
     }
 
     @AsyncTest()
