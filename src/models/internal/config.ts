@@ -31,9 +31,6 @@ export default interface Config
     /** Discord bot application token */
     token: string
 
-    /** Configuration details for the heartbeat feature */
-    heartbeat?: HeartbeatConfig
-
     /** Friendly name for the bot */
     serviceName: string
 
@@ -42,6 +39,9 @@ export default interface Config
 
     /** Timeout duration to wait for a response after asking a question */
     askTimeoutMs: number
+
+    /** Configuration details for the heartbeat feature */
+    heartbeat?: HeartbeatConfig
 
     /** Configuration object for the chosen database client; defaults will be used if not provided */
     dbClientConfig?: NedbClientConfig | MongoClientConfig

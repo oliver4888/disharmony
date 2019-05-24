@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/benji7425/disharmony#readme",
   "dependencies": {
+    "@hapi/joi": "^15.0.3",
+    "@types/hapi__joi": "^15.0.1",
     "discord.js": "^11.4.2",
     "mongodb": "^3.2.2",
     "nedb-core": "^3.0.6",
