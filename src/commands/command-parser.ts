@@ -1,3 +1,4 @@
+import { Logger } from "..";
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message";
 import Command from "./command"
@@ -6,13 +7,33 @@ import CommandRejection from "./command-rejection";
 
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {
-    const details = getCommandDetails(message, client)
-    if (!details)
-        return null
+    let details: {
+        name: string;
+        params: string[];
+    } | null
 
-    const command = client.commands.find(x => x.syntax.startsWith(details.name))
-    if (!command)
+    let command: Command | undefined
+
+    try
+    {
+        details = getCommandDetails(message, client)
+        if (!details)
+            return null
+
+        command = client.commands.find(x => x.syntax.startsWith(details!.name))
+        if (!command)
+            return null
+    }
+    catch (err)
+    {
+        /* Suppress any errors that occur while we're not yet sure if this is a command.
+           This is important because of the high volume of messages the bot receives, if something
+           goes wrong with message parsing we don't want it to reply "an error occurred" to
+           every single message it sees! */
+
+        Logger.debugLogError(`Error determining if message contained command`, err)
         return null
+    }
 
     if (!isUserPermitted(message, command))
         throw new CommandError(CommandErrorReason.UserMissingPermissions)
@@ -26,7 +47,7 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
 
             try
             {
-                out = await command.invoke(details.params, invokeMessage, invokeClient)
+                out = await command!.invoke(details!.params, invokeMessage, invokeClient)
             }
             catch (e)
             {
