@@ -28,9 +28,8 @@ async function invoke(_: string[], message: BotMessage, client: IClient)
 }
 
 export default new Command(
-    /*name*/            "reset",
-    /*description*/     "Reset all data for this Discord server. WARNING: YOU WILL LOSE ALL YOUR SETTINGS!",
     /*syntax*/          "reset",
+    /*description*/     "Reset all data for this Discord server. WARNING: YOU WILL LOSE ALL YOUR SETTINGS!",
     /*permissionLevel*/ PermissionLevel.Admin,
     /*invoke*/          invoke,
 )

@@ -6,9 +6,8 @@ function invoke()
 }
 
 export default new Command(
-    /*name*/            "version",
-    /*description*/     "Returns the current version of the bot",
     /*syntax*/          "version",
+    /*description*/     "Returns the current version of the bot",
     /*permissionLevel*/ PermissionLevel.Anyone,
     /*invoke*/          invoke,
 )

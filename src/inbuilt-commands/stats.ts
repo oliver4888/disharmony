@@ -14,9 +14,8 @@ function invoke(_: string[], __: BotMessage, client: IClient)
 }
 
 export default new Command(
-    /*name*/            "stats",
-    /*description*/     "Returns some stats about the bot",
     /*syntax*/          "stats",
+    /*description*/     "Returns some stats about the bot",
     /*permissionLevel*/ PermissionLevel.Anyone,
     /*invoke*/          invoke,
 )

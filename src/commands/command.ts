@@ -15,9 +15,8 @@ export default class Command
 {
     public invokeDependency?: any
     constructor(
-        public name: string,
-        public description: string,
         public syntax: string,
+        public description: string,
         public permissionLevel: PermissionLevel,
         public invoke: InvokeFunc) { }
 }

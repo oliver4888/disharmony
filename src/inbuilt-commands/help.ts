@@ -14,7 +14,7 @@ function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMe
     const embed = new RichEmbed().setTitle(`__${client.config.serviceName} help__`)
 
     for (const command of client.commands.filter(x => x.permissionLevel <= member.getPermissionLevel()))
-        embed.addField(command.name,
+        embed.addField(command.syntax.match(/^\s?[^\s]+/)![0],
             `${command.description}
             **Usage:** *@${me.nickname || me.username} ${command.syntax}*
             ${command.permissionLevel !== PermissionLevel.Anyone ? `***${PermissionLevel[command.permissionLevel]} only***` : ""}`,
@@ -27,9 +27,8 @@ function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMe
 }
 
 export default new Command(
-    /*name*/            "help",
-    /*description*/     "Display available commands with descriptions",
     /*syntax*/          "help",
+    /*description*/     "Display available commands with descriptions",
     /*permissionLevel*/ PermissionLevel.Anyone,
     /*invoke*/          invoke,
 )
