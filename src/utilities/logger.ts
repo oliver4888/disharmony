@@ -1,9 +1,9 @@
 import * as SimpleFileWriter from "simple-file-writer"
 
-const consoleLogWriter = new SimpleFileWriter(process.cwd() + "/console.log")
-const debugLogWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
+const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/console.log")
+const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
 
-async function doLog(message: string, debugOnly: boolean, error?: Error | boolean)
+function doLog(message: string, debugOnly: boolean, error?: Error | boolean)
 {
     const prefix = error ? "[ERROR]" : debugOnly ? "[DEBUG]" : "[INFO]"
     const messageStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
@@ -15,14 +15,17 @@ async function doLog(message: string, debugOnly: boolean, error?: Error | boolea
         debugStr += `\n\t${error.message}\n\t${error.stack}`
     }
 
-    await debugLogWriter.write(debugStr + "\n")
-
-    if (!debugOnly)
+    return new Promise<void>(resolve =>
     {
-        // tslint:disable-next-line: no-console
-        console.log(consoleStr)
-        await consoleLogWriter.write(consoleStr + "\n")
-    }
+        debugLogWriter.write(debugStr + "\n", () => resolve())
+
+        if (!debugOnly)
+        {
+            // tslint:disable-next-line: no-console
+            console.log(consoleStr)
+            consoleLogWriter.write(consoleStr + "\n", () => resolve())
+        }
+    })
 }
 
 export default {
