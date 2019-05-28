@@ -16,16 +16,21 @@ export default abstract class Document extends Serializable
     {
         this.record._id = this.id
 
+        /* Invoking toRecord here will execute any record writes that derived
+           classes may implement in their toRecord function, in case they need
+           to be included in the update $set operator */
+        const record = this.toRecord()
+
         this.throwIfReconnecting()
 
         try
         {
             if (this.isNewRecord)
-                await Document.dbClient.insertOne(this.constructor.name, this.toRecord())
+                await Document.dbClient.insertOne(this.constructor.name, record)
             else if (Object.keys(this.updateFields).length > 0)
                 await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
             else
-                await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, this.toRecord())
+                await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, record)
             this.updateFields = {}
             this.isNewRecord = false
         }
