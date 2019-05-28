@@ -37,7 +37,7 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
 
     if (!isUserPermitted(message, command))
         throw new CommandError(CommandErrorReason.UserMissingPermissions)
-    else if (details.params.length < (command.syntax.match(/ [^ \[]+/g) || []).length)
+    else if (details.params.length < (command.syntax.match(/\s[^\s\[]+/g) || []).length)
         throw new CommandError(CommandErrorReason.IncorrectSyntax)
     else
         return async (invokeClient: IClient, invokeMessage: BotMessage) =>
@@ -71,11 +71,11 @@ function getCommandDetails(message: BotMessage, client: IClient)
 {
     // if no command prefix exists for this guild command criteria is bot mention
     const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botId}>`
-    const regexp = new RegExp(`${commandPrefix} ?([^ ]+)(?: ([^ ].*))?`)
+    const regexp = new RegExp(`${commandPrefix}\\s+([^\\s]+)(?:\\s+(.*))?`)
     const result = regexp.exec(message.content)
     return !result ? null :
         {
             name: result[1],
-            params: result[2] ? result[2].split(/ +/) : [],
+            params: result[2] ? result[2].split(/\s+/) : [],
         }
 }
