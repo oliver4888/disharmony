@@ -8,7 +8,11 @@ export default async function handleMessage<TMessage extends BotMessage>(
     djsMessage: DjsMessage,
     innerGetCommandInvoker?: (client: IClient, message: BotMessage) => Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>)
 {
-    // ignore messages from self
+    // Sometimes message member is null, no idea why
+    if (!djsMessage.member)
+        return
+
+    // Ignore messages from self
     if (djsMessage.member.id === djsMessage.member.guild.me.id)
         return
 
