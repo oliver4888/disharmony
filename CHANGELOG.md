@@ -1,4 +1,8 @@
 # Changelog
+## v0.9.1
+### Fixed
+- Exception being thrown if message member is null
+
 ## v0.9.0
 ### Added
 - Improved error handling during command parsing and execution
