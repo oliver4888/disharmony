@@ -1,4 +1,19 @@
 # Changelog
+## v0.9.0
+### Added
+- Improved error handling during command parsing and execution
+    - Errors should now always be caught, and translated into a user message
+    - Differentation is performed between friendly and unfriendly user error strings;  
+      unfriendly errors will return generic "An unknown error occurred" message
+- Schema validation for config file
+    - Starting the app with an invalid config file will halt
+
+### Fixed
+- Instances where log messages wouldn't finish writing before process exit after an error
+- Command parsing not allowing all whitespace types between parameters
+- Command parsing not allowing more than one whitespace character between parameters
+- Classes derived from `Document` not always having `toRecord` executed before saving
+
 ## v0.8.3
 ### Fixed
 - Writes to subdocuments conflicting with array container mutation
