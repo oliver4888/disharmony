@@ -1,4 +1,8 @@
 # Changelog
+## v0.9.2
+### Fixed
+- Property `isReconnecting` on `MongoClient` returning inverted value (true if not reconnecting, false if reconnecting)
+
 ## v0.9.1
 ### Fixed
 - Exception being thrown if message member is null
