@@ -12,7 +12,7 @@ export default class MongoClient implements IDbClient
     private db: Db
 
     public isMongo = true
-    public get isReconnecting() { return !this.reconnectFailTimeout }
+    public get isReconnecting() { return !!this.reconnectFailTimeout }
 
     public async updateOne(collectionName: string, query: any, update: any): Promise<void>
     {
