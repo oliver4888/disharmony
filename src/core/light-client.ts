@@ -58,8 +58,14 @@ export default class LightClient implements ILightClient
 
         Document.dbClient = getDbClient(config.dbConnectionString, this.onCriticalDbError, config.dbClientConfig)
 
+        this.djs.on("error", (err: ErrorEvent) => Logger.debugLogError("Websocket error from discord.js", err.error))
+
         Error.stackTraceLimit = Infinity
-        process.on("uncaughtException", err => Logger.debugLogError("Unhandled exception!", err))
+        process.on("uncaughtException", async err =>
+        {
+            await Logger.debugLogError("Unhandled exception!", err)
+            process.exit(1)
+        })
         process.on("exit", () => Logger.debugLog("Shutdown"))
         process.on("SIGINT", () =>
         {
