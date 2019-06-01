@@ -10,7 +10,7 @@ export interface ILightClient extends IDjsExtension<DjsClient>
     readonly botId: string
     readonly dbClient: IDbClient
     readonly config: Config
-    initialize(token: string): Promise<void>
+    login(token: string): Promise<void>
 }
 
 export default class LightClient implements ILightClient
@@ -20,10 +20,8 @@ export default class LightClient implements ILightClient
     public get botId() { return /[0-9]{18}/.exec(this.djs.user.toString())![0] }
     public get dbClient() { return Document.dbClient }
 
-    public async initialize(token: string)
+    public async login(token: string)
     {
-        this.djs.on("debug", this.onDebug)
-
         // remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.djs.login(token.replace(/\r?\n|\r/g, ""))
         Logger.consoleLog(`Registered bot ${this.djs.user.username}`)
@@ -58,9 +56,11 @@ export default class LightClient implements ILightClient
 
         Document.dbClient = getDbClient(config.dbConnectionString, this.onCriticalDbError, config.dbClientConfig)
 
-        this.djs.on("error", (err: ErrorEvent) => Logger.debugLogError("Websocket error from discord.js", err.error))
-
         Error.stackTraceLimit = Infinity
+
+        this.djs.on("error", (err: ErrorEvent) => Logger.debugLogError("Websocket error from discord.js", err.error))
+        this.djs.on("debug", this.onDebug)
+
         process.on("uncaughtException", async err =>
         {
             await Logger.debugLogError("Unhandled exception!", err)
