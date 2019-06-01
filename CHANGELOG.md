@@ -1,4 +1,9 @@
 # Changelog
+## v0.9.3
+### Fixed
+- Lack of handling for Discord.js client 'error' event
+    - I now belive this lack of handling has been the source of my 'silent disconnect' issues
+
 ## v0.9.2
 ### Fixed
 - Property `isReconnecting` on `MongoClient` returning inverted value (true if not reconnecting, false if reconnecting)
