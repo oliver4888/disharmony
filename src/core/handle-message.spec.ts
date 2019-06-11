@@ -1,12 +1,13 @@
 // tslint:disable: no-floating-promises
-import { AsyncTest, Expect, Setup } from "alsatian";
+import { AsyncTest, Expect, Setup, TestFixture } from "alsatian";
 import { Message as DjsMessage } from "discord.js";
 import { IMock, It, Mock, Times } from "typemoq";
 import { BotMessage, Client } from "..";
 import { CommandError, CommandErrorReason } from "../commands/command-error";
 import handleMessage from "./handle-message";
 
-export default class HandleMessageTests
+@TestFixture("Message handling")
+export class HandleMessageTestFixture
 {
     private client: IMock<Client<BotMessage>>
     private djsMessage: IMock<DjsMessage>

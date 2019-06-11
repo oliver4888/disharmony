@@ -1,8 +1,9 @@
-import { Expect, Test } from "alsatian";
+import { Expect, Test, TestFixture } from "alsatian";
 import Config from "../models/internal/config";
 import { isConfigValid } from "./load-configuration";
 
-export class LoadConfigurationTests
+@TestFixture("Config loading")
+export class LoadConfigurationTestFixture
 {
     @Test()
     public config_valid_when_all_required_fields_present()

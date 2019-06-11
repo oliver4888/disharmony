@@ -1,10 +1,11 @@
 // tslint:disable: no-floating-promises
-import { AsyncTest, Expect, Setup, Test } from "alsatian"
+import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian"
 import { IMock, It, Mock, Times } from "typemoq"
 import { IDbClient } from "../database/db-client";
 import Document from "./document";
 
-export class DocumentTests
+@TestFixture("Document base class")
+export class DocumentTestFixture
 {
     public dbClient: IMock<IDbClient>
 

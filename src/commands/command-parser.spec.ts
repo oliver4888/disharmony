@@ -1,11 +1,12 @@
-import { AsyncTest, Expect, Setup } from "alsatian";
+import { AsyncTest, Expect, Setup, TestFixture } from "alsatian";
 import { IMock, Mock } from "typemoq";
 import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
 import Command, { PermissionLevel } from "./command";
 import { CommandErrorReason } from "./command-error";
 import getCommandInvoker from "./command-parser";
 
-export class CommandParserTests
+@TestFixture("Command parsing")
+export class CommandParserTestFixture
 {
     private command: Command
     private client: IClient
