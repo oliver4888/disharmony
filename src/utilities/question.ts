@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js";
-import { BotGuildMember, BotMessage, IClient } from "..";
+import { BotGuildMember, BotMessage, IClient, Logger } from "..";
 
 export default class Question
 {
@@ -24,16 +24,27 @@ export default class Question
                 }
             }
 
-            const rejecter = () =>
+            const timeoutRejecter = () =>
             {
                 this.client.onMessage.unsub(resolver)
-                reject("Response timeout") // todo send recognisable error for expected rejections
+                reject(QuestionRejectionReason.ResponseTimeout)
             }
 
-            timeout = setTimeout(rejecter, this.client.config.askTimeoutMs || 3000)
+            timeout = setTimeout(timeoutRejecter, this.client.config.askTimeoutMs || 3000)
             this.client.onMessage.sub(resolver)
 
-            await this.channel.send(this.queryStr) // todo handle this erroring
+            try
+            {
+                await this.channel.send(this.queryStr)
+            }
+            catch (e)
+            {
+                Logger.debugLogError(`Failed to send question to channel ${this.channelID}`, e)
+                if (timeout)
+                    clearTimeout(timeout)
+                this.client.onMessage.unsub(resolver)
+                reject(QuestionRejectionReason.ChannelSendError)
+            }
         })
     }
 
@@ -50,4 +61,10 @@ export default class Question
 
         this.channel = this.client.channels.get(this.channelID) as TextChannel
     }
+}
+
+export enum QuestionRejectionReason
+{
+    ResponseTimeout,
+    ChannelSendError,
 }
