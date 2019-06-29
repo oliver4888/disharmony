@@ -2,15 +2,16 @@ import { CommandRejection } from "..";
 import Command, { PermissionLevel } from "../commands/command"
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message"
+import Question from "../utilities/question";
 
 async function invoke(_: string[], message: BotMessage, client: IClient)
 {
     return new Promise<string>(async (resolve, reject) =>
     {
-        const response = await BotMessage.ask(
+        const response = await new Question(
             client, message.channelId,
             "Are you sure you want to delete all the data for this server? (yes/no)",
-            message.member, true)
+            message.member, true).send()
 
         /* This is a very hacky way of doing this, but when using resolve
            the Guild object gets saved back to the database straight away,
