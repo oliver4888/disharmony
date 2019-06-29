@@ -32,7 +32,7 @@ export default class Client<
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
     public readonly onMessage = new SimpleEventDispatcher<TMessage>()
-    public readonly onVoiceStateUpdate = new SimpleEventDispatcher<BotGuildMember>()
+    public readonly onVoiceStateUpdate = new SimpleEventDispatcher<{ oldMember: TGuildMember, newMember: TGuildMember }>()
 
     public commands: Command[]
     public stats: Stats
@@ -57,6 +57,15 @@ export default class Client<
     public dispatchMessage(message: TMessage)
     {
         this.onMessage.dispatch(message)
+    }
+
+    private dispatchVoiceStateUpdateIfPermitted(oldDjsMember: DjsGuildMember, newDjsMember: DjsGuildMember)
+    {
+        const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
+        const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me)
+
+        if (botPerms && botPerms.has("VIEW_CHANNEL"))
+            this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
     }
 
     private setHeartbeatInterval()
@@ -94,7 +103,7 @@ export default class Client<
         this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
         this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
-        this.djs.on("voiceStateUpdate", djsMember => this.onVoiceStateUpdate.dispatch(new BotGuildMember(djsMember)))
+        this.djs.on("voiceStateUpdate", this.dispatchVoiceStateUpdateIfPermitted)
 
         this.commands = commands.concat(inbuiltCommands)
         this.stats = new Stats(this.djs)
