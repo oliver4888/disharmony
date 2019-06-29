@@ -10,6 +10,7 @@ import getWorker from "./utilities/fork-worker"
 import loadConfig from "./utilities/load-configuration"
 import Logger from "./utilities/logger"
 import NotifyPropertyChanged from "./utilities/notify-property-changed"
+import Question from "./utilities/question";
 
 export
 {
@@ -28,4 +29,5 @@ export
     NotifyPropertyChanged,
     SubDocument,
     CommandRejection,
+    Question,
 }
