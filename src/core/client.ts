@@ -1,4 +1,4 @@
-import { Channel as DjsChannel, Message as DjsMessage } from "discord.js"
+import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
 import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
 import { Logger } from "..";
@@ -22,7 +22,10 @@ export interface IClient extends ILightClient
 
 type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessage) => TMessage
 
-export default class Client<TMessage extends BotMessage> extends LightClient implements IClient
+export default class Client<
+    TMessage extends BotMessage = BotMessage,
+    TGuildMember extends BotGuildMember = BotGuildMember
+    > extends LightClient implements IClient
 {
     private heartbeatInterval: NodeJS.Timeout
 
@@ -81,8 +84,9 @@ export default class Client<TMessage extends BotMessage> extends LightClient imp
 
     constructor(
         commands: Command[],
-        public messageCtor: MessageConstructor<TMessage>,
         config: Config,
+        public messageCtor: MessageConstructor<TMessage> = BotMessage as any,
+        public guildMemberCtor: new (djsGuildMember: DjsGuildMember) => TGuildMember = BotGuildMember as any,
     )
     {
         super(config)

@@ -2,14 +2,14 @@
 import { AsyncTest, Expect, Setup, TestFixture } from "alsatian";
 import { Message as DjsMessage } from "discord.js";
 import { IMock, It, Mock, Times } from "typemoq";
-import { BotMessage, Client } from "..";
+import { Client } from "..";
 import { CommandError, CommandErrorReason } from "../commands/command-error";
 import handleMessage from "./handle-message";
 
 @TestFixture("Message handling")
 export class HandleMessageTestFixture
 {
-    private client: IMock<Client<BotMessage>>
+    private client: IMock<Client>
     private djsMessage: IMock<DjsMessage>
 
     private setMessageMember(memberId: string)
@@ -36,8 +36,7 @@ export class HandleMessageTestFixture
     @Setup
     public setup()
     {
-        // this.client = Mock.ofType<Client<BotMessage>>(Client, MockBehavior.Loose, true, "", [], BotMessage)
-        this.client = Mock.ofType() as IMock<Client<BotMessage>>
+        this.client = Mock.ofType() as IMock<Client>
         this.client.setup(x => x.botId)
             .returns(() => "bot-id")
 
