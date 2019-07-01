@@ -9,8 +9,8 @@ export default class BotGuildMember extends Document implements IDjsExtension<Dj
     public get nickname() { return this.djs.nickname }
     public get username() { return this.djs.user.username }
 
-    public addRole(snowflake: string) { return this.djs.addRole(snowflake) }
-    public removeRole(snowflake: string) { return this.djs.removeRole(snowflake) }
+    public addRole(snowflake: string, reason?: string) { return this.djs.addRole(snowflake, reason) }
+    public removeRole(snowflake: string, reason?: string) { return this.djs.removeRole(snowflake, reason) }
 
     public hasRole(snowflake: string): boolean
     {
