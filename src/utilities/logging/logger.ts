@@ -1,3 +1,4 @@
+@@ -1,36 +0,0 @@
 import * as SimpleFileWriter from "simple-file-writer"
 
 const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/console.log")

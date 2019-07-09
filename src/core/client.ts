@@ -8,7 +8,7 @@ import BotGuildMember from "../models/discord/guild-member";
 import BotMessage from "../models/discord/message";
 import Config from "../models/internal/config";
 import Stats from "../models/internal/stats";
-import logger from "../utilities/logger";
+import logger from "../utilities/logging/logger";
 import handleMessage from "./handle-message";
 import LightClient, { ILightClient } from "./light-client";
 

@@ -3,7 +3,7 @@ import getDbClient, { CriticalError as CriticalDbError, IDbClient } from "../dat
 import IDjsExtension from "../models/discord/djs-extension";
 import Document from "../models/document"
 import Config from "../models/internal/config";
-import Logger from "../utilities/logger";
+import Logger from "../utilities/logging/logger";
 
 export interface ILightClient extends IDjsExtension<DjsClient>
 {

@@ -1,5 +1,5 @@
 import { IDbClient } from "../database/db-client";
-import logger from "../utilities/logger";
+import logger from "../utilities/logging/logger";
 import { DocumentError, DocumentErrorReason } from "./document-error";
 import Serializable from "./serializable";
 

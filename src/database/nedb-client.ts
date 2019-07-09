@@ -2,7 +2,7 @@ import * as Datastore from "nedb-core"
 import { join } from "path"
 import { promisify } from "typed-promisify"
 import { NedbClientConfig } from "../models/internal/config";
-import Logger from "../utilities/logger";
+import Logger from "../utilities/logging/logger";
 import { IDbClient } from "./db-client"
 
 export default class NedbClient implements IDbClient
