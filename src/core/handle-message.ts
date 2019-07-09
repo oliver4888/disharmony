@@ -2,6 +2,7 @@ import { Message as DjsMessage } from "discord.js";
 import { BotMessage, Client, IClient, Logger } from "..";
 import { CommandError, CommandErrorReason } from "../commands/command-error";
 import getCommandInvoker from "../commands/command-parser";
+import { EventStrings } from "../utilities/logging/event-strings";
 
 export default async function handleMessage<TMessage extends BotMessage>(
     client: Client<TMessage>,
@@ -34,6 +35,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
     catch (err)
     {
         Logger.debugLogError(`Error invoking command in guild ${message.guild.id}`, err)
+        Logger.logEvent(EventStrings.InvokeCommandError, { guildId: message.guild.id })
         await message.reply(err.friendlyMessage || "An unknown error occurred.")
     }
 

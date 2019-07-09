@@ -1,9 +1,9 @@
 import { Client as DjsClient } from "discord.js";
+import { Logger } from "..";
 import getDbClient, { CriticalError as CriticalDbError, IDbClient } from "../database/db-client";
 import IDjsExtension from "../models/discord/djs-extension";
 import Document from "../models/document"
 import Config from "../models/internal/config";
-import Logger from "../utilities/logging/logger";
 
 export interface ILightClient extends IDjsExtension<DjsClient>
 {

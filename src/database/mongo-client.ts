@@ -1,6 +1,7 @@
 import { Collection, Db, MongoClient as MongoClientActual } from "mongodb"
 import { Logger } from "..";
 import { MongoClientConfig } from "../models/internal/config";
+import { EventStrings} from "../utilities/logging/event-strings";
 import { CriticalError, IDbClient } from "./db-client"
 
 export default class MongoClient implements IDbClient
@@ -74,13 +75,14 @@ export default class MongoClient implements IDbClient
     private onClose(err?: Error)
     {
         Logger.consoleLogError(`MongoDB connection lost`, err)
+        Logger.logEvent(EventStrings.DbConnectionLost, { protocol: "MongoDB" })
         const onReconnectFail = () => this.onCriticalError(CriticalError.ReconnectFail)
         this.reconnectFailTimeout = setTimeout(onReconnectFail, this.mongoClientConfig.reconnectInterval * this.mongoClientConfig.reconnectTries)
     }
 
     private onReconnect()
     {
-        Logger.consoleLog("MongoDB connection re-established")
+        Logger.logEvent(EventStrings.DbReconnected, { protocol: "MongoDB" })
         if (this.reconnectFailTimeout)
             clearTimeout(this.reconnectFailTimeout)
         this.reconnectFailTimeout = null
