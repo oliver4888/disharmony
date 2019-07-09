@@ -8,7 +8,7 @@ import BotMessage from "./models/discord/message";
 import SubDocument from "./models/sub-document"
 import getWorker from "./utilities/fork-worker"
 import loadConfig from "./utilities/load-configuration"
-import Logger from "./utilities/logger"
+import Logger from "./utilities/logging/logger"
 import NotifyPropertyChanged from "./utilities/notify-property-changed"
 import Question from "./utilities/question";
 
