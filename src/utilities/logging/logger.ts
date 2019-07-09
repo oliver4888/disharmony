@@ -1,12 +1,13 @@
-@@ -1,36 +0,0 @@
 import * as SimpleFileWriter from "simple-file-writer"
+import EventLogger from "./event-logger";
+import FileEventLogger from "./file-event-logger";
 
 const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/console.log")
 const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
+const eventLogger: EventLogger = new FileEventLogger(process.cwd() + "/event.log")
 
-function doLog(message: string, debugOnly: boolean, error?: Error | boolean)
+function logMessage(message: string, writeToConsole: boolean, prefix: string, error?: Error | boolean)
 {
-    const prefix = error ? "[ERROR]" : debugOnly ? "[DEBUG]" : "[INFO]"
     const messageStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
     let consoleStr = messageStr, debugStr = messageStr
 
@@ -20,7 +21,7 @@ function doLog(message: string, debugOnly: boolean, error?: Error | boolean)
     {
         debugLogWriter.write(debugStr + "\n", () => resolve())
 
-        if (!debugOnly)
+        if (writeToConsole)
         {
             // tslint:disable-next-line: no-console
             console.log(consoleStr)
@@ -29,9 +30,18 @@ function doLog(message: string, debugOnly: boolean, error?: Error | boolean)
     })
 }
 
+function logEvent(category: string, action: string, parameters: any): void | Promise<void>
+{
+    const logMessagePromise = logMessage(`${category}, ${action}`, true, "[EVENT]").catch()
+    const eventLogPromise = eventLogger.logEvent(category, action, parameters)
+
+    return Promise.all([logMessagePromise, eventLogPromise]).catch() as Promise<void>
+}
+
 export default {
-    consoleLog: (message: string): void | Promise<void> => doLog(message, false).catch(),
-    debugLog: (message: string): void | Promise<void> => doLog(message, true).catch(),
-    consoleLogError: (message: string, error?: Error): void | Promise<void> => doLog(message, false, error || true).catch(),
-    debugLogError: (message: string, error?: Error): void | Promise<void> => doLog(message, true, error || true).catch(),
+    consoleLog: (message: string): void | Promise<void> => logMessage(message, true, "[INFO]").catch(),
+    debugLog: (message: string): void | Promise<void> => logMessage(message, false, "[DEBUG]").catch(),
+    consoleLogError: (message: string, error?: Error): void | Promise<void> => logMessage(message, true, "[ERROR]", error || true).catch(),
+    debugLogError: (message: string, error?: Error): void | Promise<void> => logMessage(message, false, "[ERROR_DEBUG]", error || true).catch(),
+    logEvent,
 }
