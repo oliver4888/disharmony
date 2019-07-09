@@ -1,10 +1,10 @@
 // tslint:disable: no-floating-promises
-import { AsyncTest, Expect, Setup, TestFixture } from "alsatian";
-import { Message as DjsMessage } from "discord.js";
-import { IMock, It, Mock, Times } from "typemoq";
-import { Client } from "..";
-import { CommandError, CommandErrorReason } from "../commands/command-error";
-import handleMessage from "./handle-message";
+import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
+import { Message as DjsMessage } from "discord.js"
+import { IMock, It, Mock, Times } from "typemoq"
+import { Client } from ".."
+import { CommandError, CommandErrorReason } from "../commands/command-error"
+import handleMessage from "./handle-message"
 
 @TestFixture("Message handling")
 export class HandleMessageTestFixture
@@ -168,7 +168,7 @@ export class HandleMessageTestFixture
             () => Promise.resolve(
                 (): any =>
                 {
-                    commandInvoked = true;
+                    commandInvoked = true
                     Promise.resolve("result")
                 })
 

@@ -1,10 +1,10 @@
-import { Logger } from "..";
+import { Logger } from ".."
 import { IClient } from "../core/client"
-import BotMessage from "../models/discord/message";
-import { EventStrings } from "../utilities/logging/event-strings";
+import BotMessage from "../models/discord/message"
+import { EventStrings } from "../utilities/logging/event-strings"
 import Command from "./command"
-import { CommandError, CommandErrorReason } from "./command-error";
-import CommandRejection from "./command-rejection";
+import { CommandError, CommandErrorReason } from "./command-error"
+import CommandRejection from "./command-rejection"
 
 export default async function getCommandInvoker(client: IClient, message: BotMessage): Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>
 {

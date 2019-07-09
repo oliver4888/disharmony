@@ -1,9 +1,9 @@
 // tslint:disable: no-floating-promises
 import { Expect, Setup, Test, TestFixture } from "alsatian"
 import { IMock, It, Mock, Times } from "typemoq"
-import { SubDocument } from "..";
-import { IDbClient } from "../database/db-client";
-import Document from "./document";
+import { SubDocument } from ".."
+import { IDbClient } from "../database/db-client"
+import Document from "./document"
 
 class TestDocument extends Document
 {

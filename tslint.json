@@ -1,7 +1,7 @@
 {
     "extends": "tslint:recommended",
     "rules": {
-        "semicolon": false,
+        "semicolon": [true, "never"],
         "curly": false,
         "max-line-length": false,
         "one-line": false,

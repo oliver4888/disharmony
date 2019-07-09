@@ -1,8 +1,8 @@
-import { CommandRejection } from "..";
+import { CommandRejection } from ".."
 import Command, { PermissionLevel } from "../commands/command"
 import { IClient } from "../core/client"
 import BotMessage from "../models/discord/message"
-import Question from "../utilities/question";
+import Question from "../utilities/question"
 
 async function invoke(_: string[], message: BotMessage, client: IClient)
 {

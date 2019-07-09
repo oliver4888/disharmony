@@ -1,7 +1,7 @@
 import { Collection, Db, MongoClient as MongoClientActual } from "mongodb"
-import { Logger } from "..";
-import { MongoClientConfig } from "../models/internal/config";
-import { EventStrings} from "../utilities/logging/event-strings";
+import { Logger } from ".."
+import { MongoClientConfig } from "../models/internal/config"
+import { EventStrings} from "../utilities/logging/event-strings"
 import { CriticalError, IDbClient } from "./db-client"
 
 export default class MongoClient implements IDbClient

@@ -1,7 +1,7 @@
 import { RichEmbed } from "discord.js"
 import Command, { PermissionLevel } from "../commands/command"
 import { IClient } from "../core/client"
-import BotGuildMember from "../models/discord/guild-member";
+import BotGuildMember from "../models/discord/guild-member"
 import BotMessage from "../models/discord/message"
 
 async function invoke(params: string[], message: BotMessage, client: IClient): Promise<void>

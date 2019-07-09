@@ -1,6 +1,6 @@
-import { TextChannel } from "discord.js";
-import { BotGuildMember, BotMessage, IClient, Logger } from "..";
-import { EventStrings } from "./logging/event-strings";
+import { TextChannel } from "discord.js"
+import { BotGuildMember, BotMessage, IClient, Logger } from ".."
+import { EventStrings } from "./logging/event-strings"
 
 export default class Question
 {

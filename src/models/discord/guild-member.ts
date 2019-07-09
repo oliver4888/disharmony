@@ -1,7 +1,7 @@
-import { GuildMember as DjsGuildMember } from "discord.js";
-import { PermissionLevel } from "../../commands/command";
-import Document from "../document";
-import IDjsExtension from "./djs-extension";
+import { GuildMember as DjsGuildMember } from "discord.js"
+import { PermissionLevel } from "../../commands/command"
+import Document from "../document"
+import IDjsExtension from "./djs-extension"
 
 export default class BotGuildMember extends Document implements IDjsExtension<DjsGuildMember>
 {

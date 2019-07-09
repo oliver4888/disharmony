@@ -2,7 +2,7 @@
 import * as Joi from "@hapi/joi"
 import { existsSync } from "fs"
 import { resolve } from "path"
-import Config from "../models/internal/config";
+import Config from "../models/internal/config"
 
 export default function (configPath: string = "./config.json")
 {

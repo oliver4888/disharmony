@@ -1,16 +1,16 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
 import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
-import { Logger } from "..";
+import { Logger } from ".."
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
-import BotGuildMember from "../models/discord/guild-member";
-import BotMessage from "../models/discord/message";
-import Config from "../models/internal/config";
-import Stats from "../models/internal/stats";
-import { EventStrings } from "../utilities/logging/event-strings";
-import handleMessage from "./handle-message";
-import LightClient, { ILightClient } from "./light-client";
+import BotGuildMember from "../models/discord/guild-member"
+import BotMessage from "../models/discord/message"
+import Config from "../models/internal/config"
+import Stats from "../models/internal/stats"
+import { EventStrings } from "../utilities/logging/event-strings"
+import handleMessage from "./handle-message"
+import LightClient, { ILightClient } from "./light-client"
 
 export interface IClient extends ILightClient
 {

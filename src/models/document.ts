@@ -1,8 +1,8 @@
-import { Logger } from "..";
-import { IDbClient } from "../database/db-client";
-import { EventStrings } from "../utilities/logging/event-strings";
-import { DocumentError, DocumentErrorReason } from "./document-error";
-import Serializable from "./serializable";
+import { Logger } from ".."
+import { IDbClient } from "../database/db-client"
+import { EventStrings } from "../utilities/logging/event-strings"
+import { DocumentError, DocumentErrorReason } from "./document-error"
+import Serializable from "./serializable"
 
 export default abstract class Document extends Serializable
 {

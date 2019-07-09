@@ -1,5 +1,5 @@
 import * as SimpleFileWriter from "simple-file-writer"
-import EventLogger from "./event-logger";
+import EventLogger from "./event-logger"
 
 export default class FileEventLogger implements EventLogger
 {

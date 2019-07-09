@@ -1,4 +1,4 @@
-import { FriendlyError } from "../core/friendly-error";
+import { FriendlyError } from "../core/friendly-error"
 
 export class DocumentError extends FriendlyError
 {
@@ -17,9 +17,9 @@ export class DocumentError extends FriendlyError
         public reason: DocumentErrorReason,
     )
     {
-        super(DocumentError.getFriendlyMessage(reason), true);
+        super(DocumentError.getFriendlyMessage(reason), true)
 
-        Object.setPrototypeOf(this, DocumentError.prototype);
+        Object.setPrototypeOf(this, DocumentError.prototype)
     }
 }
 

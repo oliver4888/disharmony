@@ -1,9 +1,9 @@
-import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian";
-import { TextChannel } from "discord.js";
-import { SimpleEventDispatcher } from "ste-simple-events";
-import { IMock, It, Mock, Times } from "typemoq";
-import { BotGuildMember, BotMessage, IClient } from "..";
-import Question, { QuestionRejectionReason } from "./question";
+import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian"
+import { TextChannel } from "discord.js"
+import { SimpleEventDispatcher } from "ste-simple-events"
+import { IMock, It, Mock, Times } from "typemoq"
+import { BotGuildMember, BotMessage, IClient } from ".."
+import Question, { QuestionRejectionReason } from "./question"
 
 @TestFixture("Question")
 export class QuestionTestFixture

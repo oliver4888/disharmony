@@ -1,7 +1,7 @@
 import { Guild as DjsGuild, PermissionResolvable } from "discord.js"
-import Document from "../document";
-import IDjsExtension from "./djs-extension";
-import BotGuildMember from "./guild-member";
+import Document from "../document"
+import IDjsExtension from "./djs-extension"
+import BotGuildMember from "./guild-member"
 
 export default class BotGuild extends Document implements IDjsExtension<DjsGuild>
 {

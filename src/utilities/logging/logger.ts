@@ -1,6 +1,6 @@
 import * as SimpleFileWriter from "simple-file-writer"
-import EventLogger from "./event-logger";
-import FileEventLogger from "./file-event-logger";
+import EventLogger from "./event-logger"
+import FileEventLogger from "./file-event-logger"
 
 const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/console.log")
 const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
