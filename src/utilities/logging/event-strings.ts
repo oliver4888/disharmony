@@ -10,4 +10,5 @@ export enum EventStrings
     SentHeartbeatError = "SentHeartbeatError",
     InvokeCommandError = "InvokeCommandError",
     MessageSendError = "MessageSendError",
+    MemoryMeasured = "MemoryMeasured",
 }

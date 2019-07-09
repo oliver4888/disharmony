@@ -38,11 +38,14 @@ export default interface Config
     requiredPermissions: number
 
     /** Timeout duration to wait for a response after asking a question */
-    askTimeoutMs: number
+    askTimeoutMs?: number
 
     /** Configuration details for the heartbeat feature */
     heartbeat?: HeartbeatConfig
 
     /** Configuration object for the chosen database client; defaults will be used if not provided */
     dbClientConfig?: NedbClientConfig | MongoClientConfig
+
+    /** How often to log an event with the current memory usage */
+    memoryMeasureIntervalSec?: number
 }

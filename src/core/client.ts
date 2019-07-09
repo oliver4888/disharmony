@@ -45,6 +45,8 @@ export default class Client<
 
         if (this.config.heartbeat)
             this.setHeartbeatInterval()
+
+        this.setMemoryMeasureInterval()
     }
 
     public async destroy()
@@ -64,6 +66,7 @@ export default class Client<
         const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
         const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me)
 
+        // Solve the issue where Discord sends voice state update events even when a voice channel is hidden from the bot
         if (botPerms && botPerms.has("VIEW_CHANNEL"))
             this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
     }
@@ -90,6 +93,12 @@ export default class Client<
             if (rethrow)
                 throw err
         }
+    }
+
+    private setMemoryMeasureInterval()
+    {
+        const intervalMs = (this.config.memoryMeasureIntervalSec || 600) * 1000
+        setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
     }
 
     constructor(
