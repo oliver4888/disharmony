@@ -30,10 +30,10 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
     })
 }
 
-function logEvent(category: string, action: string, parameters: any): void | Promise<void>
+function logEvent(action: string, parameters?: any): void | Promise<void>
 {
-    const logMessagePromise = logMessage(`${category}, ${action}`, true, "[EVENT]").catch()
-    const eventLogPromise = eventLogger.logEvent(category, action, parameters)
+    const logMessagePromise = logMessage(`${action}`, true, "[EVENT]").catch()
+    const eventLogPromise = eventLogger.logEvent(action, parameters)
 
     return Promise.all([logMessagePromise, eventLogPromise]).catch() as Promise<void>
 }
