@@ -41,7 +41,7 @@ export default class Question
             catch (e)
             {
                 Logger.debugLogError(`Failed to send question to channel ${this.channelID}`, e)
-                Logger.logEvent("REMOVE THIS", EventStrings.MessageSendError)
+                Logger.logEvent(EventStrings.MessageSendError)
                 if (timeout)
                     clearTimeout(timeout)
                 this.client.onMessage.unsub(resolver)
