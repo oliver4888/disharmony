@@ -1,4 +1,15 @@
 # Changelog
+## Unreleased
+### Added
+- Class `Question` in place of static `Message.ask`
+- Event `onVoiceStateUpdate`
+    - Proxies discord.js' event
+    - Adds validation that the bot has channel read permissions
+- Event logging to a file
+
+### Updated
+- Class `Client` to accept guild member type specificaton (to support `onVoiceStateUpdate`)
+
 ## v0.9.3
 ### Fixed
 - Lack of handling for Discord.js client 'error' event
