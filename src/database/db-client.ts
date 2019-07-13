@@ -1,5 +1,5 @@
-import { MongoClientConfig, NedbClientConfig } from "../models/internal/config";
-import Logger from "../utilities/logger";
+import { MongoClientConfig, NedbClientConfig } from "../models/internal/config"
+import Logger from "../utilities/logging/logger"
 import MongoClient from "./mongo-client"
 import NedbClient from "./nedb-client"
 

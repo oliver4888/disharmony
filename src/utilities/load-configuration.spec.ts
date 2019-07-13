@@ -1,6 +1,6 @@
-import { Expect, Test, TestFixture } from "alsatian";
-import Config from "../models/internal/config";
-import { isConfigValid } from "./load-configuration";
+import { Expect, Test, TestFixture } from "alsatian"
+import Config from "../models/internal/config"
+import { isConfigValid } from "./load-configuration"
 
 @TestFixture("Config loading")
 export class LoadConfigurationTestFixture

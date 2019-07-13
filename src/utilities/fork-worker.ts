@@ -1,5 +1,5 @@
 import * as Cluster from "cluster"
-import { Logger } from "..";
+import { Logger } from ".."
 
 export default function(modulePath: string, configPath: string)
 {

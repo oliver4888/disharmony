@@ -1,7 +1,8 @@
-import { IDbClient } from "../database/db-client";
-import logger from "../utilities/logger";
-import { DocumentError, DocumentErrorReason } from "./document-error";
-import Serializable from "./serializable";
+import { Logger } from ".."
+import { IDbClient } from "../database/db-client"
+import { EventStrings } from "../utilities/logging/event-strings"
+import { DocumentError, DocumentErrorReason } from "./document-error"
+import Serializable from "./serializable"
 
 export default abstract class Document extends Serializable
 {
@@ -36,7 +37,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
+            Logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
+            Logger.logEvent(EventStrings.DocumentUpdateError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }
@@ -51,7 +53,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
+            Logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
+            Logger.logEvent(EventStrings.DocumentDeleteError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }
@@ -84,7 +87,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
+            Logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
+            Logger.logEvent(EventStrings.DocumentLoadError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }

@@ -1,5 +1,6 @@
-import { TextChannel } from "discord.js";
-import { BotGuildMember, BotMessage, IClient, Logger } from "..";
+import { TextChannel } from "discord.js"
+import { BotGuildMember, BotMessage, IClient, Logger } from ".."
+import { EventStrings } from "./logging/event-strings"
 
 export default class Question
 {
@@ -40,6 +41,7 @@ export default class Question
             catch (e)
             {
                 Logger.debugLogError(`Failed to send question to channel ${this.channelID}`, e)
+                Logger.logEvent(EventStrings.MessageSendError)
                 if (timeout)
                     clearTimeout(timeout)
                 this.client.onMessage.unsub(resolver)

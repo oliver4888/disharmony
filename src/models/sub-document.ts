@@ -1,7 +1,7 @@
-import { SimpleEventDispatcher } from "strongly-typed-events";
-import { NotifyPropertyChanged } from "..";
+import { SimpleEventDispatcher } from "strongly-typed-events"
+import { NotifyPropertyChanged } from ".."
 import Document from "./document"
-import Serializable from "./serializable";
+import Serializable from "./serializable"
 
 export default abstract class SubDocument extends Serializable implements NotifyPropertyChanged
 {

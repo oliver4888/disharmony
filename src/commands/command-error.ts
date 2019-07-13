@@ -1,4 +1,4 @@
-import { FriendlyError } from "../core/friendly-error";
+import { FriendlyError } from "../core/friendly-error"
 
 export class CommandError extends FriendlyError
 {

@@ -1,7 +1,7 @@
-import { GuildMember as DjsGuildMember } from "discord.js";
-import { PermissionLevel } from "../../commands/command";
-import Document from "../document";
-import IDjsExtension from "./djs-extension";
+import { GuildMember as DjsGuildMember, Role } from "discord.js"
+import { PermissionLevel } from "../../commands/command"
+import Document from "../document"
+import IDjsExtension from "./djs-extension"
 
 export default class BotGuildMember extends Document implements IDjsExtension<DjsGuildMember>
 {
@@ -9,8 +9,8 @@ export default class BotGuildMember extends Document implements IDjsExtension<Dj
     public get nickname() { return this.djs.nickname }
     public get username() { return this.djs.user.username }
 
-    public addRole(snowflake: string, reason?: string) { return this.djs.addRole(snowflake, reason) }
-    public removeRole(snowflake: string, reason?: string) { return this.djs.removeRole(snowflake, reason) }
+    public addRole(snowflake: string | Role, reason?: string) { return this.djs.addRole(snowflake, reason) }
+    public removeRole(snowflake: string | Role, reason?: string) { return this.djs.removeRole(snowflake, reason) }
 
     public hasRole(snowflake: string): boolean
     {

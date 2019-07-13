@@ -1,7 +1,7 @@
-import { Expect, Setup, Test, TestFixture } from "alsatian";
+import { Expect, Setup, Test, TestFixture } from "alsatian"
 import { Client as DjsClient } from "discord.js"
-import { IMock, Mock } from "typemoq";
-import Stats from "./stats";
+import { IMock, Mock } from "typemoq"
+import Stats from "./stats"
 
 @TestFixture("Stats model transformations")
 export class StatsTestFixture
@@ -11,7 +11,7 @@ export class StatsTestFixture
     @Setup
     public setup()
     {
-        this.djsClient = Mock.ofType<DjsClient>();
+        this.djsClient = Mock.ofType<DjsClient>()
     }
 
     @Test()

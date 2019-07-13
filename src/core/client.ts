@@ -1,16 +1,16 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
 import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
-import { Logger } from "..";
+import { Logger } from ".."
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
-import BotGuildMember from "../models/discord/guild-member";
-import BotMessage from "../models/discord/message";
-import Config from "../models/internal/config";
-import Stats from "../models/internal/stats";
-import logger from "../utilities/logger";
-import handleMessage from "./handle-message";
-import LightClient, { ILightClient } from "./light-client";
+import BotGuildMember from "../models/discord/guild-member"
+import BotMessage from "../models/discord/message"
+import Config from "../models/internal/config"
+import Stats from "../models/internal/stats"
+import { EventStrings } from "../utilities/logging/event-strings"
+import handleMessage from "./handle-message"
+import LightClient, { ILightClient } from "./light-client"
 
 export interface IClient extends ILightClient
 {
@@ -45,6 +45,8 @@ export default class Client<
 
         if (this.config.heartbeat)
             this.setHeartbeatInterval()
+
+        this.setMemoryMeasureInterval()
     }
 
     public async destroy()
@@ -64,6 +66,7 @@ export default class Client<
         const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
         const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me)
 
+        // Solve the issue where Discord sends voice state update events even when a voice channel is hidden from the bot
         if (botPerms && botPerms.has("VIEW_CHANNEL"))
             this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
     }
@@ -85,10 +88,17 @@ export default class Client<
         catch (err)
         {
             Logger.debugLogError("Error sending heartbeat", err)
+            Logger.logEvent(EventStrings.SentHeartbeatError)
 
             if (rethrow)
                 throw err
         }
+    }
+
+    private setMemoryMeasureInterval()
+    {
+        const intervalMs = (this.config.memoryMeasureIntervalSec || 600) * 1000
+        setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
     }
 
     constructor(
@@ -102,7 +112,7 @@ export default class Client<
 
         this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
-        this.djs.on("guildCreate", guild => logger.consoleLog(`Added to guild ${guild.name}`))
+        this.djs.on("guildCreate", guild => Logger.logEvent(EventStrings.GuildAdd, { name: guild.name }))
         this.djs.on("voiceStateUpdate", this.dispatchVoiceStateUpdateIfPermitted)
 
         this.commands = commands.concat(inbuiltCommands)

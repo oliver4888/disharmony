@@ -1,9 +1,9 @@
-import { AsyncTest, Expect, Setup, TestFixture } from "alsatian";
-import { IMock, Mock } from "typemoq";
-import { BotGuild, BotGuildMember, BotMessage, IClient } from "..";
-import Command, { PermissionLevel } from "./command";
-import { CommandErrorReason } from "./command-error";
-import getCommandInvoker from "./command-parser";
+import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
+import { IMock, Mock } from "typemoq"
+import { BotGuild, BotGuildMember, BotMessage, IClient } from ".."
+import Command, { PermissionLevel } from "./command"
+import { CommandErrorReason } from "./command-error"
+import getCommandInvoker from "./command-parser"
 
 @TestFixture("Command parsing")
 export class CommandParserTestFixture
@@ -21,7 +21,7 @@ export class CommandParserTestFixture
 
         const command: any = {}
         command.syntax = "valid"
-        command.permissionLevel = PermissionLevel.Anyone;
+        command.permissionLevel = PermissionLevel.Anyone
         this.command = command
 
         const client: any = {}
