@@ -1,4 +1,10 @@
 # Changelog
+## v1.0.1
+### Updated
+- All instances of guild/member name being logged to use their ID instead
+    - Provides better privacy for users
+    - Allows for name changes without making logs useless
+
 ## v1.0
 ### Added
 - Class `Client` as an extension of discord.js' Client
@@ -19,12 +25,12 @@
 - Error handling for commands
 - Logger module for logging errors, messages and events
     - Automatically attaches timestamp and process ID
-    - Automatically attaches timestamp and process ID
 - NoSQL database integration with MongoDB or NeDB
     - Automatically selects whether to issue 'insert', 'update' or 'replace' mutation
     - Automatically loads and saves data when a command is executed
     - Provides an easy method for loading/saving data on demand
 - Helper module for NodeJS cluster integration
 - Class `Question` for sending a message and awaiting an answer
+- Permissions validation; commands won't be executed if the bot is missing required permissions
 - [TSLint](https://palantir.github.io/tslint/)
 - [Buildkite](https://buildkite.com/) pipeline
