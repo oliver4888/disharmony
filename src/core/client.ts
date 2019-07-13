@@ -112,7 +112,7 @@ export default class Client<
 
         this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
-        this.djs.on("guildCreate", guild => Logger.logEvent(EventStrings.GuildAdd, { name: guild.name }))
+        this.djs.on("guildCreate", guild => Logger.logEvent(EventStrings.GuildAdd, { guildId: guild.id }))
         this.djs.on("voiceStateUpdate", this.dispatchVoiceStateUpdateIfPermitted)
 
         this.commands = commands.concat(inbuiltCommands)

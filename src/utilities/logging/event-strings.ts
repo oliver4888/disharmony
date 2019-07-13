@@ -9,6 +9,7 @@ export enum EventStrings
     DetermineCommandError = "[Core] DetermineCommandError",
     SentHeartbeatError = "[Core] SentHeartbeatError",
     InvokeCommandError = "[Core] InvokeCommandError",
+    MissingGuildPermissions = "[Core] MissingGuildPermissions",
     MessageSendError = "[Core] MessageSendError",
     MemoryMeasured = "[Core] MemoryMeasured",
 }
