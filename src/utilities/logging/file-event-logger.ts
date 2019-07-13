@@ -7,7 +7,7 @@ export default class FileEventLogger implements EventLogger
 
     public logEvent(action: string, parameters: any): Promise<void>
     {
-        const logStr = JSON.stringify({ ts: new Date().getMilliseconds(), action, parameters })
+        const logStr = JSON.stringify({ ts: new Date().getTime(), action, parameters }) + "\n"
         return new Promise(resolve => this.logWriter.write(logStr, resolve))
     }
 
