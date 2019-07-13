@@ -35,7 +35,7 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 - [NodeJS v10](https://nodejs.org/en/) installed
 
 ### Setup
-- `npm install --only dev` to install dependencies
+- `npm install` to install dependencies
 - `tsc` to compile JS into dist/
 
 ### Tests
