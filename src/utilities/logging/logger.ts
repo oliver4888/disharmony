@@ -32,10 +32,7 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
 
 function logEvent(action: string, parameters?: any): void | Promise<void>
 {
-    const logMessagePromise = logMessage(`${action}`, true, "[EVENT]").catch()
-    const eventLogPromise = eventLogger.logEvent(action, parameters)
-
-    return Promise.all([logMessagePromise, eventLogPromise]).catch() as Promise<void>
+    return eventLogger.logEvent(action, parameters)
 }
 
 export default {
