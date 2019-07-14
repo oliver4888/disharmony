@@ -1,4 +1,8 @@
 # Changelog
+## v1.0.2
+### Fixed
+- Crash when processing voice state update
+
 ## v1.0.1
 ### Updated
 - All instances of guild/member name being logged to use their ID instead
