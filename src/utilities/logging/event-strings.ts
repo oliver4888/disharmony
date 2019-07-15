@@ -12,4 +12,5 @@ export enum EventStrings
     MissingGuildPermissions = "[Core] MissingGuildPermissions",
     MessageSendError = "[Core] MessageSendError",
     MemoryMeasured = "[Core] MemoryMeasured",
+    GuildReset = "[Core] GuildReset",
 }
