@@ -1,6 +1,33 @@
-steps:
-  - command: "npm install\nnpm run lint"
-    label: ":lint-roller: Lint"
+# The Docker plugin is configured explicitly to allow it to work on both Windows and Linux host machines
+# Buildkite assumes that the container uses the same OS as the host machine, which means it uses Windows-specific syntax on Windows hosts
+# Given that we want to run in a Linux container regardless of the host OS, various aspects of the plugin are configured explicitly
 
-  - command: "npm install --prune\nnpm run build\nnpm run test"
-    label: ":hammer: Build + test"
+steps:
+  - label: ":lint-roller: Lint"
+    plugins:
+      - docker#v3.3.0:
+          image: "node:10"
+          volumes: [".:/workdir"]
+          workdir: "/workdir"
+          mount-checkout: false
+          command: ["/bin/bash", "-c", "npm install && npm run lint"]
+    soft_fail:
+      - exit_status: 2
+
+  - label: ":hammer: Build"
+    plugins:
+      - docker#v3.3.0:
+          image: "node:10"
+          volumes: [".:/workdir"]
+          workdir: "/workdir"
+          mount-checkout: false
+          command: ["/bin/bash", "-c", "npm install && npm run build"]
+
+  - label: ":crossed_fingers: Test"
+    plugins:
+      - docker#v3.3.0:
+          image: "node:10"
+          volumes: [".:/workdir"]
+          workdir: "/workdir"
+          mount-checkout: false
+          command: ["/bin/bash", "-c", "npm install && npm run test"]
