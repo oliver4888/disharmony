@@ -4,6 +4,7 @@ import getDbClient, { CriticalError as CriticalDbError, IDbClient } from "../dat
 import IDjsExtension from "../models/discord/djs-extension"
 import Document from "../models/document"
 import Config from "../models/internal/config"
+import { ExitCodes } from "../utilities/exit-codes"
 
 export interface ILightClient extends IDjsExtension<DjsClient>
 {
@@ -43,7 +44,7 @@ export default class LightClient implements ILightClient
     private onCriticalDbError(error: CriticalDbError)
     {
         (Logger.consoleLogError(`Critical database error, shutting down: ${error.toString()}`) as Promise<void>)
-            .then(() => process.exit(1)).catch(() => process.exit(1))
+            .catch().then(() => process.exit(ExitCodes.CriticalDatabaseError)).catch()
     }
 
     constructor(
@@ -64,15 +65,15 @@ export default class LightClient implements ILightClient
 
         process.on("uncaughtException", async err =>
         {
-            await Logger.debugLogError("Unhandled exception!", err)
-            process.exit(1)
+            await Logger.consoleLogError("Unhandled exception!", err)
+            process.exit(ExitCodes.UnhandledException)
         })
         process.on("exit", () => Logger.debugLog("Shutdown"))
         process.on("SIGINT", () =>
         {
             this.dbClient.closeConnection()
                 .then(() => process.exit(0))
-                .catch(() => process.exit(1))
+                .catch(() => process.exit(ExitCodes.DatabaseCloseError))
         })
     }
 }
