@@ -1,10 +1,16 @@
+import { existsSync, mkdirSync } from "fs"
+import { join } from "path"
 import * as SimpleFileWriter from "simple-file-writer"
 import EventLogger from "./event-logger"
 import FileEventLogger from "./file-event-logger"
 
-const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/console.log")
-const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(process.cwd() + "/debug.log")
-const eventLogger: EventLogger = new FileEventLogger(process.cwd() + "/event.log")
+const logsDir = join(process.cwd(), "logs")
+if (!existsSync(logsDir))
+    mkdirSync(logsDir)
+
+const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(join(logsDir, "console.log"))
+const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(join(logsDir, "debug.log"))
+const eventLogger: EventLogger = new FileEventLogger(join(logsDir, "event.log"))
 
 function logMessage(message: string, writeToConsole: boolean, prefix: string, error?: Error | boolean)
 {
@@ -17,7 +23,7 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
         debugStr += `\n\t${error.message}\n\t${error.stack}`
     }
 
-    return new Promise<void>(resolve =>
+    return new Promise<void>(async resolve =>
     {
         debugLogWriter.write(debugStr + "\n", () => resolve())
 
@@ -32,10 +38,7 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
 
 function logEvent(action: string, parameters?: any): void | Promise<void>
 {
-    const logMessagePromise = logMessage(`${action}`, true, "[EVENT]").catch()
-    const eventLogPromise = eventLogger.logEvent(action, parameters)
-
-    return Promise.all([logMessagePromise, eventLogPromise]).catch() as Promise<void>
+    return eventLogger.logEvent(action, parameters)
 }
 
 export default {

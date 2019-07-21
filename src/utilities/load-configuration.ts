@@ -3,6 +3,7 @@ import * as Joi from "@hapi/joi"
 import { existsSync } from "fs"
 import { resolve } from "path"
 import Config from "../models/internal/config"
+import { ExitCodes } from "./exit-codes"
 
 export default function (configPath: string = "./config.json")
 {
@@ -12,13 +13,13 @@ export default function (configPath: string = "./config.json")
     else
     {
         console.error("No config file found!")
-        process.exit(1)
+        process.exit(ExitCodes.ConfigLoadError)
     }
 
     if (!isConfigValid(config!))
     {
         console.error("Invalid config!")
-        process.exit(1)
+        process.exit(ExitCodes.ConfigLoadError)
     }
 
     return {
