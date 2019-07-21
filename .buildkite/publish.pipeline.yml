@@ -1,0 +1,20 @@
+steps:
+  - label: ":crossed_fingers: Test"
+    plugins:
+      - docker#v3.3.0:
+          image: "node:10"
+          volumes: [".:/workdir"]
+          workdir: "/workdir"
+          mount-checkout: false
+          command: ["/bin/bash", "-c", "npm install && npm run test"]
+  - block: ":shipit: Ship?"
+    prompt: "Publish to NPM?"
+  - label: ":npm: Publish"
+    plugins:
+      - docker#v3.3.0:
+          image: "node:10"
+          volumes: [".:/workdir"]
+          workdir: "/workdir"
+          mount-checkout: false
+          environment: ["NPM_AUTH_TOKEN"]
+          command: ["/bin/bash", ".buildkite/scripts/publish.sh"]
