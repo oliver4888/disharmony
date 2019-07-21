@@ -1,6 +1,6 @@
 {
   "name": "disharmony",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Discord bot framework built on discord.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
