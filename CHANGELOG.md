@@ -1,4 +1,13 @@
 # Changelog
+## v1.0.3
+### Added
+- Event log when guild data reset
+
+### Updated
+- Logger module to no longer print events to stdout
+- Log file location to be within /logs
+- Calls to `process.exit` to include a unique exit code per reason
+
 ## v1.0.2
 ### Fixed
 - Crash when processing voice state update
@@ -36,5 +45,3 @@
 - Helper module for NodeJS cluster integration
 - Class `Question` for sending a message and awaiting an answer
 - Permissions validation; commands won't be executed if the bot is missing required permissions
-- [TSLint](https://palantir.github.io/tslint/)
-- [Buildkite](https://buildkite.com/) pipeline
