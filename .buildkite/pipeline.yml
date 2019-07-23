@@ -10,7 +10,7 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install && npm run lint"]
+          command: ["/bin/bash", "-c", "npm install tslint && npm run lint"]
     soft_fail:
       - exit_status: 2
 
@@ -21,7 +21,7 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install && npm run build"]
+          command: ["/bin/bash", "-c", "npm install --production && npm run build"]
 
   - label: ":crossed_fingers: Test"
     plugins:
@@ -30,4 +30,4 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install && npm run test"]
+          command: ["/bin/bash", "-c", "npm install --dev && npm run test"]
