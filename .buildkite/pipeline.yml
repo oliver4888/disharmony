@@ -10,7 +10,7 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install --dev && npm run lint"]
+          command: ["/bin/bash", "-c", "npm install tslint && npm run lint"]
     soft_fail:
       - exit_status: 2
 
