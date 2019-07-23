@@ -42,6 +42,19 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 - Written in TypeScript using [Alsatian](https://github.com/alsatian-test/alsatian)
 - Run with `npm test`
 
+## CI setup
+- The repository is configured for CI using [Buildkite](https://buildkite.com/)
+- Pipelines are stored in [.buildkite](./buildkite) and should be loadeg using Buildkite's 'read from repository' step
+- The [standard pipeline](./buildkite/pipeline.yml) deals with linting, building and running tests
+- The [publish pipeline](./buildkite/publish.pipeline.yml) will publish the package to NPM when triggered
+    - The Buildkite agent must have an NPM auth token set in the *NPM_AUTH_TOKEN* environment variable
+
+- Docker and Git must both be installed on the Buildkite agent
+- If running the agent on Windows, a couple of extra configuration steps need to be performed
+    - The drive the Buildkite agent writes to needs to be shared with Docker
+    - Git's /bin folder needs to be in the PATH
+    - Git's global config option *core.autocrlf* needs to be set to *false* (as the files are used in a Linux docker image)
+
 ## Built With
 - [TypeScript](https://www.typescriptlang.org/) - *language*
 - [discord.js](https://github.com/discordjs/discord.js) - *Discord library*
