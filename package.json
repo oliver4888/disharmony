@@ -6,9 +6,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "test": "npm run build && node ./test-runner.js",
-    "test-no-build": "node ./test-runner.js",
-    "lint": "./node_modules/.bin/tslint --project ."
+    "lint": "./node_modules/.bin/tslint --project .",
+    "test": "npm run build && npm run test-built",
+    "test-built": "node ./test-runner.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,10 @@
   "homepage": "https://github.com/benji7425/disharmony#readme",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
+    "@types/hapi__joi": "^15.0.1",
+    "@types/mongodb": "^3.1.27",
+    "@types/node": "^11.13.12",
+    "@types/request-promise-native": "^1.0.16",
     "discord.js": "^11.5.1",
     "mongodb": "^3.2.6",
     "nedb-core": "^3.0.6",
@@ -29,17 +33,13 @@
     "request-promise-native": "^1.0.7",
     "simple-file-writer": "^2.0.0",
     "strongly-typed-events": "^1.4.10",
-    "typed-promisify": "^0.4.0"
+    "typed-promisify": "^0.4.0",
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
-    "@types/hapi__joi": "^15.0.1",
-    "@types/mongodb": "^3.1.27",
-    "@types/node": "^11.13.12",
-    "@types/request-promise-native": "^1.0.16",
     "alsatian": "^2.4.0",
     "tslint": "^5.16.0",
-    "typemoq": "^2.1.0",
-    "typescript": "^3.5.1"
+    "typemoq": "^2.1.0"
   },
   "files": [
     "/dist",
