@@ -16,6 +16,12 @@ export default function (configPath: string = "./config.json")
         process.exit(ExitCodes.ConfigLoadError)
     }
 
+    if (process.env.TOKEN)
+        config.token = process.env.TOKEN
+
+    if (process.env.DB_STRING)
+        config.dbConnectionString = process.env.DB_STRING
+
     if (!isConfigValid(config!))
     {
         console.error("Invalid config!")
