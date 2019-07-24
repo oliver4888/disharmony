@@ -37,8 +37,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            Logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
-            Logger.logEvent(EventStrings.DocumentUpdateError, { id: this.id })
+            await Logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
+            await Logger.logEvent(EventStrings.DocumentUpdateError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }
@@ -53,8 +53,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            Logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
-            Logger.logEvent(EventStrings.DocumentDeleteError, { id: this.id })
+            await Logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
+            await Logger.logEvent(EventStrings.DocumentDeleteError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }
@@ -87,8 +87,8 @@ export default abstract class Document extends Serializable
         }
         catch (e)
         {
-            Logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
-            Logger.logEvent(EventStrings.DocumentLoadError, { id: this.id })
+            await Logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
+            await Logger.logEvent(EventStrings.DocumentLoadError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
         }
     }

@@ -32,8 +32,8 @@ export default async function getCommandInvoker(client: IClient, message: BotMes
            goes wrong with message parsing we don't want it to reply "an error occurred" to
            every single message it sees! */
 
-        Logger.debugLogError(`Error determining if message contained command`, err)
-        Logger.logEvent(EventStrings.DetermineCommandError)
+        await Logger.debugLogError(`Error determining if message contained command`, err)
+        await Logger.logEvent(EventStrings.DetermineCommandError)
         return null
     }
 
