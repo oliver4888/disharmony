@@ -18,3 +18,12 @@ steps:
           mount-checkout: false
           environment: ["NPM_AUTH_TOKEN"]
           command: ["/bin/bash", ".buildkite/scripts/publish.sh"]
+  - label: ":github: Create release"
+    plugins:
+      - docker#v3.3.0:
+          image: "benji7425/github-release-creator:latest"
+          volumes: ["./CHANGELOG.md:/app/CHANGELOG.md"]
+          mount-checkout: false
+          environment: ["GITHUB_TOKEN"]
+          command: ["--owner", "benji7425", "--repo", "disharmony", "--file", "CHANGELOG.md"]
+    soft_fail: true
