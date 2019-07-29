@@ -20,7 +20,7 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install --production && npm run build"]
+          command: ["/bin/bash", "-c", "npm ci && npm run build"]
 
   - label: ":crossed_fingers: Test"
     plugins:
