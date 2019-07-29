@@ -26,7 +26,7 @@ export default class LightClient implements ILightClient
         // remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.djs.login(token.replace(/\r?\n|\r/g, ""))
         Logger.consoleLog(`Registered bot ${this.djs.user.username}`)
-        Logger.consoleLog(`View more detailed logs in these files: console.log, debug.log, event.log`)
+        Logger.consoleLog(`You can view detailed logs in the logs/ directory`)
     }
 
     public async destroy()
@@ -68,7 +68,7 @@ export default class LightClient implements ILightClient
             await Logger.consoleLogError("Unhandled exception!", err)
             process.exit(ExitCodes.UnhandledException)
         })
-        process.on("exit", () => Logger.debugLog("Shutdown"))
+        process.on("exit", () => Logger.consoleLog("Shutdown"))
         process.on("SIGINT", () =>
         {
             this.dbClient.closeConnection()

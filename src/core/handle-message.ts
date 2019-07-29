@@ -34,11 +34,11 @@ export default async function handleMessage<TMessage extends BotMessage>(
     }
     catch (err)
     {
-        Logger.debugLogError(`Error invoking command in guild ${message.guild.id}`, err)
+        await Logger.debugLogError(`Error invoking command in guild ${message.guild.id}`, err)
         if (err && (err as CommandError).reason === CommandErrorReason.BotMissingGuildPermissions)
-            Logger.logEvent(EventStrings.MissingGuildPermissions, { guildId: message.guild.id })
+            await Logger.logEvent(EventStrings.MissingGuildPermissions, { guildId: message.guild.id })
         else
-            Logger.logEvent(EventStrings.InvokeCommandError, { guildId: message.guild.id })
+            await Logger.logEvent(EventStrings.InvokeCommandError, { guildId: message.guild.id })
 
         await message.reply(err.friendlyMessage || "An unknown error occurred.")
     }

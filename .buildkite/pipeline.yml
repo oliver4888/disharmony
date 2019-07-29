@@ -11,8 +11,7 @@ steps:
           workdir: "/workdir"
           mount-checkout: false
           command: ["/bin/bash", "-c", "npm install tslint && npm run lint"]
-    soft_fail:
-      - exit_status: 2
+    soft_fail: true
 
   - label: ":hammer: Build"
     plugins:
@@ -21,7 +20,7 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install --production && npm run build"]
+          command: ["/bin/bash", "-c", "npm ci && npm run build"]
 
   - label: ":crossed_fingers: Test"
     plugins:
