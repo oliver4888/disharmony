@@ -64,6 +64,11 @@ export default class Client<
     private dispatchVoiceStateUpdateIfPermitted(oldDjsMember: DjsGuildMember, newDjsMember: DjsGuildMember)
     {
         const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
+
+        // Sometimes this is undefined, no idea why
+        if (!voiceChannel)
+            return
+
         const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me)
 
         // Solve the issue where Discord sends voice state update events even when a voice channel is hidden from the bot
