@@ -23,16 +23,16 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
         debugStr += `\n\t${error.message}\n\t${error.stack}`
     }
 
+    if (writeToConsole)
+        // tslint:disable-next-line: no-console
+        console.log(consoleStr)
+
     return new Promise<void>(async resolve =>
     {
         debugLogWriter.write(debugStr + "\n", () => resolve())
 
         if (writeToConsole)
-        {
-            // tslint:disable-next-line: no-console
-            console.log(consoleStr)
             consoleLogWriter.write(consoleStr + "\n", () => resolve())
-        }
     })
 }
 
