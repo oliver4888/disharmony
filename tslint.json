@@ -1,6 +1,8 @@
 {
     "extends": "tslint:recommended",
     "rules": {
+        "no-unused-expression": true,
+        "comment-format": [true, "check-space", "check-uppercase", "allow-trailing-lowercase"],
         "semicolon": [true, "never"],
         "curly": false,
         "max-line-length": false,

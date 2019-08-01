@@ -5,7 +5,7 @@ import LightClient, { ILightClient } from "./core/light-client"
 import BotGuild from "./models/discord/guild"
 import BotGuildMember from "./models/discord/guild-member"
 import BotMessage from "./models/discord/message"
-import Config from "./models/internal/config";
+import Config from "./models/internal/config"
 import SubDocument from "./models/sub-document"
 import getWorker from "./utilities/fork-worker"
 import loadConfig from "./utilities/load-configuration"

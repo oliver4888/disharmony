@@ -1,24 +1,8 @@
 {
-  "name": "disharmony",
-  "version": "1.0.4",
-  "description": "Discord bot framework built on discord.js",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "./node_modules/.bin/tsc",
-    "lint": "./node_modules/.bin/tslint --project .",
-    "test": "./node_modules/.bin/tsc -p tsconfig.tests.json && node ./test-runner.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/benji7425/disharmony.git"
-  },
   "author": "Benji7425 <benji7425@pm.me> (http://benji7425.github.io/)",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/benji7425/disharmony/issues"
   },
-  "homepage": "https://github.com/benji7425/disharmony#readme",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "@types/hapi__joi": "^15.0.1",
@@ -35,6 +19,7 @@
     "typed-promisify": "^0.4.0",
     "typescript": "^3.5.3"
   },
+  "description": "Discord bot framework built on discord.js",
   "devDependencies": {
     "alsatian": "^2.4.0",
     "tslint": "^5.18.0",
@@ -45,10 +30,26 @@
     "!*.map",
     "!*.spec.*"
   ],
+  "homepage": "https://github.com/benji7425/disharmony#readme",
   "keywords": [
     "discord",
     "discordapp",
     "framework",
     "client"
-  ]
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "disharmony",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benji7425/disharmony.git"
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/tsc --project tsconfig.prod.json",
+    "build-test": "./node_modules/.bin/tsc --project tsconfig.json && npm test",
+    "lint": "./node_modules/.bin/tslint --project .",
+    "test": "node --stack-trace-limit=1 test-runner.js"
+  },
+  "types": "dist/index.d.ts",
+  "version": "1.0.4"
 }

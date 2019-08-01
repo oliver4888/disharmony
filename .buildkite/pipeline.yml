@@ -29,4 +29,4 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm install --dev && npm run test"]
+          command: ["/bin/bash", "-c", "npm install --dev && npm run build-test"]
