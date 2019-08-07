@@ -50,12 +50,14 @@ export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema
         dbClientConfig: Joi.object().optional(),
     })
 
-    const primarySchemaError: boolean = !!Joi.validate(config, primarySchema).error
+    const validationOptions: Joi.ValidationOptions = { allowUnknown: true }
+
+    const primarySchemaError: boolean = !!Joi.validate(config, primarySchema, validationOptions).error
 
     let secondarySchemaError: boolean = false
 
     if (secondarySchema)
-        secondarySchemaError = !!Joi.validate(config, secondarySchema).error
+        secondarySchemaError = !!Joi.validate(config, secondarySchema, validationOptions).error
 
     return !primarySchemaError && !secondarySchemaError
 }
