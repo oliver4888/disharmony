@@ -6,7 +6,8 @@ steps:
           volumes: [".:/workdir"]
           workdir: "/workdir"
           mount-checkout: false
-          command: ["/bin/bash", "-c", "npm ci --dev && npm run test"]
+          command: ["/bin/bash", "-c", "npm ci --dev && npm run build-test"]
+  - wait: ~
   - block: ":shipit: Ship?"
     prompt: "Publish to NPM?"
   - label: ":npm: Publish"
