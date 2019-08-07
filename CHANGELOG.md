@@ -1,4 +1,16 @@
 # Changelog
+## v1.1.0
+### Added
+- Support for extending the `Config` interface
+    - Includes support for custom schema validation
+    - Exposes `.config` property on `Client`
+
+### Updated
+- Method `Guild.hasPermissions` to `Guild.botHasPermissions` to make it clearer what it's purpose actually is
+
+### Fixed
+- Occasional unhandled exception when proccessing voice events
+
 ## v1.0.4
 ### Added
 - Support for providing the Discord token and DB connection string via environment variables
