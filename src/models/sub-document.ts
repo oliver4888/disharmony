@@ -12,7 +12,7 @@ export default abstract class SubDocument extends Serializable implements Notify
         return new Proxy(proxyTarget, {
             get: (target: any, prop) =>
             {
-                // if prop is array index, create T from data if not already created
+                // If prop is array index, create T from data if not already created
                 if (typeof prop === "string" && !isNaN(Number(prop)) && !(target[prop] instanceof SubDocument))
                 {
                     const subDoc = new ctor()

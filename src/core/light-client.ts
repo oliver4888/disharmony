@@ -23,7 +23,7 @@ export default class LightClient implements ILightClient
 
     public async login(token: string)
     {
-        // remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
+        // Remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.djs.login(token.replace(/\r?\n|\r/g, ""))
         Logger.consoleLog(`Registered bot ${this.djs.user.username}`)
         Logger.consoleLog(`You can view detailed logs in the logs/ directory`)
@@ -37,7 +37,7 @@ export default class LightClient implements ILightClient
     private onDebug(msg: string)
     {
         msg = msg.replace(/Authenticated using token [^ ]+/, "Authenticated using token [redacted]")
-        if (!/[Hh]eartbeat/.exec(msg)) // ignore regular heartbeat messages that would bloat the log file
+        if (!/[Hh]eartbeat/.exec(msg)) // Ignore regular heartbeat messages that would bloat the log file
             Logger.debugLog(msg)
     }
 

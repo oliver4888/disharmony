@@ -78,7 +78,7 @@ export class HandleMessageTestFixture
         const self = this
         class Message
         {
-            public guild = { hasPermissions: (_: any) => true }
+            public guild = { botHasPermissions: (_: any) => true }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
 

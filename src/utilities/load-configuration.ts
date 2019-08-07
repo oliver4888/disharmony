@@ -5,9 +5,9 @@ import { resolve } from "path"
 import Config from "../models/internal/config"
 import { ExitCodes } from "./exit-codes"
 
-export default function (configPath: string = "./config.json")
+export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, configPath: string = "./config.json"): { config: TConfig, isLocalDb: boolean, configPath: string }
 {
-    let config: Config = null as unknown as Config
+    let config: TConfig = null as unknown as TConfig
     if (existsSync(configPath))
         config = require(resolve(process.cwd(), configPath))
     else
@@ -22,7 +22,7 @@ export default function (configPath: string = "./config.json")
     if (process.env.DB_STRING)
         config.dbConnectionString = process.env.DB_STRING
 
-    if (!isConfigValid(config!))
+    if (!isConfigValid(config!, schema))
     {
         console.error("Invalid config!")
         process.exit(ExitCodes.ConfigLoadError)
@@ -35,9 +35,9 @@ export default function (configPath: string = "./config.json")
     }
 }
 
-export function isConfigValid(config: Config)
+export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema)
 {
-    const schema = Joi.object().keys({
+    const primarySchema = Joi.object().keys({
         dbConnectionString: Joi.string().required(),
         token: Joi.string().required(),
         serviceName: Joi.string().required(),
@@ -50,6 +50,14 @@ export function isConfigValid(config: Config)
         dbClientConfig: Joi.object().optional(),
     })
 
-    const { error } = Joi.validate(config, schema)
-    return !error
+    const validationOptions: Joi.ValidationOptions = { allowUnknown: true }
+
+    const primarySchemaError: boolean = !!Joi.validate(config, primarySchema, validationOptions).error
+
+    let secondarySchemaError: boolean = false
+
+    if (secondarySchema)
+        secondarySchemaError = !!Joi.validate(config, secondarySchema, validationOptions).error
+
+    return !primarySchemaError && !secondarySchemaError
 }

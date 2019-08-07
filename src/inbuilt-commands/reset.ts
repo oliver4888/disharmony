@@ -7,7 +7,7 @@ import Question from "../utilities/question"
 
 async function invoke(_: string[], message: BotMessage, client: IClient)
 {
-    return new Promise<string>(async (resolve, reject) =>
+    return new Promise<string>(async (__, reject) =>
     {
         const response = await new Question(
             client, message.channelId,

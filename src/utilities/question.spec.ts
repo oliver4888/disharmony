@@ -188,6 +188,7 @@ export class QuestionTestFixture
     }
 
     // TODO: Can't work out why this just times out
+    // tslint:disable: comment-format
     // @AsyncTest()
     // public async rejects_with_channel_send_error_reason_when_channel_send_throws()
     // {

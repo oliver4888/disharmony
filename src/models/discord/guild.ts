@@ -10,7 +10,10 @@ export default class BotGuild extends Document implements IDjsExtension<DjsGuild
     public get name() { return this.djs.name }
     public get commandPrefix() { return this.record.commandPrefix }
 
-    public hasPermissions(permissions: number): boolean
+    /** @deprecated Use `botHasPermissions` instead */
+    public get hasPermissions() { return this.botHasPermissions }
+
+    public botHasPermissions(permissions: number): boolean
     {
         return (this.djs.me.permissions.missing(permissions) as PermissionResolvable[]).length === 0
     }

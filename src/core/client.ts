@@ -24,7 +24,8 @@ type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessa
 
 export default class Client<
     TMessage extends BotMessage = BotMessage,
-    TGuildMember extends BotGuildMember = BotGuildMember
+    TGuildMember extends BotGuildMember = BotGuildMember,
+    TConfig extends Config = Config,
     > extends LightClient implements IClient
 {
     private heartbeatInterval: NodeJS.Timeout
@@ -108,7 +109,7 @@ export default class Client<
 
     constructor(
         commands: Command[],
-        config: Config,
+        public config: TConfig,
         public messageCtor: MessageConstructor<TMessage> = BotMessage as any,
         public guildMemberCtor: new (djsGuildMember: DjsGuildMember) => TGuildMember = BotGuildMember as any,
     )

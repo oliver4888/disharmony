@@ -24,7 +24,7 @@ export default async function handleMessage<TMessage extends BotMessage>(
         const commandInvoker = await (innerGetCommandInvoker ? innerGetCommandInvoker!(client, message) : getCommandInvoker(client, message))
         if (commandInvoker)
         {
-            if (!message.guild.hasPermissions(client.config.requiredPermissions))
+            if (!message.guild.botHasPermissions(client.config.requiredPermissions))
                 throw new CommandError(CommandErrorReason.BotMissingGuildPermissions)
 
             const result = await commandInvoker(client, message)
