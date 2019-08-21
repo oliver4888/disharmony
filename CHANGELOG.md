@@ -1,4 +1,9 @@
 # Changelog
+## v1.2.0
+### Added
+- Option to create 'hidden' commands
+    - Hidden commands will behave as normal commands, but won't show up in the 'help' response
+
 ## v1.1.0
 ### Added
 - Support for extending the `Config` interface
