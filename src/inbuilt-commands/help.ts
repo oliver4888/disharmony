@@ -13,7 +13,12 @@ function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMe
 {
     const embed = new RichEmbed().setTitle(`__${client.config.serviceName} help__`)
 
-    for (const command of client.commands.filter(x => x.permissionLevel <= member.getPermissionLevel()))
+    const displayableCommands =
+        client.commands
+            .filter(x => x.permissionLevel <= member.getPermissionLevel())
+            .filter(x => !x.hidden)
+
+    for (const command of displayableCommands)
         embed.addField(command.syntax.match(/^\s?[^\s]+/)![0],
             `${command.description}
             **Usage:** *@${me.nickname || me.username} ${command.syntax}*

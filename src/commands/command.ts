@@ -13,10 +13,11 @@ export enum PermissionLevel
 
 export default class Command
 {
-    public invokeDependency?: any
     constructor(
         public syntax: string,
         public description: string,
         public permissionLevel: PermissionLevel,
-        public invoke: InvokeFunc) { }
+        public invoke: InvokeFunc,
+        public hidden: boolean = false)
+    { }
 }
