@@ -17,7 +17,7 @@ steps:
           environment: ["NPM_AUTH_TOKEN"]
           command: ["/bin/bash", ".buildkite/scripts/publish.sh"]
   - wait: ~
-  - label: ":github: Create release"
+  - label: ":github: Create Release"
     plugins:
       - docker#v3.3.0:
           image: "benji7425/github-release-creator:latest"
