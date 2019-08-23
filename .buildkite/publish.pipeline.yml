@@ -1,12 +1,9 @@
 steps:
-  - label: ":crossed_fingers: Test"
-    plugins:
-      - docker#v3.3.0:
-          image: "node:10"
-          volumes: [".:/workdir"]
-          workdir: "/workdir"
-          mount-checkout: false
-          command: ["/bin/bash", "-c", "npm ci --dev && npm run build-test"]
+  - label: "Run regular pipeline"
+    trigger: "disharmony"
+    build:
+      branch: "${BUILDKITE_BRANCH}"
+      message: "Pre-publish"
   - wait: ~
   - block: ":shipit: Ship?"
     prompt: "Publish to NPM?"
@@ -19,6 +16,7 @@ steps:
           mount-checkout: false
           environment: ["NPM_AUTH_TOKEN"]
           command: ["/bin/bash", ".buildkite/scripts/publish.sh"]
+  - wait: ~
   - label: ":github: Create release"
     plugins:
       - docker#v3.3.0:
