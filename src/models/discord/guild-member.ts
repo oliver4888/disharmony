@@ -12,11 +12,6 @@ export default class BotGuildMember extends Document implements IDjsExtension<Dj
     public addRole(snowflake: string | Role, reason?: string) { return this.djs.addRole(snowflake, reason) }
     public removeRole(snowflake: string | Role, reason?: string) { return this.djs.removeRole(snowflake, reason) }
 
-    public hasRole(snowflake: string): boolean
-    {
-        return !!this.djs.roles.get(snowflake)
-    }
-
     public getPermissionLevel(): PermissionLevel
     {
         if (this.id === "117966411548196870")
