@@ -1,3 +1,4 @@
+import exportGuild from "./export-guild"
 import help from "./help"
 import reset from "./reset"
 import stats from "./stats"
@@ -8,4 +9,5 @@ export default [
     help,
     reset,
     stats,
+    exportGuild,
 ]

@@ -18,6 +18,11 @@ export default class BotGuild extends Document implements IDjsExtension<DjsGuild
         return (this.djs.me.permissions.missing(permissions) as PermissionResolvable[]).length === 0
     }
 
+    public getExportJson()
+    {
+        return JSON.stringify(this.record, null, "\t")
+    }
+
     constructor(
         public readonly djs: DjsGuild)
     {
