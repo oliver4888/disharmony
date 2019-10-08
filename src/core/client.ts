@@ -1,4 +1,5 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
+import { resolve } from "path"
 import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
 import { Logger } from ".."
@@ -8,7 +9,9 @@ import BotGuildMember from "../models/discord/guild-member"
 import BotMessage from "../models/discord/message"
 import Config from "../models/internal/config"
 import Stats from "../models/internal/stats"
+import { isDbLocal } from "../utilities/load-configuration"
 import { EventStrings } from "../utilities/logging/event-strings"
+import { invokeWorkerAction } from "../utilities/worker-action"
 import handleMessage from "./handle-message"
 import LightClient, { ILightClient } from "./light-client"
 
@@ -48,6 +51,8 @@ export default class Client<
             this.setHeartbeatInterval()
 
         this.setMemoryMeasureInterval()
+
+        this.setExportGenerationInterval()
     }
 
     public async destroy()
@@ -77,12 +82,24 @@ export default class Client<
             this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
     }
 
+    // TODO: Create some kind of 'interval manager' module to put all these interval thingys in; have it ensure all intervals are destroyed at the appropriate time
     private setHeartbeatInterval()
     {
         const intervalMs = this.config.heartbeat!.intervalSec * 1000
         this.sendHeartbeat(true)
             .then(() => this.heartbeatInterval = setInterval(() => this.sendHeartbeat.bind(this)(), intervalMs))
             .catch(() => Logger.debugLogError("Error sending initial heartbeat, interval setup abandoned"))
+    }
+
+    private setMemoryMeasureInterval()
+    {
+        const intervalMs = (this.config.memoryMeasureIntervalSec || 600) * 1000
+        setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
+    }
+
+    private setExportGenerationInterval()
+    {
+        setInterval(this.invokeExportGenerator, 60 * 60 * 1000)
     }
 
     private async sendHeartbeat(rethrow?: boolean)
@@ -101,10 +118,9 @@ export default class Client<
         }
     }
 
-    private setMemoryMeasureInterval()
+    private async invokeExportGenerator()
     {
-        const intervalMs = (this.config.memoryMeasureIntervalSec || 600) * 1000
-        setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
+        await invokeWorkerAction(resolve(__dirname, "../utilities/export-generator"), isDbLocal(this.config.dbConnectionString), this)
     }
 
     constructor(

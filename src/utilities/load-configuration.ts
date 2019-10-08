@@ -30,7 +30,7 @@ export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, conf
 
     return {
         config,
-        isLocalDb: config!.dbConnectionString.startsWith("nedb://"),
+        isLocalDb: isDbLocal(config.dbConnectionString),
         configPath,
     }
 }
@@ -60,4 +60,9 @@ export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema
         secondarySchemaError = !!Joi.validate(config, secondarySchema, validationOptions).error
 
     return !primarySchemaError && !secondarySchemaError
+}
+
+export function isDbLocal(connectionString: string)
+{
+    return connectionString.startsWith("nedb://")
 }
