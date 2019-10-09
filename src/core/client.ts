@@ -1,6 +1,4 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
-import { resolve } from "path"
-import * as RequestPromise from "request-promise-native"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
 import { Logger } from ".."
 import Command from "../commands/command"
@@ -9,9 +7,8 @@ import BotGuildMember from "../models/discord/guild-member"
 import BotMessage from "../models/discord/message"
 import Config from "../models/internal/config"
 import Stats from "../models/internal/stats"
-import { isDbLocal } from "../utilities/load-configuration"
 import { EventStrings } from "../utilities/logging/event-strings"
-import { invokeWorkerAction } from "../utilities/worker-action"
+import ClientIntervalManager from "./client-interval-manager"
 import handleMessage from "./handle-message"
 import LightClient, { ILightClient } from "./light-client"
 
@@ -31,7 +28,7 @@ export default class Client<
     TConfig extends Config = Config,
     > extends LightClient implements IClient
 {
-    private heartbeatInterval: NodeJS.Timeout
+    private intervalManager: ClientIntervalManager
 
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
@@ -46,19 +43,12 @@ export default class Client<
     public async login(token: string)
     {
         await super.login(token)
-
-        if (this.config.heartbeat)
-            this.setHeartbeatInterval()
-
-        this.setMemoryMeasureInterval()
-
-        this.setExportGenerationInterval()
+        this.intervalManager.setIntervalCallbacks()
     }
 
     public async destroy()
     {
-        if (this.heartbeatInterval)
-            clearInterval(this.heartbeatInterval)
+        this.intervalManager.clearConnectionDependentIntervals()
         await super.destroy()
     }
 
@@ -82,47 +72,6 @@ export default class Client<
             this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
     }
 
-    // TODO: Create some kind of 'interval manager' module to put all these interval thingys in; have it ensure all intervals are destroyed at the appropriate time
-    private setHeartbeatInterval()
-    {
-        const intervalMs = this.config.heartbeat!.intervalSec * 1000
-        this.sendHeartbeat(true)
-            .then(() => this.heartbeatInterval = setInterval(() => this.sendHeartbeat.bind(this)(), intervalMs))
-            .catch(() => Logger.debugLogError("Error sending initial heartbeat, interval setup abandoned"))
-    }
-
-    private setMemoryMeasureInterval()
-    {
-        const intervalMs = (this.config.memoryMeasureIntervalSec || 600) * 1000
-        setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
-    }
-
-    private setExportGenerationInterval()
-    {
-        setInterval(this.invokeExportGenerator, 60 * 60 * 1000)
-    }
-
-    private async sendHeartbeat(rethrow?: boolean)
-    {
-        try
-        {
-            await RequestPromise.get(this.config.heartbeat!.url)
-        }
-        catch (err)
-        {
-            Logger.debugLogError("Error sending heartbeat", err)
-            Logger.logEvent(EventStrings.SentHeartbeatError)
-
-            if (rethrow)
-                throw err
-        }
-    }
-
-    private async invokeExportGenerator()
-    {
-        await invokeWorkerAction(resolve(__dirname, "../utilities/export-generator"), isDbLocal(this.config.dbConnectionString), this)
-    }
-
     constructor(
         commands: Command[],
         public config: TConfig,
@@ -139,5 +88,6 @@ export default class Client<
 
         this.commands = commands.concat(inbuiltCommands)
         this.stats = new Stats(this.djs)
+        this.intervalManager = new ClientIntervalManager(this)
     }
 }

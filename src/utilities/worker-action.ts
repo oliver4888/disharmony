@@ -1,5 +1,5 @@
 import { resolve } from "path"
-import { forkWorkerClient, LightClient, loadConfig, Logger } from ".."
+import { forkWorkerClient, ILightClient, LightClient, loadConfig, Logger } from ".."
 
 /** Base class representing a module which can be easily launched in a worker module.
  *  Will automatically connect to Discord and provide a LightClient instance
@@ -43,9 +43,9 @@ export default abstract class WorkerAction
     ) { }
 }
 
-export async function invokeWorkerAction(path: string, useMainProcess: boolean, mainProcessClient: LightClient): Promise<void>
+export async function invokeWorkerAction(path: string, useMainProcess: boolean, mainProcessClient: ILightClient): Promise<void>
 export async function invokeWorkerAction(path: string, useMainProcess: boolean, configPath: string): Promise<void>
-export async function invokeWorkerAction(path: string, useMainProcess: boolean, processArg: LightClient | string)
+export async function invokeWorkerAction(path: string, useMainProcess: boolean, processArg: ILightClient | string)
 {
     await Logger.debugLog(`Loading worker module in ${useMainProcess ? "main" : "worker"} process`)
     if (useMainProcess)

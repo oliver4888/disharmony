@@ -7,7 +7,7 @@ export enum EventStrings
     DocumentDeleteError = "[Core] DocumentDeleteError",
     DocumentLoadError = "[Core] DocumentLoadError",
     DetermineCommandError = "[Core] DetermineCommandError",
-    SentHeartbeatError = "[Core] SentHeartbeatError",
+    SendHeartbeatError = "[Core] SendHeartbeatError",
     InvokeCommandError = "[Core] InvokeCommandError",
     MissingGuildPermissions = "[Core] MissingGuildPermissions",
     MessageSendError = "[Core] MessageSendError",
