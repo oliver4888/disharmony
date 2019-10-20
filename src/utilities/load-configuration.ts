@@ -37,6 +37,7 @@ export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, conf
 
 export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema)
 {
+    // See config.ts for a typed interface
     const primarySchema = Joi.object().keys({
         dbConnectionString: Joi.string().required(),
         token: Joi.string().required(),
@@ -48,6 +49,8 @@ export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema
             intervalSec: Joi.number().required(),
         }),
         dbClientConfig: Joi.object().optional(),
+        memoryMeasureIntervalSec: Joi.number().optional(),
+        playingStatusString: Joi.string().optional(),
     })
 
     const validationOptions: Joi.ValidationOptions = { allowUnknown: true }

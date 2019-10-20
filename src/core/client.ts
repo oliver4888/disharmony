@@ -46,6 +46,9 @@ export default class DisharmonyClient<
     {
         await super.login(token)
         this.intervalManager.setIntervalCallbacks()
+
+        if (this.config.playingStatusString)
+            await this.djs.user.setPresence({ game: { name: this.config.playingStatusString } })
     }
 
     public async destroy()
