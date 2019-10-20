@@ -1,6 +1,6 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
-import { Logger } from ".."
+import { BotGuild, Logger } from ".."
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
 import BotGuildMember from "../models/discord/guild-member"
@@ -24,6 +24,8 @@ type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessa
 
 export default class DisharmonyClient<
     TMessage extends BotMessage = BotMessage,
+    // This has the _underscore prefix as it is not yet used; may be needed in future so including in 2.0 as it's a breaking addition
+    _TGuild extends BotGuild = BotGuild,
     TGuildMember extends BotGuildMember = BotGuildMember,
     TConfig extends Config = Config,
     > extends LiteDisharmonyClient implements Client
