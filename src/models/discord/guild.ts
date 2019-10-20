@@ -20,13 +20,13 @@ export default class BotGuild extends Document implements IDjsExtension<DjsGuild
 
     public getExportJson()
     {
-        return JSON.stringify(this.record, null, "\t")
+        return JSON.stringify(this.record)
     }
 
     constructor(
         public readonly djs: DjsGuild)
     {
-        super(djs.id)
+        super(djs.id, "Guild")
         this.me = new BotGuildMember(djs.me)
     }
 }

@@ -6,10 +6,16 @@ import Serializable from "./serializable"
 
 export default abstract class Document extends Serializable
 {
+    /** Whether this Document represents a brand new Database record */
     protected isNewRecord = false
 
+    /** Name of the database collection to use when saving/loading this document */
+    private dbCollectionName: string
+
+    /** Collection of fields to be included in the next database $set operation */
     public updateFields: any = {}
 
+    /** Reference to the IDbClient to use for Document save/load operations */
     public static dbClient: IDbClient
 
     /** Save record modifications back to the database, or insert the record for the first time */
@@ -27,11 +33,11 @@ export default abstract class Document extends Serializable
         try
         {
             if (this.isNewRecord)
-                await Document.dbClient.insertOne(this.constructor.name, record)
+                await Document.dbClient.insertOne(this.dbCollectionName, record)
             else if (Object.keys(this.updateFields).length > 0)
-                await Document.dbClient.updateOne(this.constructor.name, { _id: this.id }, { $set: this.updateFields })
+                await Document.dbClient.updateOne(this.dbCollectionName, { _id: this.id }, { $set: this.updateFields })
             else
-                await Document.dbClient.replaceOne(this.constructor.name, { _id: this.id }, record)
+                await Document.dbClient.replaceOne(this.dbCollectionName, { _id: this.id }, record)
             this.updateFields = {}
             this.isNewRecord = false
         }
@@ -49,7 +55,7 @@ export default abstract class Document extends Serializable
         this.throwIfReconnecting()
         try
         {
-            await Document.dbClient.deleteOne(this.constructor.name, { _id: this.id })
+            await Document.dbClient.deleteOne(this.dbCollectionName, { _id: this.id })
         }
         catch (e)
         {
@@ -65,7 +71,7 @@ export default abstract class Document extends Serializable
         this.throwIfReconnecting()
         try
         {
-            const record = await Document.dbClient.findOne(this.constructor.name, { _id: this.id })
+            const record = await Document.dbClient.findOne(this.dbCollectionName, { _id: this.id })
             const recordProxy = new Proxy(record || {}, {
                 get: (target, prop) => target[prop],
                 set: (target, prop, value) =>
@@ -93,6 +99,7 @@ export default abstract class Document extends Serializable
         }
     }
 
+    /** Throw an error if the database client is currently reconnecting */
     private throwIfReconnecting()
     {
         if (Document.dbClient.isReconnecting)
@@ -110,8 +117,10 @@ export default abstract class Document extends Serializable
 
     constructor(
         public id: string,
+        dbCollectionName?: string,
     )
     {
         super()
+        this.dbCollectionName = dbCollectionName || this.constructor.name
     }
 }
