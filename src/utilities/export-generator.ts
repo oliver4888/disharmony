@@ -43,7 +43,7 @@ export default class ExportGenerator extends WorkerAction
         const dir = ".exports"
         await fs.mkdir(dir, { recursive: true })
         const fileName = `${dir}/${pendingExport.guildId}-${pendingExport.memberId}.json`
-        await fs.writeFile(fileName, exportJson) // TODO Make this overwrite
+        await fs.writeFile(fileName, exportJson)
 
         // Send JSON file to member
         const attachment = new Attachment(fileName, `${pendingExport.guildId}.json`)
@@ -54,7 +54,6 @@ export default class ExportGenerator extends WorkerAction
         }
         catch (err)
         {
-            // TODO Consider implementing a mechanism for retaining this pending export if it fails (everything gets deleted after the iteration is done)
             Logger.debugLogError(`Error sending export for guild ${pendingExport.guildId} to member ${pendingExport.memberId}`, err)
         }
     }

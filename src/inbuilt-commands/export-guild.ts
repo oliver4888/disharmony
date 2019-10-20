@@ -15,7 +15,7 @@ async function invoke(_: string[], message: BotMessage)
     })
 
     await pendingList.save()
-    return "Your export will be generated in the background and should be private messaged to you within one hour."
+    return "Your export will be generated in the background and should be private messaged to you within one hour. Please make sure you allow direct messages from server members."
 }
 
 export default new Command(
