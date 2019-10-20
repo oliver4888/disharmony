@@ -1,15 +1,15 @@
 import { RichEmbed } from "discord.js"
 import Command, { PermissionLevel } from "../commands/command"
-import { IClient } from "../core/client"
+import { Client } from "../core/client"
 import BotGuildMember from "../models/discord/guild-member"
 import BotMessage from "../models/discord/message"
 
-async function invoke(_: string[], message: BotMessage, client: IClient): Promise<void>
+async function invoke(_: string[], message: BotMessage, client: Client): Promise<void>
 {
     await message.reply(createHelpEmbed(client, message.guild.me, message.member))
 }
 
-function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMember): RichEmbed
+function createHelpEmbed(client: Client, me: BotGuildMember, member: BotGuildMember): RichEmbed
 {
     const embed = new RichEmbed().setTitle(`__${client.config.serviceName} help__`)
 

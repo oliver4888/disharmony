@@ -1,9 +1,9 @@
 import { Guild as DjsGuild, PermissionResolvable } from "discord.js"
 import Document from "../document"
-import IDjsExtension from "./djs-extension"
+import DjsExtensionModel from "./djs-extension"
 import BotGuildMember from "./guild-member"
 
-export default class BotGuild extends Document implements IDjsExtension<DjsGuild>
+export default class BotGuild extends Document implements DjsExtensionModel<DjsGuild>
 {
     public readonly me: BotGuildMember
 

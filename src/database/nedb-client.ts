@@ -3,9 +3,9 @@ import { join } from "path"
 import { promisify } from "typed-promisify"
 import { NedbClientConfig } from "../models/internal/config"
 import Logger from "../utilities/logging/logger"
-import { IDbClient } from "./db-client"
+import { DbClient } from "./db-client"
 
-export default class NedbClient implements IDbClient
+export default class NedbClient implements DbClient
 {
     private writeCount: number = 0
     private baseDir: string

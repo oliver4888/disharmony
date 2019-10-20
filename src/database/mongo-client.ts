@@ -2,9 +2,9 @@ import { Collection, Db, MongoClient as MongoClientActual } from "mongodb"
 import { Logger } from ".."
 import { MongoClientConfig } from "../models/internal/config"
 import { EventStrings} from "../utilities/logging/event-strings"
-import { CriticalError, IDbClient } from "./db-client"
+import { CriticalError, DbClient } from "./db-client"
 
-export default class MongoClient implements IDbClient
+export default class MongoClient implements DbClient
 {
     private connectionPromise: Promise<void>
     private reconnectFailTimeout: NodeJS.Timeout | null

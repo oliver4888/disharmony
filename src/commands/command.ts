@@ -1,8 +1,8 @@
-import { IClient } from "../core/client"
+import { Client } from "../core/client"
 import BotMessage from "../models/discord/message"
 
 // Allow any type messages so implementers can override Message as for some reason derived types aren't allowed
-type InvokeFunc = (params: string[], message: BotMessage | any, client: IClient) => Promise<string | void>
+type InvokeFunc = (params: string[], message: BotMessage | any, client: Client) => Promise<string | void>
 
 export enum PermissionLevel
 {

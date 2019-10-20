@@ -10,9 +10,9 @@ import Stats from "../models/internal/stats"
 import { EventStrings } from "../utilities/logging/event-strings"
 import ClientIntervalManager from "./client-interval-manager"
 import handleMessage from "./handle-message"
-import LightClient, { ILightClient } from "./light-client"
+import LiteDisharmonyClient, { LiteClient } from "./light-client"
 
-export interface IClient extends ILightClient
+export interface Client extends LiteClient
 {
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
@@ -22,11 +22,11 @@ export interface IClient extends ILightClient
 
 type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessage) => TMessage
 
-export default class Client<
+export default class DisharmonyClient<
     TMessage extends BotMessage = BotMessage,
     TGuildMember extends BotGuildMember = BotGuildMember,
     TConfig extends Config = Config,
-    > extends LightClient implements IClient
+    > extends LiteDisharmonyClient implements Client
 {
     private intervalManager: ClientIntervalManager
 

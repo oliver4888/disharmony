@@ -1,7 +1,7 @@
 import Command, { PermissionLevel } from "./commands/command"
 import CommandRejection from "./commands/command-rejection"
-import Client, { IClient } from "./core/client"
-import LightClient, { ILightClient } from "./core/light-client"
+import DisharmonyClient, { Client } from "./core/client"
+import LiteDisharmonyClient, { LiteClient } from "./core/light-client"
 import BotGuild from "./models/discord/guild"
 import BotGuildMember from "./models/discord/guild-member"
 import BotMessage from "./models/discord/message"
@@ -15,10 +15,10 @@ import Question from "./utilities/question"
 
 export
 {
-    ILightClient,
-    IClient,
-    LightClient,
-    Client,
+    LiteClient as ILightClient,
+    Client as IClient,
+    LiteDisharmonyClient as LightClient,
+    DisharmonyClient as Client,
     BotMessage,
     BotGuild,
     BotGuildMember,

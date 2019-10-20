@@ -2,7 +2,7 @@
 import { Expect, Setup, Test, TestFixture } from "alsatian"
 import { IMock, It, Mock, Times } from "typemoq"
 import { SubDocument } from ".."
-import { IDbClient } from "../database/db-client"
+import { DbClient } from "../database/db-client"
 import Document from "./document"
 
 class TestDocument extends Document
@@ -28,12 +28,12 @@ class TestSubDocument extends SubDocument
 @TestFixture("SubDocment base class")
 export class SubDocumentTestFixture
 {
-    public dbClient: IMock<IDbClient>
+    public dbClient: IMock<DbClient>
 
     @Setup
     public setup()
     {
-        this.dbClient = Mock.ofType<IDbClient>()
+        this.dbClient = Mock.ofType<DbClient>()
         this.dbClient.setup(x => x.isReconnecting).returns(() => false)
     }
 

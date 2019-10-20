@@ -1,9 +1,9 @@
 import { GuildMember as DjsGuildMember, Role } from "discord.js"
 import { PermissionLevel } from "../../commands/command"
 import Document from "../document"
-import IDjsExtension from "./djs-extension"
+import DjsExtensionModel from "./djs-extension"
 
-export default class BotGuildMember extends Document implements IDjsExtension<DjsGuildMember>
+export default class BotGuildMember extends Document implements DjsExtensionModel<DjsGuildMember>
 {
     public get permissions() { return this.djs.permissions }
     public get nickname() { return this.djs.nickname }

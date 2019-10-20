@@ -1,9 +1,9 @@
 import { Message as DjsMessage, RichEmbed } from "discord.js"
-import IDjsExtension from "./djs-extension"
+import DjsExtensionModel from "./djs-extension"
 import BotGuild from "./guild"
 import BotGuildMember from "./guild-member"
 
-export default class BotMessage implements IDjsExtension<DjsMessage>
+export default class BotMessage implements DjsExtensionModel<DjsMessage>
 {
     public readonly guild: BotGuild
     public readonly member: BotGuildMember

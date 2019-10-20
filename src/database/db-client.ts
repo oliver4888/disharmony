@@ -3,7 +3,7 @@ import Logger from "../utilities/logging/logger"
 import MongoClient from "./mongo-client"
 import NedbClient from "./nedb-client"
 
-export default function getDbClient(connectionString: string, onCriticalError: (err: CriticalError) => void, clientConfig?: MongoClientConfig | NedbClientConfig): IDbClient
+export default function getDbClient(connectionString: string, onCriticalError: (err: CriticalError) => void, clientConfig?: MongoClientConfig | NedbClientConfig): DbClient
 {
     const protocol = connectionString.match(/^.+:\/\//)![0]
 
@@ -22,7 +22,7 @@ export default function getDbClient(connectionString: string, onCriticalError: (
     throw new Error("Invalid connection string")
 }
 
-export interface IDbClient
+export interface DbClient
 {
     updateOne(collectionName: string, query: any, update: any): Promise<void>
     insertOne(collectionName: string, record: any, allowBuffering?: boolean): Promise<void>
