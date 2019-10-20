@@ -1,11 +1,11 @@
 import { CommandRejection, Logger } from ".."
 import Command, { PermissionLevel } from "../commands/command"
 import { Client } from "../core/client"
-import BotMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/message"
 import { EventStrings } from "../utilities/logging/event-strings"
 import Question from "../utilities/question"
 
-async function invoke(_: string[], message: BotMessage, client: Client)
+async function invoke(_: string[], message: DisharmonyMessage, client: Client)
 {
     return new Promise<string>(async (__, reject) =>
     {

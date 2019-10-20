@@ -1,10 +1,10 @@
 import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
-import { BotGuild, Logger } from ".."
+import { DisharmonyGuild, Logger } from ".."
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
-import BotGuildMember from "../models/discord/guild-member"
-import BotMessage from "../models/discord/message"
+import DisharmonyGuildMember from "../models/discord/guild-member"
+import DisharmonyMessage from "../models/discord/message"
 import Config from "../models/internal/config"
 import Stats from "../models/internal/stats"
 import { EventStrings } from "../utilities/logging/event-strings"
@@ -16,17 +16,17 @@ export interface Client extends LiteClient
 {
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
-    readonly onMessage: ISimpleEvent<BotMessage>
+    readonly onMessage: ISimpleEvent<DisharmonyMessage>
     stats: Stats
 }
 
-type MessageConstructor<TMessage extends BotMessage> = new (djsMessage: DjsMessage) => TMessage
+type MessageConstructor<TMessage extends DisharmonyMessage> = new (djsMessage: DjsMessage) => TMessage
 
 export default class DisharmonyClient<
-    TMessage extends BotMessage = BotMessage,
+    TMessage extends DisharmonyMessage = DisharmonyMessage,
     // This has the _underscore prefix as it is not yet used; may be needed in future so including in 2.0 as it's a breaking addition
-    _TGuild extends BotGuild = BotGuild,
-    TGuildMember extends BotGuildMember = BotGuildMember,
+    _TGuild extends DisharmonyGuild = DisharmonyGuild,
+    TGuildMember extends DisharmonyGuildMember = DisharmonyGuildMember,
     TConfig extends Config = Config,
     > extends LiteDisharmonyClient implements Client
 {
@@ -77,8 +77,8 @@ export default class DisharmonyClient<
     constructor(
         commands: Command[],
         public config: TConfig,
-        public messageCtor: MessageConstructor<TMessage> = BotMessage as any,
-        public guildMemberCtor: new (djsGuildMember: DjsGuildMember) => TGuildMember = BotGuildMember as any,
+        public messageCtor: MessageConstructor<TMessage> = DisharmonyMessage as any,
+        public guildMemberCtor: new (djsGuildMember: DjsGuildMember) => TGuildMember = DisharmonyGuildMember as any,
     )
     {
         super(config)

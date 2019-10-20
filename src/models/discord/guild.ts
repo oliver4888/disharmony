@@ -1,11 +1,11 @@
 import { Guild as DjsGuild, PermissionResolvable } from "discord.js"
 import Document from "../document"
 import DjsExtensionModel from "./djs-extension"
-import BotGuildMember from "./guild-member"
+import DisharmonyGuildMember from "./guild-member"
 
-export default class BotGuild extends Document implements DjsExtensionModel<DjsGuild>
+export default class DisharmonyGuild extends Document implements DjsExtensionModel<DjsGuild>
 {
-    public readonly me: BotGuildMember
+    public readonly me: DisharmonyGuildMember
 
     public get name() { return this.djs.name }
     public get commandPrefix() { return this.record.commandPrefix }
@@ -27,6 +27,6 @@ export default class BotGuild extends Document implements DjsExtensionModel<DjsG
         public readonly djs: DjsGuild)
     {
         super(djs.id, "Guild")
-        this.me = new BotGuildMember(djs.me)
+        this.me = new DisharmonyGuildMember(djs.me)
     }
 }

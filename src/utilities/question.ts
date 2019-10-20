@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js"
-import { BotGuildMember, BotMessage, IClient, Logger } from ".."
+import { DisharmonyGuildMember, DisharmonyMessage, IClient, Logger } from ".."
 import { EventStrings } from "./logging/event-strings"
 
 export default class Question
@@ -7,13 +7,13 @@ export default class Question
     private queryStr: string
     private channel: TextChannel
 
-    public async send(): Promise<BotMessage>
+    public async send(): Promise<DisharmonyMessage>
     {
-        return new Promise<BotMessage>(async (resolve, reject) =>
+        return new Promise<DisharmonyMessage>(async (resolve, reject) =>
         {
             let timeout: NodeJS.Timer | null
 
-            let resolver: (msg: BotMessage) => void
+            let resolver: (msg: DisharmonyMessage) => void
             resolver = msg =>
             {
                 if (!this.askee || msg.member.id === this.askee.id)
@@ -56,7 +56,7 @@ export default class Question
         private client: IClient,
         public readonly channelID: string,
         public readonly query: string,
-        public readonly askee?: BotGuildMember,
+        public readonly askee?: DisharmonyGuildMember,
         public readonly pingAskee: boolean = false)
     {
         this.queryStr = query

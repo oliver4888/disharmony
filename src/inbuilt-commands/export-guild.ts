@@ -1,7 +1,7 @@
-import { BotMessage, Command, PermissionLevel } from ".."
+import { Command, DisharmonyMessage, PermissionLevel } from ".."
 import PendingExports from "../models/internal/pending-exports"
 
-async function invoke(_: string[], message: BotMessage)
+async function invoke(_: string[], message: DisharmonyMessage)
 {
     const pendingList = new PendingExports()
     await pendingList.loadDocument()

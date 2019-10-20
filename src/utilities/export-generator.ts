@@ -1,6 +1,6 @@
 import { Attachment } from "discord.js"
 import { promises as fs } from "fs"
-import { BotGuild, Logger } from ".."
+import { DisharmonyGuild, Logger } from ".."
 import PendingExports, { PendingExport } from "../models/internal/pending-exports"
 import WorkerAction from "./worker-action"
 
@@ -29,7 +29,7 @@ export default class ExportGenerator extends WorkerAction
         if (!djsGuild)
             return
 
-        const guild = new BotGuild(djsGuild)
+        const guild = new DisharmonyGuild(djsGuild)
         const djsMember = guild.djs.members.get(pendingExport.memberId)
 
         if (!djsMember)

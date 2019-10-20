@@ -1,6 +1,6 @@
 import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
 import { IMock, Mock } from "typemoq"
-import { BotGuild, BotGuildMember, BotMessage, IClient } from ".."
+import { DisharmonyGuild, DisharmonyGuildMember, DisharmonyMessage, IClient } from ".."
 import Command, { PermissionLevel } from "./command"
 import { CommandErrorReason } from "./command-error"
 import getCommandInvoker from "./command-parser"
@@ -10,9 +10,9 @@ export class CommandParserTestFixture
 {
     private command: Command
     private client: IClient
-    private guild: IMock<BotGuild>
-    private member: IMock<BotGuildMember>
-    private message: IMock<BotMessage>
+    private guild: IMock<DisharmonyGuild>
+    private member: IMock<DisharmonyGuildMember>
+    private message: IMock<DisharmonyMessage>
 
     @Setup
     public async setup()
@@ -29,15 +29,15 @@ export class CommandParserTestFixture
         client.commands = [this.command]
         this.client = client
 
-        this.guild = Mock.ofType() as IMock<BotGuild>
+        this.guild = Mock.ofType() as IMock<DisharmonyGuild>
         this.guild.setup(x => x.commandPrefix)
             .returns(() => null)
 
-        this.member = Mock.ofType() as IMock<BotGuildMember>
+        this.member = Mock.ofType() as IMock<DisharmonyGuildMember>
         this.member.setup(x => x.getPermissionLevel())
             .returns(() => PermissionLevel.Anyone)
 
-        this.message = Mock.ofType() as IMock<BotMessage>
+        this.message = Mock.ofType() as IMock<DisharmonyMessage>
         this.message.setup(x => x.guild)
             .returns(() => this.guild.object)
         this.message.setup(x => x.member)
@@ -143,7 +143,7 @@ export class CommandParserTestFixture
     public async command_recognised_when_guild_has_command_prefix()
     {
         // ARRANGE
-        this.guild = Mock.ofType() as IMock<BotGuild>
+        this.guild = Mock.ofType() as IMock<DisharmonyGuild>
         this.guild.setup(x => x.commandPrefix)
             .returns(() => "!")
 

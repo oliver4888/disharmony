@@ -2,9 +2,9 @@ import Command, { PermissionLevel } from "./commands/command"
 import CommandRejection from "./commands/command-rejection"
 import DisharmonyClient, { Client } from "./core/client"
 import LiteDisharmonyClient, { LiteClient } from "./core/light-client"
-import BotGuild from "./models/discord/guild"
-import BotGuildMember from "./models/discord/guild-member"
-import BotMessage from "./models/discord/message"
+import DisharmonyGuild from "./models/discord/guild"
+import DisharmonyGuildMember from "./models/discord/guild-member"
+import DisharmonyMessage from "./models/discord/message"
 import Config from "./models/internal/config"
 import SubDocument from "./models/sub-document"
 import getWorker from "./utilities/fork-worker"
@@ -19,9 +19,9 @@ export
     Client as IClient,
     LiteDisharmonyClient as LightClient,
     DisharmonyClient as Client,
-    BotMessage,
-    BotGuild,
-    BotGuildMember,
+    DisharmonyMessage,
+    DisharmonyGuild,
+    DisharmonyGuildMember,
     Command,
     PermissionLevel,
     Logger,

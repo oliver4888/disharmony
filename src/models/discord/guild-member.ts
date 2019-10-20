@@ -3,7 +3,7 @@ import { PermissionLevel } from "../../commands/command"
 import Document from "../document"
 import DjsExtensionModel from "./djs-extension"
 
-export default class BotGuildMember extends Document implements DjsExtensionModel<DjsGuildMember>
+export default class DisharmonyGuildMember extends Document implements DjsExtensionModel<DjsGuildMember>
 {
     public get permissions() { return this.djs.permissions }
     public get nickname() { return this.djs.nickname }

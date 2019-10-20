@@ -1,12 +1,12 @@
 import { Logger } from ".."
 import { Client } from "../core/client"
-import BotMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/message"
 import { EventStrings } from "../utilities/logging/event-strings"
 import Command from "./command"
 import { CommandError, CommandErrorReason } from "./command-error"
 import CommandRejection from "./command-rejection"
 
-export default async function getCommandInvoker(client: Client, message: BotMessage): Promise<((disharmonyClient: Client, message: BotMessage) => Promise<string>) | null>
+export default async function getCommandInvoker(client: Client, message: DisharmonyMessage): Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>
 {
     let details: {
         name: string;
@@ -42,7 +42,7 @@ export default async function getCommandInvoker(client: Client, message: BotMess
     else if (details.params.length < (command.syntax.match(/\s[^\s\[]+/g) || []).length)
         throw new CommandError(CommandErrorReason.IncorrectSyntax)
     else
-        return async (invokeClient: Client, invokeMessage: BotMessage) =>
+        return async (invokeClient: Client, invokeMessage: DisharmonyMessage) =>
         {
             await invokeMessage.guild.loadDocument()
             let out
@@ -64,12 +64,12 @@ export default async function getCommandInvoker(client: Client, message: BotMess
         }
 }
 
-function isUserPermitted(message: BotMessage, command: Command)
+function isUserPermitted(message: DisharmonyMessage, command: Command)
 {
     return message.member.getPermissionLevel() >= command.permissionLevel
 }
 
-function getCommandDetails(message: BotMessage, client: Client)
+function getCommandDetails(message: DisharmonyMessage, client: Client)
 {
     // If no command prefix exists for this guild command criteria is bot mention
     const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botId}>`
