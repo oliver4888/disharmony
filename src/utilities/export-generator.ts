@@ -1,4 +1,6 @@
-import { Logger } from ".."
+import { Attachment } from "discord.js"
+import { promises as fs } from "fs"
+import { BotGuild, Logger } from ".."
 import PendingExports, { PendingExport } from "../models/internal/pending-exports"
 import WorkerAction from "./worker-action"
 
@@ -15,18 +17,46 @@ export default class ExportGenerator extends WorkerAction
         for (const pendingExport of pendingExports.allPending)
             await this.processExportForPendingEntry(pendingExport)
 
+        await pendingExports.deleteRecord()
         await Logger.debugLog("Finished iterating pending exports")
     }
 
     public async processExportForPendingEntry(pendingExport: PendingExport)
     {
         // Fetch data for this guild
+        const djsGuild = this.client.djs.guilds.get(pendingExport.guildId)
+
+        if (!djsGuild)
+            return
+
+        const guild = new BotGuild(djsGuild)
+        const djsMember = guild.djs.members.get(pendingExport.memberId)
+
+        if (!djsMember)
+            return
+
+        await guild.loadDocument()
+
+        const exportJson = guild.getExportJson()
 
         // Generate file containing JSON
+        const dir = ".exports"
+        await fs.mkdir(dir, { recursive: true })
+        const fileName = `${dir}/${pendingExport.guildId}-${pendingExport.memberId}.json`
+        await fs.writeFile(fileName, exportJson) // TODO Make this overwrite
 
         // Send JSON file to member
+        const attachment = new Attachment(fileName, `${pendingExport.guildId}.json`)
 
-        // Handle what to do if the file is too big for Discord's upload limit
+        try
+        {
+            await djsMember.send(attachment)
+        }
+        catch (err)
+        {
+            // TODO Consider implementing a mechanism for retaining this pending export if it fails (everything gets deleted after the iteration is done)
+            Logger.debugLogError(`Error sending export for guild ${pendingExport.guildId} to member ${pendingExport.memberId}`, err)
+        }
     }
 }
 
