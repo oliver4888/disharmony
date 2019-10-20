@@ -1,13 +1,13 @@
 import { Message as DjsMessage } from "discord.js"
-import { BotMessage, Client, IClient, Logger } from ".."
+import { Client, DisharmonyMessage, IClient, Logger } from ".."
 import { CommandError, CommandErrorReason } from "../commands/command-error"
 import getCommandInvoker from "../commands/command-parser"
 import { EventStrings } from "../utilities/logging/event-strings"
 
-export default async function handleMessage<TMessage extends BotMessage>(
+export default async function handleMessage<TMessage extends DisharmonyMessage>(
     client: Client<TMessage>,
     djsMessage: DjsMessage,
-    innerGetCommandInvoker?: (client: IClient, message: BotMessage) => Promise<((disharmonyClient: IClient, message: BotMessage) => Promise<string>) | null>)
+    innerGetCommandInvoker?: (client: IClient, message: DisharmonyMessage) => Promise<((disharmonyClient: IClient, message: DisharmonyMessage) => Promise<string>) | null>)
 {
     // Sometimes message member is null, no idea why
     if (!djsMessage.member)

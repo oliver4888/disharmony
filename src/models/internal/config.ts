@@ -23,6 +23,7 @@ export interface MongoClientConfig
     reconnectInterval: number
 }
 
+/** Configuration properties; see also function isConfigValid in load-configuration.ts */
 export default interface Config
 {
     /** Connection string for the Mongo-like database to be used */
@@ -48,4 +49,7 @@ export default interface Config
 
     /** How often to log an event with the current memory usage */
     memoryMeasureIntervalSec?: number
+
+    /** Text to set as the 'playing' status in Discord */
+    playingStatusString?: string
 }

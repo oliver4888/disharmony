@@ -2,22 +2,22 @@ import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian"
 import { TextChannel } from "discord.js"
 import { SimpleEventDispatcher } from "ste-simple-events"
 import { IMock, It, Mock, Times } from "typemoq"
-import { BotGuildMember, BotMessage, IClient } from ".."
+import { DisharmonyGuildMember, DisharmonyMessage, IClient } from ".."
 import Question, { QuestionRejectionReason } from "./question"
 
 @TestFixture("Question")
 export class QuestionTestFixture
 {
-    private messageDispatcher: SimpleEventDispatcher<BotMessage>
+    private messageDispatcher: SimpleEventDispatcher<DisharmonyMessage>
     private channelMock: IMock<TextChannel>
     private clientMock: IMock<IClient>
-    private askeeMock: IMock<BotGuildMember>
-    private responseMock: IMock<BotMessage>
+    private askeeMock: IMock<DisharmonyGuildMember>
+    private responseMock: IMock<DisharmonyMessage>
 
     @Setup
     public setup()
     {
-        this.messageDispatcher = new SimpleEventDispatcher<BotMessage>()
+        this.messageDispatcher = new SimpleEventDispatcher<DisharmonyMessage>()
 
         this.channelMock = Mock.ofType() as IMock<TextChannel>
         this.channelMock
@@ -32,7 +32,7 @@ export class QuestionTestFixture
             .setup(x => x.channels)
             .returns(() => new Map<string, TextChannel>([["channelid", this.channelMock.object]]))
 
-        this.askeeMock = Mock.ofType<BotGuildMember>()
+        this.askeeMock = Mock.ofType<DisharmonyGuildMember>()
         this.askeeMock
             .setup(x => x.toString())
             .returns(() => "<askee-id>")
@@ -40,7 +40,7 @@ export class QuestionTestFixture
             .setup(x => x.id)
             .returns(() => "askee-id")
 
-        this.responseMock = Mock.ofType<BotMessage>()
+        this.responseMock = Mock.ofType<DisharmonyMessage>()
         /* Fixes issue where promises resolving with this never finish,
            as the engine iteratively looks for .then until it's undefined */
         this.responseMock.setup(x => (x as any).then).returns(() => undefined)
@@ -109,7 +109,7 @@ export class QuestionTestFixture
     public async does_not_resolve_when_askee_provided_and_other_member_responds()
     {
         // ARRANGE
-        const otherMemberMock = Mock.ofType<BotGuildMember>()
+        const otherMemberMock = Mock.ofType<DisharmonyGuildMember>()
         otherMemberMock
             .setup(x => x.id)
             .returns(() => "other-id")
@@ -136,12 +136,12 @@ export class QuestionTestFixture
     public async still_resolves_with_answer_when_askee_provided_and_other_member_responds_before_askee_does()
     {
         // ARRANGE
-        const otherMemberMock = Mock.ofType<BotGuildMember>()
+        const otherMemberMock = Mock.ofType<DisharmonyGuildMember>()
         otherMemberMock
             .setup(x => x.id)
             .returns(() => "other-id")
 
-        const otherMemberResponseMock = Mock.ofType<BotMessage>()
+        const otherMemberResponseMock = Mock.ofType<DisharmonyMessage>()
         otherMemberResponseMock.setup(x => (x as any).then).returns(() => undefined)
         otherMemberResponseMock
             .setup(x => x.member)

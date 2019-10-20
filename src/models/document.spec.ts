@@ -1,18 +1,18 @@
 // tslint:disable: no-floating-promises
 import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian"
 import { IMock, It, Mock, Times } from "typemoq"
-import { IDbClient } from "../database/db-client"
+import { DbClient } from "../database/db-client"
 import Document from "./document"
 
 @TestFixture("Document base class")
 export class DocumentTestFixture
 {
-    public dbClient: IMock<IDbClient>
+    public dbClient: IMock<DbClient>
 
     @Setup
     public setup()
     {
-        this.dbClient = Mock.ofType<IDbClient>()
+        this.dbClient = Mock.ofType<DbClient>()
         this.dbClient.setup(x => x.isReconnecting).returns(() => false)
     }
 

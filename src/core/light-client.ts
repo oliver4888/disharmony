@@ -1,20 +1,20 @@
 import { Client as DjsClient } from "discord.js"
 import { Logger } from ".."
-import getDbClient, { CriticalError as CriticalDbError, IDbClient } from "../database/db-client"
-import IDjsExtension from "../models/discord/djs-extension"
+import getDbClient, { CriticalError as CriticalDbError, DbClient } from "../database/db-client"
+import DjsExtensionModel from "../models/discord/djs-extension"
 import Document from "../models/document"
 import Config from "../models/internal/config"
 import { ExitCodes } from "../utilities/exit-codes"
 
-export interface ILightClient extends IDjsExtension<DjsClient>
+export interface LiteClient extends DjsExtensionModel<DjsClient>
 {
     readonly botId: string
-    readonly dbClient: IDbClient
+    readonly dbClient: DbClient
     readonly config: Config
     login(token: string): Promise<void>
 }
 
-export default class LightClient implements ILightClient
+export default class LiteDisharmonyClient implements LiteClient
 {
     public djs: DjsClient
 

@@ -1,5 +1,5 @@
 import { Logger } from ".."
-import { IDbClient } from "../database/db-client"
+import { DbClient } from "../database/db-client"
 import { EventStrings } from "../utilities/logging/event-strings"
 import { DocumentError, DocumentErrorReason } from "./document-error"
 import Serializable from "./serializable"
@@ -16,7 +16,7 @@ export default abstract class Document extends Serializable
     public updateFields: any = {}
 
     /** Reference to the IDbClient to use for Document save/load operations */
-    public static dbClient: IDbClient
+    public static dbClient: DbClient
 
     /** Save record modifications back to the database, or insert the record for the first time */
     public async save()
