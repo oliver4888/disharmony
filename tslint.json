@@ -17,6 +17,7 @@
         "arrow-parens": false,
         "no-floating-promises": true,
         "space-before-function-paren": false,
-        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
+        "unified-signatures": false
     }
 }

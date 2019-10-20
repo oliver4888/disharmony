@@ -15,8 +15,9 @@ function createHelpEmbed(client: IClient, me: BotGuildMember, member: BotGuildMe
 
     const displayableCommands =
         client.commands
-            .filter(x => x.permissionLevel <= member.getPermissionLevel())
-            .filter(x => !x.hidden)
+            .filter(x => x.permissionLevel <= member.getPermissionLevel()) // Show only commands available to this user
+            .filter(x => !x.hidden) // Don't show hidden commands
+            .sort((a, b) => a.syntax <= b.syntax ? 0 : 1) // Sort commands alphabetically by syntax
 
     for (const command of displayableCommands)
         embed.addField(command.syntax.match(/^\s?[^\s]+/)![0],
