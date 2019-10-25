@@ -12,13 +12,14 @@ async function invoke(_: string[], message: DisharmonyMessage)
     const guildId = message.guild.id
     const memberId = message.member.id
 
-    if (pendingList.allPending.find(x => x.guildId === guildId && x.memberId === memberId))
-        return "You already have a pending import for this server"
+    if (pendingList.allPending.find(x => x.guildId === guildId))
+        return "There is already a pending import for this server"
 
     pendingList.allPending.push({
         guildId,
         memberId,
         isImport: true,
+        url: message.djs.attachments.first().url,
     })
 
     await pendingList.save()

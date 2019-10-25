@@ -1,6 +1,6 @@
 import Document from "../document"
 
-export type PendingDataPort = { guildId: string, memberId: string, isImport: boolean }
+export type PendingDataPort = { guildId: string, memberId: string, isImport: boolean, url?: string }
 
 export default class PendingDataPorts extends Document
 {

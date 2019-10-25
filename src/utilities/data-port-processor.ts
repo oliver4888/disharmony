@@ -1,8 +1,10 @@
 import { Attachment } from "discord.js"
-import { promises as fs } from "fs"
+import { promises as fs, createWriteStream, write } from "fs"
 import { DisharmonyGuild, Logger } from ".."
 import PendingDataPorts, { PendingDataPort } from "../models/internal/pending-data-ports"
 import WorkerAction from "./worker-action"
+import * as http from "http"
+import { promisify } from "typed-promisify"
 
 export default class DataPortProcessor extends WorkerAction
 {
@@ -37,15 +39,45 @@ export default class DataPortProcessor extends WorkerAction
 
         await guild.loadDocument()
 
-        if (pendingPort.isImport)
-            await this.processImport()
+        let filePath: string
+        if (pendingPort.isImport && pendingPort.url)
+            filePath = await this.processImport(pendingPort)
         else
-            await this.processExport(guild, pendingPort)
+            filePath = await this.processExport(guild, pendingPort)
+
+        // TODO Delete filePath
     }
 
-    private async processImport()
+    private async processImport(pendingPort: PendingDataPort): Promise<string>
     {
-        // Download the file (or 'load' it if already downloaded)
+        // Set up the file to be piped into
+        const dir = ".imports"
+        await fs.mkdir(dir, { recursive: true })
+        const filePath = `${dir}/${pendingPort.guildId}`
+        const writeStream = createWriteStream(filePath)
+
+        const response = await new Promise<http.IncomingMessage>(resolve => http.get(pendingPort.url!, resolve))
+
+        // Exit if response is not successful
+        if (response.statusCode !== 200)
+        {
+            Logger.debugLogError(`Failed to fetch the import file for guild ${pendingPort.guildId} from url ${pendingPort.url!}`)
+            return ""
+        }
+
+        // Pipe the response data to a file
+        try
+        {
+            response.pipe(writeStream)
+            await promisify(writeStream.close)()
+        }
+        catch (err)
+        {
+            await fs.unlink(filePath)
+            await Logger.debugLogError(`Error piping response to file when downloading import for guild ${pendingPort.guildId} from url ${pendingPort.url!}`)
+        }
+        
+        // Load the file
 
         // Create a new Guild database entry
 
@@ -54,9 +86,11 @@ export default class DataPortProcessor extends WorkerAction
         // Handle overwrites of existing data
 
         // Delete JSON file
+
+        return filePath
     }
 
-    private async processExport(guild: DisharmonyGuild, pendingPort: PendingDataPort)
+    private async processExport(guild: DisharmonyGuild, pendingPort: PendingDataPort): Promise<string>
     {
         const djsMember = guild.djs.members.get(pendingPort.memberId)
 
@@ -80,7 +114,7 @@ export default class DataPortProcessor extends WorkerAction
             Logger.debugLogError(`Error sending export for guild ${pendingPort.guildId} to member ${pendingPort.memberId}`, err)
         }
 
-        // TODO Delete JSON file when done
+        return fileName
     }
 }
 
