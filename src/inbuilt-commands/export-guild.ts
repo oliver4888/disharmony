@@ -1,17 +1,21 @@
 import { Command, DisharmonyMessage, PermissionLevel } from ".."
-import PendingExports from "../models/internal/pending-exports"
+import PendingDataPorts from "../models/internal/pending-data-ports"
 
 async function invoke(_: string[], message: DisharmonyMessage)
 {
-    const pendingList = new PendingExports()
+    const pendingList = new PendingDataPorts()
     await pendingList.loadDocument()
 
-    if (pendingList.allPending.find(x => x.guildId === message.guild.id && x.memberId === message.member.id))
+    const guildId = message.guild.id
+    const memberId = message.member.id
+
+    if (pendingList.allPending.find(x => x.guildId === guildId && x.memberId === memberId))
         return "You already have a pending export for this server!"
 
     pendingList.allPending.push({
-        guildId: message.guild.id,
-        memberId: message.member.id,
+        guildId,
+        memberId,
+        isImport: false,
     })
 
     await pendingList.save()

@@ -1,10 +1,10 @@
 import Document from "../document"
 
-export type PendingExport = { guildId: string, memberId: string }
+export type PendingDataPort = { guildId: string, memberId: string, isImport: boolean }
 
-export default class PendingExports extends Document
+export default class PendingDataPorts extends Document
 {
-    public allPending: PendingExport[] = new Array<PendingExport>()
+    public allPending: PendingDataPort[] = new Array<PendingDataPort>()
 
     /** @inheritdoc */
     public loadRecord(record: any): void
