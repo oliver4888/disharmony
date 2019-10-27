@@ -46,7 +46,7 @@ export default class ClientIntervalManager
 
     private setExportGenerationInterval()
     {
-        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), /* 60 * 60 */ 15 * 1000)
+        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), /* 60 * 60 */ 5 * 1000)
     }
 
     /** Send the heartbeat HTTP request
@@ -71,7 +71,7 @@ export default class ClientIntervalManager
     private async invokeExportGenerator(): Promise<void>
     {
         return invokeWorkerAction(
-            resolve(__dirname, "../utilities/export-generator"),
+            resolve(__dirname, "../utilities/data-port-processor"),
             isDbLocal(this.client.config.dbConnectionString),
             this.client)
     }

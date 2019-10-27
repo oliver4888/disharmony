@@ -1,10 +1,10 @@
-import { Attachment } from "discord.js"
-import { promises as fs, createWriteStream, write } from "fs"
+import { Attachment, Guild as DjsGuild } from "discord.js"
+import { createWriteStream, promises as fsPromises } from "fs"
+import { IncomingMessage } from "http"
+import { get as httpsGet } from "https"
 import { DisharmonyGuild, Logger } from ".."
 import PendingDataPorts, { PendingDataPort } from "../models/internal/pending-data-ports"
 import WorkerAction from "./worker-action"
-import * as http from "http"
-import { promisify } from "typed-promisify"
 
 export default class DataPortProcessor extends WorkerAction
 {
@@ -39,24 +39,26 @@ export default class DataPortProcessor extends WorkerAction
 
         await guild.loadDocument()
 
+        // Process the import or export
         let filePath: string
         if (pendingPort.isImport && pendingPort.url)
-            filePath = await this.processImport(pendingPort)
+            filePath = await this.processImport(pendingPort, djsGuild)
         else
             filePath = await this.processExport(guild, pendingPort)
 
-        // TODO Delete filePath
+        if (filePath)
+            await fsPromises.unlink(filePath)
     }
 
-    private async processImport(pendingPort: PendingDataPort): Promise<string>
+    private async processImport(pendingPort: PendingDataPort, djsGuild: DjsGuild): Promise<string>
     {
         // Set up the file to be piped into
         const dir = ".imports"
-        await fs.mkdir(dir, { recursive: true })
+        await fsPromises.mkdir(dir, { recursive: true })
         const filePath = `${dir}/${pendingPort.guildId}`
         const writeStream = createWriteStream(filePath)
 
-        const response = await new Promise<http.IncomingMessage>(resolve => http.get(pendingPort.url!, resolve))
+        const response = await new Promise<IncomingMessage>(resolve => httpsGet(pendingPort.url!, resolve))
 
         // Exit if response is not successful
         if (response.statusCode !== 200)
@@ -68,24 +70,44 @@ export default class DataPortProcessor extends WorkerAction
         // Pipe the response data to a file
         try
         {
-            response.pipe(writeStream)
-            await promisify(writeStream.close)()
+            const writePromise = new Promise(resolve =>
+            {
+                response.pipe(writeStream)
+                writeStream.on("close", resolve)
+            })
+            await writePromise
+            writeStream.close()
         }
         catch (err)
         {
-            await fs.unlink(filePath)
+            await fsPromises.unlink(filePath)
             await Logger.debugLogError(`Error piping response to file when downloading import for guild ${pendingPort.guildId} from url ${pendingPort.url!}`)
+            return ""
         }
-        
-        // Load the file
 
-        // Create a new Guild database entry
+        // Load the file
+        let data: any
+        try
+        {
+            const contents = await fsPromises.readFile(filePath, "utf8")
+            data = JSON.parse(contents)
+        }
+        catch (err)
+        {
+            await Logger.debugLogError(`Failed to load JSON data from file ${filePath}`)
+            return ""
+        }
+
+        // Validate the data
+        if (!data._id)
+            return ""
+
+        // Create a new Guild instance
+        const document = new DisharmonyGuild(djsGuild)
+        document.loadRecord(data)
 
         // Write the new entry to the database
-
-        // Handle overwrites of existing data
-
-        // Delete JSON file
+        await document.save() // TODO Validate that this will overwrite if record already exists
 
         return filePath
     }
@@ -98,9 +120,9 @@ export default class DataPortProcessor extends WorkerAction
 
         // Generate file containing JSON
         const dir = ".exports"
-        await fs.mkdir(dir, { recursive: true })
+        await fsPromises.mkdir(dir, { recursive: true })
         const fileName = `${dir}/${pendingPort.guildId}-${pendingPort.memberId}.json`
-        await fs.writeFile(fileName, exportJson)
+        await fsPromises.writeFile(fileName, exportJson)
 
         // Send JSON file to member
         const attachment = new Attachment(fileName, `${pendingPort.guildId}.json`)
