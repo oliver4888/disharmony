@@ -1,4 +1,18 @@
 # Changelog
+## v2.0.0
+### Added
+- Command `export` to export guild data to a JSON file
+- Command `import` to import guild data from a JSON file
+- Type requirement `TGuild` to `Client` declaration
+- Config option to set bot 'playing' status
+
+### Updated
+- Interface names previously using hungarian notation
+- Discord-based model naming to use prefix 'Disharmony' instead of 'Bot'
+
+### Removed
+- Unnecessary and confusing `DisharmonyGuildMember.hasRole` method
+
 ## v1.2.0
 ### Added
 - Option to create 'hidden' commands
