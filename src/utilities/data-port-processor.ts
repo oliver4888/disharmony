@@ -1,4 +1,4 @@
-import { Attachment, GuildMember } from "discord.js"
+import { Attachment, TextChannel } from "discord.js"
 import { createWriteStream, promises as fsPromises } from "fs"
 import { IncomingMessage } from "http"
 import { get as httpsGet } from "https"
@@ -32,25 +32,27 @@ export default class DataPortProcessor extends WorkerAction
             return
 
         const guild = new DisharmonyGuild(djsGuild)
-        const djsMember = guild.djs.members.get(pendingPort.memberId)
+        const isMemberStillInGuild = guild.djs.members.has(pendingPort.memberId)
 
-        if (!djsMember)
+        if (!isMemberStillInGuild)
             return
 
         await guild.loadDocument()
 
+        const channel = guild.djs.channels.get(pendingPort.channelId) as TextChannel
+
         // Process the import or export
         let filePath: string
         if (pendingPort.isImport && pendingPort.url)
-            filePath = await this.processImport(pendingPort, guild, djsMember)
+            filePath = await this.processImport(pendingPort, guild, channel)
         else
-            filePath = await this.processExport(pendingPort, guild, djsMember)
+            filePath = await this.processExport(pendingPort, guild, channel)
 
         if (filePath)
             await fsPromises.unlink(filePath)
     }
 
-    private async processImport(pendingPort: PendingDataPort, guild: DisharmonyGuild, djsMember: GuildMember): Promise<string>
+    private async processImport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string>
     {
         // Set up the file to be piped into
         const dir = ".imports"
@@ -109,12 +111,19 @@ export default class DataPortProcessor extends WorkerAction
         // Write the new entry to the database
         await document.save()
 
-        await djsMember.send(`Your import for server "${guild.name}" is complete!`)
+        try
+        {
+            await channel.send(`<@${pendingPort.memberId}> Your data import is complete!`)
+        }
+        catch (err)
+        {
+            Logger.debugLogError(`Error sending import confirmation message for guild ${pendingPort.guildId}`)
+        }
 
         return filePath
     }
 
-    private async processExport(pendingPort: PendingDataPort, guild: DisharmonyGuild, djsMember: GuildMember): Promise<string>
+    private async processExport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string>
     {
         const exportJson = guild.getExportJson()
 
@@ -129,11 +138,11 @@ export default class DataPortProcessor extends WorkerAction
 
         try
         {
-            await djsMember!.send(`Here is your JSON export for the server "${guild.name}"`, attachment)
+            await channel.send(`<@${pendingPort.memberId}> Here is your JSON data export file`, attachment)
         }
         catch (err)
         {
-            Logger.debugLogError(`Error sending export for guild ${pendingPort.guildId} to member ${pendingPort.memberId}`, err)
+            Logger.debugLogError(`Error uploading export file to channel ${pendingPort.channelId} in guild ${pendingPort.guildId}`, err)
         }
 
         return fileName

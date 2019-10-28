@@ -1,3 +1,4 @@
+import { Permissions } from "discord.js"
 import { Command, DisharmonyMessage, PermissionLevel } from ".."
 import PendingDataPorts from "../models/internal/pending-data-ports"
 
@@ -12,14 +13,18 @@ async function invoke(_: string[], message: DisharmonyMessage)
     if (pendingList.allPending.find(x => x.guildId === guildId && x.memberId === memberId))
         return "You already have a pending export for this server!"
 
+    if (!message.guild.hasPermissions(Permissions.FLAGS.ATTACH_FILES!))
+        return "Please grant the bot permission to attach files and try again"
+
     pendingList.allPending.push({
         guildId,
         memberId,
+        channelId: message.channelId,
         isImport: false,
     })
 
     await pendingList.save()
-    return "Your export will be generated in the background and should be private messaged to you within one hour. Please make sure you allow direct messages from server members."
+    return "Your export will be generated in the background within a few minutes and will be uploaded to this channel."
 }
 
 export default new Command(

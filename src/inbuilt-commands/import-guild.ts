@@ -18,12 +18,13 @@ async function invoke(_: string[], message: DisharmonyMessage)
     pendingList.allPending.push({
         guildId,
         memberId,
+        channelId: message.channelId,
         isImport: true,
         url: message.djs.attachments.first().url,
     })
 
     await pendingList.save()
-    return "Your import will be processed within one hour and you will be private messaged when it completes. Please make sure you allow direct messages from server members."
+    return "Your import will be processed in the background within a few minutes and you will receive a confirmation message in this channel."
 }
 
 export default new Command(
