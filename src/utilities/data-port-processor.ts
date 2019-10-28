@@ -1,4 +1,4 @@
-import { Attachment, Guild as DjsGuild } from "discord.js"
+import { Attachment, GuildMember } from "discord.js"
 import { createWriteStream, promises as fsPromises } from "fs"
 import { IncomingMessage } from "http"
 import { get as httpsGet } from "https"
@@ -32,9 +32,9 @@ export default class DataPortProcessor extends WorkerAction
             return
 
         const guild = new DisharmonyGuild(djsGuild)
-        const isMemberStillInGuild = guild.djs.members.has(pendingPort.memberId)
+        const djsMember = guild.djs.members.get(pendingPort.memberId)
 
-        if (!isMemberStillInGuild)
+        if (!djsMember)
             return
 
         await guild.loadDocument()
@@ -42,15 +42,15 @@ export default class DataPortProcessor extends WorkerAction
         // Process the import or export
         let filePath: string
         if (pendingPort.isImport && pendingPort.url)
-            filePath = await this.processImport(pendingPort, djsGuild)
+            filePath = await this.processImport(pendingPort, guild, djsMember)
         else
-            filePath = await this.processExport(guild, pendingPort)
+            filePath = await this.processExport(pendingPort, guild, djsMember)
 
         if (filePath)
             await fsPromises.unlink(filePath)
     }
 
-    private async processImport(pendingPort: PendingDataPort, djsGuild: DjsGuild): Promise<string>
+    private async processImport(pendingPort: PendingDataPort, guild: DisharmonyGuild, djsMember: GuildMember): Promise<string>
     {
         // Set up the file to be piped into
         const dir = ".imports"
@@ -103,19 +103,19 @@ export default class DataPortProcessor extends WorkerAction
             return ""
 
         // Create a new Guild instance
-        const document = new DisharmonyGuild(djsGuild)
+        const document = new DisharmonyGuild(guild.djs)
         document.loadRecord(data)
 
         // Write the new entry to the database
-        await document.save() // TODO Validate that this will overwrite if record already exists
+        await document.save()
+
+        await djsMember.send(`Your import for server "${guild.name}" is complete!`)
 
         return filePath
     }
 
-    private async processExport(guild: DisharmonyGuild, pendingPort: PendingDataPort): Promise<string>
+    private async processExport(pendingPort: PendingDataPort, guild: DisharmonyGuild, djsMember: GuildMember): Promise<string>
     {
-        const djsMember = guild.djs.members.get(pendingPort.memberId)
-
         const exportJson = guild.getExportJson()
 
         // Generate file containing JSON
@@ -129,7 +129,7 @@ export default class DataPortProcessor extends WorkerAction
 
         try
         {
-            await djsMember!.send(attachment)
+            await djsMember!.send(`Here is your JSON export for the server "${guild.name}"`, attachment)
         }
         catch (err)
         {

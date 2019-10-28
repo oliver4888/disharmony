@@ -84,7 +84,7 @@ export class QuestionTestFixture
         const response = await responsePromise
 
         // ASSERT
-        await Expect(response).toBe(this.responseMock.object)
+        Expect(response).toBe(this.responseMock.object)
     }
 
     @AsyncTest()
@@ -102,7 +102,7 @@ export class QuestionTestFixture
         const response = await responsePromise
 
         // ASSERT
-        await Expect(response).toBe(this.responseMock.object)
+        Expect(response).toBe(this.responseMock.object)
     }
 
     @AsyncTest()
@@ -129,7 +129,7 @@ export class QuestionTestFixture
         // ASSERT
         // Allow the .send() promise to resolve, if it is going to (otherwise we Expect() too early, and always pass)
         await new Promise(resolve => setImmediate(resolve))
-        await Expect(isResolved).toBe(false)
+        Expect(isResolved).toBe(false)
     }
 
     @AsyncTest()
@@ -164,7 +164,7 @@ export class QuestionTestFixture
         const response = await responsePromise
 
         // ASSERT
-        await Expect(response).toBe(this.responseMock.object)
+        Expect(response).toBe(this.responseMock.object)
     }
 
     @AsyncTest()
@@ -184,31 +184,30 @@ export class QuestionTestFixture
         await responsePromise.catch(err => rejectionValue = err)
 
         // ASSERT
-        await Expect(rejectionValue).toBe(QuestionRejectionReason.ResponseTimeout)
+        Expect(rejectionValue).toBe(QuestionRejectionReason.ResponseTimeout)
     }
 
-    // TODO: Can't work out why this just times out
-    // tslint:disable: comment-format
-    // @AsyncTest()
-    // public async rejects_with_channel_send_error_reason_when_channel_send_throws()
-    // {
-    //     // ARRANGE
-    //     this.channelMock
-    //         .setup(x => x.send(It.isAny()))
-    //         .returns(() => Promise.reject())
+    // TODO Figure out why this test times out
+    /* @AsyncTest()
+    public async rejects_with_channel_send_error_reason_when_channel_send_throws()
+    {
+        // ARRANGE
+        this.channelMock
+            .setup(x => x.send(It.isAny()))
+            .returns(() => Promise.reject())
 
-    //     this.clientMock
-    //         .setup(x => x.channels)
-    //         .returns(() => new Map<string, TextChannel>([["channelid", this.channelMock.object]]))
+        this.clientMock
+            .setup(x => x.channels)
+            .returns(() => new Map<string, TextChannel>([["channelid", this.channelMock.object]]))
 
-    //     let rejectionValue: any = null
+        let rejectionValue: any = null
 
-    //     // ACT
-    //     const sut = new Question(this.clientMock.object, "channelid", "query")
-    //     const responsePromise = sut.send()
-    //     await responsePromise.catch(err => rejectionValue = err)
+        // ACT
+        const sut = new Question(this.clientMock.object, "channelid", "query")
+        const responsePromise = sut.send()
+        await responsePromise.catch(err => rejectionValue = err)
 
-    //     // ASSERT
-    //     await Expect(rejectionValue).toBe(QuestionRejectionReason.ChannelSendError)
-    // }
+        // ASSERT
+        Expect(rejectionValue).toBe(QuestionRejectionReason.ChannelSendError)
+    } */
 }
