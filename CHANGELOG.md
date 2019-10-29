@@ -1,4 +1,8 @@
 # Changelog
+## v2.0.1
+### Updated
+- Periodicity of import/export generator worker loading
+
 ## v2.0.0
 ### Added
 - Command `export` to export guild data to a JSON file
