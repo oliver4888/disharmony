@@ -1,4 +1,11 @@
 # Changelog
+## v2.0.2
+### Added
+- Half-second delay between data port processing to prevent spamming the Discord API
+
+### Fixed
+- Error objects not being logged alongside error text in class `DataPortProcessor`
+
 ## v2.0.1
 ### Updated
 - Periodicity of import/export generator worker loading
