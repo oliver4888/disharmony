@@ -11,10 +11,10 @@ async function invoke(_: string[], message: DisharmonyMessage)
     const memberId = message.member.id
 
     if (pendingList.allPending.find(x => x.guildId === guildId && x.memberId === memberId))
-        return "You already have a pending export for this server!"
+        return "You already have a pending import or export for this server, please wait for it to complete before trying again."
 
     if (!message.guild.hasPermissions(Permissions.FLAGS.ATTACH_FILES!))
-        return "Please grant the bot permission to attach files and try again"
+        return "Please grant the bot permission to attach files and try again."
 
     pendingList.allPending.push({
         guildId,
