@@ -4,7 +4,7 @@ import PendingDataPorts from "../models/internal/pending-data-ports"
 async function invoke(_: string[], message: DisharmonyMessage)
 {
     if (message.djs.attachments.size === 0)
-        return "Please issue the command again, and attach your JSON data file"
+        return "Please issue the command again with your JSON data file attached."
 
     const pendingList = new PendingDataPorts()
     await pendingList.loadDocument()
@@ -13,7 +13,7 @@ async function invoke(_: string[], message: DisharmonyMessage)
     const memberId = message.member.id
 
     if (pendingList.allPending.find(x => x.guildId === guildId))
-        return "There is already a pending import for this server"
+        return "You already have a pending import or export for this server, please wait for it to complete before trying again."
 
     pendingList.allPending.push({
         guildId,

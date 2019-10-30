@@ -17,7 +17,10 @@ export default class DataPortProcessor extends WorkerAction
         await pendingPorts.loadDocument()
 
         for (const pendingPort of pendingPorts.allPending)
+        {
+            await new Promise(resolve => setTimeout(resolve, 500))
             await this.processDataPortForPendingEntry(pendingPort)
+        }
 
         await pendingPorts.deleteRecord()
         await Logger.debugLog("Finished iterating pending exports")
@@ -83,7 +86,7 @@ export default class DataPortProcessor extends WorkerAction
         catch (err)
         {
             await fsPromises.unlink(filePath)
-            await Logger.debugLogError(`Error piping response to file when downloading import for guild ${pendingPort.guildId} from url ${pendingPort.url!}`)
+            await Logger.debugLogError(`Error piping response to file when downloading import for guild ${pendingPort.guildId} from url ${pendingPort.url!}`, err)
             return ""
         }
 
@@ -96,7 +99,7 @@ export default class DataPortProcessor extends WorkerAction
         }
         catch (err)
         {
-            await Logger.debugLogError(`Failed to load JSON data from file ${filePath}`)
+            await Logger.debugLogError(`Failed to load JSON data from file ${filePath}`, err)
             return ""
         }
 
@@ -117,7 +120,7 @@ export default class DataPortProcessor extends WorkerAction
         }
         catch (err)
         {
-            Logger.debugLogError(`Error sending import confirmation message for guild ${pendingPort.guildId}`)
+            Logger.debugLogError(`Error sending import confirmation message for guild ${pendingPort.guildId}`, err)
         }
 
         return filePath
