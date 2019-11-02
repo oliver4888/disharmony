@@ -10,13 +10,11 @@ export default function getDbClient(connectionString: string, onCriticalError: (
     if (protocol)
     {
         Logger.consoleLog(`Using database protocol ${protocol}`)
-        switch (protocol)
-        {
-            case "mongodb://":
-                return new MongoClient(connectionString, onCriticalError, clientConfig as MongoClientConfig)
-            case "nedb://":
-                return new NedbClient(connectionString)
-        }
+
+        if (protocol.startsWith("mongodb"))
+            return new MongoClient(connectionString, onCriticalError, clientConfig as MongoClientConfig)
+        else if (protocol.startsWith("nedb"))
+            return new NedbClient(connectionString)
     }
 
     throw new Error("Invalid connection string")
