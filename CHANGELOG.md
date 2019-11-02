@@ -1,4 +1,8 @@
 # Changelog
+## v2.0.3
+### Fixed
+- Function `getDbClient` rejecting connection strings with modifiers in the prefix (ie "mongodb+srv://")
+
 ## v2.0.2
 ### Added
 - Half-second delay between data port processing to prevent spamming the Discord API
@@ -39,7 +43,7 @@
 - Method `Guild.hasPermissions` to `Guild.botHasPermissions` to make it clearer what it's purpose actually is
 
 ### Fixed
-- Occasional unhandled exception when proccessing voice events
+- Occasional unhandled exception when proccessing voice eventsc
 
 ## v1.0.4
 ### Added
