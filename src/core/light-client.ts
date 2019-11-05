@@ -68,7 +68,7 @@ export default class LiteDisharmonyClient implements LiteClient
             await Logger.consoleLogError("Unhandled exception!", err)
             process.exit(ExitCodes.UnhandledException)
         })
-        process.on("exit", () => Logger.consoleLog("Shutdown"))
+        process.on("exit", code => Logger.consoleLog("Shutdown with code " + code))
         process.on("SIGINT", () =>
         {
             this.dbClient.closeConnection()
