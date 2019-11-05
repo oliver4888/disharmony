@@ -1,6 +1,5 @@
 import { resolve } from "path"
 import requestPromise = require("request-promise-native")
-import { isDbLocal } from "../utilities/load-configuration"
 import { Client, Logger } from ".."
 import { EventStrings } from "../utilities/logging/event-strings"
 import { invokeWorkerAction } from "../utilities/worker-action"
@@ -70,10 +69,11 @@ export default class ClientIntervalManager
 
     private async invokeExportGenerator(): Promise<void>
     {
+        const isDbLocal = this.client.config.computedValues!.isLocalDb
         return invokeWorkerAction(
             resolve(__dirname, "../utilities/data-port-processor"),
-            isDbLocal(this.client.config.dbConnectionString),
-            this.client)
+            isDbLocal,
+            (isDbLocal ? this.client : this.client.config.computedValues!.configPath) as any)
     }
 
     constructor(
