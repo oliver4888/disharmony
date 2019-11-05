@@ -152,4 +152,5 @@ export default class DataPortProcessor extends WorkerAction
     }
 }
 
-WorkerAction.bootstrapModuleIfInWorker(DataPortProcessor)
+if (!module.parent)
+    WorkerAction.bootstrapWorkerModule(DataPortProcessor)

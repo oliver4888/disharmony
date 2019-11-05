@@ -6,30 +6,27 @@ import { forkWorkerClient, LiteClient, LiteDisharmonyClient, loadConfig, Logger 
  */
 export default abstract class WorkerAction
 {
-    public static bootstrapModuleIfInWorker<T extends WorkerAction>(moduleCtor: new (client: LiteDisharmonyClient) => T)
+    public static bootstrapWorkerModule<T extends WorkerAction>(moduleCtor: new (client: LiteDisharmonyClient) => T)
     {
-        if (!module.parent)
-        {
-            const configPath = process.argv[2]
-            const { config } = loadConfig(undefined, configPath)
-            const client = new LiteDisharmonyClient(config)
-            const module = new moduleCtor(client)
+        const configPath = process.argv[2]
+        const config = loadConfig(undefined, configPath)
+        const client = new LiteDisharmonyClient(config)
+        const module = new moduleCtor(client)
 
-            client.login(config.token)
-                .then(async () =>
-                {
-                    await module.invoke()
-                    await client.destroy()
-                    await Logger.debugLog("Exiting worker")
-                    process.exit(0)
-                })
-                .catch(async err =>
-                {
-                    await Logger.debugLogError("Error invoking module in worker process", err)
-                    await Logger.logEvent("ErrorInWorkerModule")
-                    process.exit(1)
-                })
-        }
+        client.login(config.token)
+            .then(async () =>
+            {
+                await module.invoke()
+                await client.destroy()
+                await Logger.debugLog("Exiting worker")
+                process.exit(0)
+            })
+            .catch(async err =>
+            {
+                await Logger.debugLogError("Error invoking module in worker process", err)
+                await Logger.logEvent("ErrorInWorkerModule")
+                process.exit(1)
+            })
     }
 
     /** @abstract */
