@@ -1,8 +1,8 @@
 import { RichEmbed } from "discord.js"
 import Command, { PermissionLevel } from "../commands/command"
 import { Client } from "../core/client"
-import DisharmonyGuildMember from "../models/discord/guild-member"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyGuildMember from "../models/discord/disharmony-guild-member"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 
 async function invoke(_: string[], message: DisharmonyMessage, client: Client): Promise<void>
 {

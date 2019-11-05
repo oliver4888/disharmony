@@ -1,7 +1,7 @@
 import { GuildMember as DjsGuildMember, Role } from "discord.js"
 import { PermissionLevel } from "../../commands/command"
 import Document from "../document"
-import DjsExtensionModel from "./djs-extension"
+import DjsExtensionModel from "./djs-extension-model"
 
 export default class DisharmonyGuildMember extends Document implements DjsExtensionModel<DjsGuildMember>
 {

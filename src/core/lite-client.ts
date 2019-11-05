@@ -1,7 +1,7 @@
 import { Client as DjsClient } from "discord.js"
 import { Logger } from ".."
 import getDbClient, { CriticalError as CriticalDbError, DbClient } from "../database/db-client"
-import DjsExtensionModel from "../models/discord/djs-extension"
+import DjsExtensionModel from "../models/discord/djs-extension-model"
 import Document from "../models/document"
 import Config from "../models/internal/config"
 import { ExitCodes } from "../utilities/exit-codes"
