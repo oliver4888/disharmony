@@ -1,20 +1,5 @@
 # Changelog
-## v2.0.3
-### Fixed
-- Function `getDbClient` rejecting connection strings with modifiers in the prefix (ie "mongodb+srv://")
-
-## v2.0.2
-### Added
-- Half-second delay between data port processing to prevent spamming the Discord API
-
-### Fixed
-- Error objects not being logged alongside error text in class `DataPortProcessor`
-
-## v2.0.1
-### Updated
-- Periodicity of import/export generator worker loading
-
-## v2.0.0
+## v2.0.4
 ### Added
 - Command `export` to export guild data to a JSON file
 - Command `import` to import guild data from a JSON file
@@ -25,8 +10,14 @@
 - Interface names previously using hungarian notation
 - Discord-based model naming to use prefix 'Disharmony' instead of 'Bot'
 
+### Fixed
+- Function `getDbClient` rejecting connection strings with modifiers in the prefix (ie "mongodb+srv://")
+
 ### Removed
 - Unnecessary and confusing `DisharmonyGuildMember.hasRole` method
+
+## v2.0.0-v2.0.3
+- Versions v2.0.0 through v2.0.3 were found to have some critical issues and are therefore deprecated
 
 ## v1.2.0
 ### Added
