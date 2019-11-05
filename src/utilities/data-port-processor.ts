@@ -11,19 +11,32 @@ export default class DataPortProcessor extends WorkerAction
     /** @override */
     public async invoke()
     {
-        await Logger.debugLog("Beginning iteration of pending exports")
+        await Logger.debugLog("Beginning iteration of pending data ports")
 
         const pendingPorts = new PendingDataPorts()
         await pendingPorts.loadDocument()
 
+        if (pendingPorts.allPending.length === 0)
+        {
+            await Logger.debugLog("No pending data ports found")
+        }
+
         for (const pendingPort of pendingPorts.allPending)
         {
             await new Promise(resolve => setTimeout(resolve, 500))
-            await this.processDataPortForPendingEntry(pendingPort)
+
+            try
+            {
+                await this.processDataPortForPendingEntry(pendingPort)
+            }
+            catch (err)
+            {
+                await Logger.debugLogError(`Error processing data port for member ${pendingPort.memberId} in guild ${pendingPort.guildId}`)
+            }
         }
 
         await pendingPorts.deleteRecord()
-        await Logger.debugLog("Finished iterating pending exports")
+        await Logger.debugLog("Finished iterating pending data ports")
     }
 
     public async processDataPortForPendingEntry(pendingPort: PendingDataPort)
