@@ -7,7 +7,7 @@ import DisharmonyGuildMember from "./models/discord/guild-member"
 import DisharmonyMessage from "./models/discord/message"
 import Config from "./models/internal/config"
 import SubDocument from "./models/sub-document"
-import getWorker from "./utilities/fork-worker"
+import forkWorkerClient from "./utilities/fork-worker"
 import loadConfig from "./utilities/load-configuration"
 import Logger from "./utilities/logging/logger"
 import NotifyPropertyChanged from "./utilities/notify-property-changed"
@@ -15,17 +15,17 @@ import Question from "./utilities/question"
 
 export
 {
-    LiteClient as ILightClient,
-    Client as IClient,
-    LiteDisharmonyClient as LightClient,
-    DisharmonyClient as Client,
+    LiteClient,
+    Client,
+    LiteDisharmonyClient,
+    DisharmonyClient,
     DisharmonyMessage,
     DisharmonyGuild,
     DisharmonyGuildMember,
     Command,
     PermissionLevel,
     Logger,
-    getWorker as forkWorkerClient,
+    forkWorkerClient,
     loadConfig,
     NotifyPropertyChanged,
     SubDocument,

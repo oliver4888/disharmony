@@ -1,7 +1,7 @@
 import { resolve } from "path"
 import requestPromise = require("request-promise-native")
-import { IClient, Logger } from ".."
 import { isDbLocal } from "../utilities/load-configuration"
+import { Client, Logger } from ".."
 import { EventStrings } from "../utilities/logging/event-strings"
 import { invokeWorkerAction } from "../utilities/worker-action"
 
@@ -77,6 +77,6 @@ export default class ClientIntervalManager
     }
 
     constructor(
-        private client: IClient,
+        private client: Client,
     ) { }
 }

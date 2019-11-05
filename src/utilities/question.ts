@@ -1,5 +1,5 @@
 import { TextChannel } from "discord.js"
-import { DisharmonyGuildMember, DisharmonyMessage, IClient, Logger } from ".."
+import { Client, DisharmonyGuildMember, DisharmonyMessage, Logger } from ".."
 import { EventStrings } from "./logging/event-strings"
 
 export default class Question
@@ -53,7 +53,7 @@ export default class Question
     }
 
     constructor(
-        private client: IClient,
+        private client: Client,
         public readonly channelID: string,
         public readonly query: string,
         public readonly askee?: DisharmonyGuildMember,
