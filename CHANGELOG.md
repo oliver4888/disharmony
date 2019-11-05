@@ -1,4 +1,8 @@
 # Changelog
+## v2.0.5
+### Fixed
+- Data port processor starting up every 5 seconds rather than every 5 minutes
+
 ## v2.0.4
 ### Added
 - Command `export` to export guild data to a JSON file
