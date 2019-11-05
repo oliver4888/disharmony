@@ -45,7 +45,7 @@ export default class ClientIntervalManager
 
     private setExportGenerationInterval()
     {
-        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), 5 * /* 60 * */ 1000)
+        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), 5 * 60 * 1000)
     }
 
     /** Send the heartbeat HTTP request
