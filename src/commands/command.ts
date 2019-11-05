@@ -1,5 +1,5 @@
 import { Client } from "../core/client"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 
 // Allow any type messages so implementers can override Message as for some reason derived types aren't allowed
 type InvokeFunc = (params: string[], message: DisharmonyMessage | any, client: Client) => Promise<string | void>

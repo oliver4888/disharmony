@@ -2,7 +2,7 @@ import { AsyncTest, Expect, Setup, Test, TestFixture } from "alsatian"
 import { TextChannel } from "discord.js"
 import { SimpleEventDispatcher } from "ste-simple-events"
 import { IMock, It, Mock, Times } from "typemoq"
-import { DisharmonyGuildMember, DisharmonyMessage, IClient } from ".."
+import { Client, DisharmonyGuildMember, DisharmonyMessage } from ".."
 import Question, { QuestionRejectionReason } from "./question"
 
 @TestFixture("Question")
@@ -10,7 +10,7 @@ export class QuestionTestFixture
 {
     private messageDispatcher: SimpleEventDispatcher<DisharmonyMessage>
     private channelMock: IMock<TextChannel>
-    private clientMock: IMock<IClient>
+    private clientMock: IMock<Client>
     private askeeMock: IMock<DisharmonyGuildMember>
     private responseMock: IMock<DisharmonyMessage>
 
@@ -24,7 +24,7 @@ export class QuestionTestFixture
             .setup(x => x.send(It.isAny()))
             .returns(() => Promise.resolve() as any)
 
-        this.clientMock = Mock.ofType<IClient>()
+        this.clientMock = Mock.ofType<Client>()
         this.clientMock
             .setup(x => x.onMessage)
             .returns(() => this.messageDispatcher)

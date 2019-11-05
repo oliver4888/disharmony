@@ -3,14 +3,14 @@ import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-
 import { DisharmonyGuild, Logger } from ".."
 import Command from "../commands/command"
 import inbuiltCommands from "../inbuilt-commands"
-import DisharmonyGuildMember from "../models/discord/guild-member"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyGuildMember from "../models/discord/disharmony-guild-member"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 import Config from "../models/internal/config"
 import Stats from "../models/internal/stats"
 import { EventStrings } from "../utilities/logging/event-strings"
 import ClientIntervalManager from "./client-interval-manager"
 import handleMessage from "./handle-message"
-import LiteDisharmonyClient, { LiteClient } from "./light-client"
+import LiteDisharmonyClient, { LiteClient } from "./lite-client"
 
 export interface Client extends LiteClient
 {

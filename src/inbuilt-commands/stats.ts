@@ -1,6 +1,6 @@
 import Command, { PermissionLevel } from "../commands/command"
 import { Client } from "../core/client"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 
 function invoke(_: string[], __: DisharmonyMessage, client: Client)
 {

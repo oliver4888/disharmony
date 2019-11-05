@@ -1,7 +1,7 @@
 import { CommandRejection, Logger } from ".."
 import Command, { PermissionLevel } from "../commands/command"
 import { Client } from "../core/client"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 import { EventStrings } from "../utilities/logging/event-strings"
 import Question from "../utilities/question"
 

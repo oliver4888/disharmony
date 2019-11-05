@@ -1,6 +1,6 @@
 import { AsyncTest, Expect, Setup, TestFixture } from "alsatian"
 import { IMock, Mock } from "typemoq"
-import { DisharmonyGuild, DisharmonyGuildMember, DisharmonyMessage, IClient } from ".."
+import { Client, DisharmonyGuild, DisharmonyGuildMember, DisharmonyMessage } from ".."
 import Command, { PermissionLevel } from "./command"
 import { CommandErrorReason } from "./command-error"
 import getCommandInvoker from "./command-parser"
@@ -9,7 +9,7 @@ import getCommandInvoker from "./command-parser"
 export class CommandParserTestFixture
 {
     private command: Command
-    private client: IClient
+    private client: Client
     private guild: IMock<DisharmonyGuild>
     private member: IMock<DisharmonyGuildMember>
     private message: IMock<DisharmonyMessage>

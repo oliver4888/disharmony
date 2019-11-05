@@ -1,6 +1,6 @@
 import { Logger } from ".."
 import { Client } from "../core/client"
-import DisharmonyMessage from "../models/discord/message"
+import DisharmonyMessage from "../models/discord/disharmony-message"
 import { EventStrings } from "../utilities/logging/event-strings"
 import Command from "./command"
 import { CommandError, CommandErrorReason } from "./command-error"

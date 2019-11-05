@@ -5,9 +5,10 @@ import { resolve } from "path"
 import Config from "../models/internal/config"
 import { ExitCodes } from "./exit-codes"
 
-export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, configPath: string = "./config.json"): { config: TConfig, isLocalDb: boolean, configPath: string }
+export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, configPath: string = "./config.json"): TConfig
 {
     let config: TConfig = null as unknown as TConfig
+    configPath = resolve(configPath)
     if (existsSync(configPath))
         config = require(resolve(process.cwd(), configPath))
     else
@@ -28,11 +29,12 @@ export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, conf
         process.exit(ExitCodes.ConfigLoadError)
     }
 
-    return {
-        config,
+    config.computedValues = {
         isLocalDb: isDbLocal(config.dbConnectionString),
         configPath,
     }
+
+    return config
 }
 
 export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema)
@@ -51,6 +53,7 @@ export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema
         dbClientConfig: Joi.object().optional(),
         memoryMeasureIntervalSec: Joi.number().optional(),
         playingStatusString: Joi.string().optional(),
+        computedValues: Joi.object().invalid(),
     })
 
     const validationOptions: Joi.ValidationOptions = { allowUnknown: true }

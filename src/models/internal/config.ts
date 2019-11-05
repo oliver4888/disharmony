@@ -23,6 +23,15 @@ export interface MongoClientConfig
     reconnectInterval: number
 }
 
+export interface ComputedValues
+{
+    /** Whether the database is local */
+    isLocalDb: boolean
+
+    /** Path to config file on disk */
+    configPath: string
+}
+
 /** Configuration properties; see also function isConfigValid in load-configuration.ts */
 export default interface Config
 {
@@ -52,4 +61,7 @@ export default interface Config
 
     /** Text to set as the 'playing' status in Discord */
     playingStatusString?: string
+
+    /** Configuration meta-values that are computed at runtime; don't provide anything for these */
+    computedValues?: ComputedValues
 }

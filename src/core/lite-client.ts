@@ -1,7 +1,7 @@
 import { Client as DjsClient } from "discord.js"
 import { Logger } from ".."
 import getDbClient, { CriticalError as CriticalDbError, DbClient } from "../database/db-client"
-import DjsExtensionModel from "../models/discord/djs-extension"
+import DjsExtensionModel from "../models/discord/djs-extension-model"
 import Document from "../models/document"
 import Config from "../models/internal/config"
 import { ExitCodes } from "../utilities/exit-codes"
@@ -68,7 +68,7 @@ export default class LiteDisharmonyClient implements LiteClient
             await Logger.consoleLogError("Unhandled exception!", err)
             process.exit(ExitCodes.UnhandledException)
         })
-        process.on("exit", () => Logger.consoleLog("Shutdown"))
+        process.on("exit", code => Logger.consoleLog("Shutdown with code " + code))
         process.on("SIGINT", () =>
         {
             this.dbClient.closeConnection()

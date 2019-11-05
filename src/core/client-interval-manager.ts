@@ -1,7 +1,6 @@
 import { resolve } from "path"
 import requestPromise = require("request-promise-native")
-import { IClient, Logger } from ".."
-import { isDbLocal } from "../utilities/load-configuration"
+import { Client, Logger } from ".."
 import { EventStrings } from "../utilities/logging/event-strings"
 import { invokeWorkerAction } from "../utilities/worker-action"
 
@@ -46,7 +45,7 @@ export default class ClientIntervalManager
 
     private setExportGenerationInterval()
     {
-        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), 5 * 60 * 1000)
+        this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), 5 * /* 60 * */ 1000)
     }
 
     /** Send the heartbeat HTTP request
@@ -70,13 +69,14 @@ export default class ClientIntervalManager
 
     private async invokeExportGenerator(): Promise<void>
     {
+        const isDbLocal = this.client.config.computedValues!.isLocalDb
         return invokeWorkerAction(
             resolve(__dirname, "../utilities/data-port-processor"),
-            isDbLocal(this.client.config.dbConnectionString),
-            this.client)
+            isDbLocal,
+            (isDbLocal ? this.client : this.client.config.computedValues!.configPath) as any)
     }
 
     constructor(
-        private client: IClient,
+        private client: Client,
     ) { }
 }

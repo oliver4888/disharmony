@@ -1,7 +1,7 @@
 import { Message as DjsMessage, RichEmbed } from "discord.js"
-import DjsExtensionModel from "./djs-extension"
-import DisharmonyGuild from "./guild"
-import DisharmonyGuildMember from "./guild-member"
+import DisharmonyGuild from "./disharmony-guild"
+import DisharmonyGuildMember from "./disharmony-guild-member"
+import DjsExtensionModel from "./djs-extension-model"
 
 export default class DisharmonyMessage implements DjsExtensionModel<DjsMessage>
 {
