@@ -1,4 +1,4 @@
-[![Build Status](https://badge.buildkite.com/9f0abc42bfe58917d8f746d05d2bfe27d650d3efbfa0dbb680.svg?branch=master)](https://buildkite.com/benji7425/disharmony)
+[![Build status](https://badge.buildkite.com/04a92d949655ca5a2e0416ae8e9d90588947c431e42dd1c712.svg?branch=master)](https://buildkite.com/benji7425/disharmony)
 
 [![NPM](https://nodei.co/npm/disharmony.png?compact=true)](https://nodei.co/npm/disharmony/)
 
