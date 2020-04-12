@@ -1,6 +1,6 @@
-[![Build status](https://badge.buildkite.com/04a92d949655ca5a2e0416ae8e9d90588947c431e42dd1c712.svg?branch=master)](https://buildkite.com/benji7425/disharmony)
+[![Build status](https://badge.buildkite.com/b64307f81fcb4a8a8e3724140aa1eb193c454ce32632159d90.svg?branch=master)](https://buildkite.com/oliver4888/disharmony)
 
-[![NPM](https://nodei.co/npm/disharmony.png?compact=true)](https://nodei.co/npm/disharmony/)
+[![NPM](https://nodei.co/npm/@oliver4888/disharmony.png?mini=true)](https://nodei.co/npm/@oliver4888/disharmony/)
 
 # Disharmony
 A Discord bot framework built on top of [discord.js](https://github.com/discordjs/discord.js) with command parsing and basic Mongo-like database integration
@@ -26,9 +26,9 @@ A Discord bot framework built on top of [discord.js](https://github.com/discordj
 - Reduce the amount of similar code between bots
 
 ## Examples
-- [Role Assigner](https://github.com/benji7425/discord-role-assigner)
-- [RSS Fetcher](https://github.com/benji7425/discord-rss-fetcher)
-- [Activity Monitor](https://github.com/benji7425/discord-activity-monitor/)
+- [Role Assigner](https://github.com/oliver4888/discord-role-assigner)
+- [RSS Fetcher](https://github.com/oliver4888/discord-rss-fetcher)
+- [Activity Monitor](https://github.com/oliver4888/discord-activity-monitor/)
 
 ## Development
 ### Prerequisites
