@@ -5,14 +5,12 @@ import { resolve } from "path"
 import Config from "../models/internal/config"
 import { ExitCodes } from "./exit-codes"
 
-export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, configPath: string = "./config.json"): TConfig
-{
+export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, configPath: string = "./config.json"): TConfig {
     let config: TConfig = null as unknown as TConfig
     configPath = resolve(configPath)
     if (existsSync(configPath))
         config = require(resolve(process.cwd(), configPath))
-    else
-    {
+    else {
         console.error("No config file found!")
         process.exit(ExitCodes.ConfigLoadError)
     }
@@ -23,8 +21,7 @@ export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, conf
     if (process.env.DB_STRING)
         config.dbConnectionString = process.env.DB_STRING
 
-    if (!isConfigValid(config!, schema))
-    {
+    if (!isConfigValid(config!, schema)) {
         console.error("Invalid config!")
         process.exit(ExitCodes.ConfigLoadError)
     }
@@ -37,8 +34,7 @@ export default function <TConfig extends Config>(schema?: Joi.ObjectSchema, conf
     return config
 }
 
-export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema)
-{
+export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema) {
     // See config.ts for a typed interface
     const primarySchema = Joi.object().keys({
         dbConnectionString: Joi.string().required(),
@@ -58,17 +54,16 @@ export function isConfigValid(config: Config, secondarySchema?: Joi.ObjectSchema
 
     const validationOptions: Joi.ValidationOptions = { allowUnknown: true }
 
-    const primarySchemaError: boolean = !!Joi.validate(config, primarySchema, validationOptions).error
+    const primarySchemaError: boolean = !!primarySchema.validate(config, validationOptions).error
 
     let secondarySchemaError: boolean = false
 
     if (secondarySchema)
-        secondarySchemaError = !!Joi.validate(config, secondarySchema, validationOptions).error
+        secondarySchemaError = !!secondarySchema?.validate(config, validationOptions).error
 
     return !primarySchemaError && !secondarySchemaError
 }
 
-export function isDbLocal(connectionString: string)
-{
+export function isDbLocal(connectionString: string) {
     return connectionString.startsWith("nedb://")
 }
