@@ -1,4 +1,8 @@
 # Changelog
+## v2.0.6
+### Updated
+- All packages excluding discordjs (newer versions contain breaking changes)
+
 ## v2.0.5
 ### Fixed
 - Data port processor starting up every 5 seconds rather than every 5 minutes

@@ -1,8 +1,11 @@
 {
-  "author": "Benji7425 <benji7425@pm.me> (http://benji7425.github.io/)",
+  "author": "Oliver4888 <oliver4888@pm.me> (https://bots.ol48.uk/)",
   "bugs": {
-    "url": "https://github.com/benji7425/disharmony/issues"
+    "url": "https://github.com/oliver4888/disharmony/issues"
   },
+  "contributors": [
+    "Benji7425 <benji7425@pm.me> (http://benji7425.github.io/)"
+  ],
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "@types/hapi__joi": "^16.0.12",
@@ -30,7 +33,7 @@
     "!*.map",
     "!*.spec.*"
   ],
-  "homepage": "https://github.com/benji7425/disharmony#readme",
+  "homepage": "https://github.com/oliver4888/disharmony#readme",
   "keywords": [
     "discord",
     "discordapp",
@@ -39,10 +42,10 @@
   ],
   "license": "MIT",
   "main": "dist/index.js",
-  "name": "disharmony",
+  "name": "@oliver4888/disharmony",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benji7425/disharmony.git"
+    "url": "git+https://github.com/oliver4888/disharmony.git"
   },
   "scripts": {
     "build": "./node_modules/.bin/tsc --project tsconfig.prod.json",
@@ -51,5 +54,5 @@
     "test": "node --stack-trace-limit=1 test-runner.js"
   },
   "types": "dist/index.d.ts",
-  "version": "2.0.5"
+  "version": "2.0.6"
 }
