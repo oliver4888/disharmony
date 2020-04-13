@@ -1,11 +1,9 @@
-export abstract class FriendlyError extends Error
-{
+export abstract class FriendlyError extends Error {
     public friendlyMessage: string
     constructor(
         message: string,
         friendlyMessage: string | boolean = false,
-    )
-    {
+    ) {
         super(message)
 
         if (friendlyMessage === true)

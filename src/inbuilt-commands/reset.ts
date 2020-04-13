@@ -5,17 +5,14 @@ import DisharmonyMessage from "../models/discord/disharmony-message"
 import { EventStrings } from "../utilities/logging/event-strings"
 import Question from "../utilities/question"
 
-async function invoke(_: string[], message: DisharmonyMessage, client: Client)
-{
-    return new Promise<string>(async (__, reject) =>
-    {
+async function invoke(_: string[], message: DisharmonyMessage, client: Client) {
+    return new Promise<string>(async (__, reject) => {
         const response = await new Question(
             client, message.channelId,
             "Are you sure you want to delete all the data for this server? (yes/no)",
             message.member, true).send()
 
-        if (response.content.toLowerCase() === "yes")
-        {
+        if (response.content.toLowerCase() === "yes") {
             await message.guild.deleteRecord()
             Logger.logEvent(EventStrings.GuildReset, { guildId: message.guild.id })
 

@@ -7,25 +7,21 @@ import { CommandError, CommandErrorReason } from "../commands/command-error"
 import handleMessage from "./handle-message"
 
 @TestFixture("Message handling")
-export class HandleMessageTestFixture
-{
+export class HandleMessageTestFixture {
     private client: IMock<DisharmonyClient>
     private djsMessage: IMock<DjsMessage>
 
-    private setMessageMember(memberId: string)
-    {
+    private setMessageMember(memberId: string) {
         this.djsMessage = Mock.ofType() as IMock<DjsMessage>
         this.djsMessage.setup(x => x.member)
-            .returns(() =>
-            {
+            .returns(() => {
                 return {
                     id: memberId,
                     guild: { me: { id: "bot-id" }, commandPrefix: null },
                 } as any
             })
         this.djsMessage.setup(x => x.guild)
-            .returns(() =>
-            {
+            .returns(() => {
                 return {
                     id: "guild-id",
                     commandPrefix: null,
@@ -34,8 +30,7 @@ export class HandleMessageTestFixture
     }
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.client = Mock.ofType() as IMock<DisharmonyClient>
         this.client.setup(x => x.botId)
             .returns(() => "bot-id")
@@ -44,8 +39,7 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async doesnt_reply_or_dispatch_when_message_from_self()
-    {
+    public async doesnt_reply_or_dispatch_when_message_from_self() {
         // ARRANGE
         this.setMessageMember("bot-id")
 
@@ -58,8 +52,7 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async dispatches_when_non_command_message()
-    {
+    public async dispatches_when_non_command_message() {
         // ARRANGE
         this.djsMessage.setup(x => x.content)
             .returns(() => "just an ordinary chat message")
@@ -72,12 +65,10 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async replies_and_dispatches_when_command_in_message()
-    {
+    public async replies_and_dispatches_when_command_in_message() {
         // ARRANGE
         const self = this
-        class Message
-        {
+        class Message {
             public guild = { botHasPermissions: (_: any) => true }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
@@ -98,12 +89,10 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async replies_and_dispatches_when_command_throws_friendly_error()
-    {
+    public async replies_and_dispatches_when_command_throws_friendly_error() {
         // ARRANGE
         const self = this
-        class Message
-        {
+        class Message {
             public guild = { hasPermissions: (_: any) => true }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
@@ -124,12 +113,10 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async replies_and_dispatches_when_guild_missing_permission()
-    {
+    public async replies_and_dispatches_when_guild_missing_permission() {
         // ARRANGE
         const self = this
-        class Message
-        {
+        class Message {
             public guild = { hasPermissions: (_: any) => false }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
@@ -150,12 +137,10 @@ export class HandleMessageTestFixture
     }
 
     @AsyncTest()
-    public async doesnt_invoke_command_when_guild_missing_permissions()
-    {
+    public async doesnt_invoke_command_when_guild_missing_permissions() {
         // ARRANGE
         const self = this
-        class Message
-        {
+        class Message {
             public guild = { hasPermissions: (_: any) => false }
             public reply(msg: string) { self.djsMessage.object.reply(msg) }
         }
@@ -166,8 +151,7 @@ export class HandleMessageTestFixture
         let commandInvoked = false
         const getCommandInvokerFunc =
             () => Promise.resolve(
-                (): any =>
-                {
+                (): any => {
                     commandInvoked = true
                     Promise.resolve("result")
                 })

@@ -4,13 +4,11 @@ import { Client } from "../core/client"
 import DisharmonyGuildMember from "../models/discord/disharmony-guild-member"
 import DisharmonyMessage from "../models/discord/disharmony-message"
 
-async function invoke(_: string[], message: DisharmonyMessage, client: Client): Promise<void>
-{
+async function invoke(_: string[], message: DisharmonyMessage, client: Client): Promise<void> {
     await message.reply(createHelpEmbed(client, message.guild.me, message.member))
 }
 
-function createHelpEmbed(client: Client, me: DisharmonyGuildMember, member: DisharmonyGuildMember): RichEmbed
-{
+function createHelpEmbed(client: Client, me: DisharmonyGuildMember, member: DisharmonyGuildMember): RichEmbed {
     const embed = new RichEmbed().setTitle(`__${client.config.serviceName} help__`)
 
     const displayableCommands =

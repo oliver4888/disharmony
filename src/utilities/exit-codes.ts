@@ -1,5 +1,4 @@
-export enum ExitCodes
-{
+export enum ExitCodes {
     UnhandledException = 100,
     CriticalDatabaseError = 200,
     DatabaseCloseError = 201,

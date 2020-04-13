@@ -13,8 +13,7 @@ import Logger from "./utilities/logging/logger"
 import NotifyPropertyChanged from "./utilities/notify-property-changed"
 import Question from "./utilities/question"
 
-export
-{
+export {
     LiteClient,
     Client,
     LiteDisharmonyClient,

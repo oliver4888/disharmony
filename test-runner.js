@@ -1,20 +1,18 @@
 const { TapBark } = require("tap-bark");
 const { TestSet, TestRunner } = require("alsatian");
 
-(async () =>
-{
-    const testSet = TestSet.create();
-    testSet.addTestsFromFiles('./dist/**/*.spec.js');
+(async () => {
+  const testSet = TestSet.create();
+  testSet.addTestsFromFiles("./dist/**/*.spec.js");
 
-    const testRunner = new TestRunner();
+  const testRunner = new TestRunner();
 
-    testRunner.outputStream
-        .pipe(TapBark.create().getPipeable())
-        .pipe(process.stdout);
+  testRunner.outputStream
+    .pipe(TapBark.create().getPipeable())
+    .pipe(process.stdout);
 
-    await testRunner.run(testSet);
-})().catch(e =>
-{
-    console.error(e);
-    process.exit(1);
-}); 
+  await testRunner.run(testSet);
+})().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

@@ -1,6 +1,5 @@
 /** Configuration details for the heartbeat feature */
-export interface HeartbeatConfig
-{
+export interface HeartbeatConfig {
     /** URL to send the heartbeat to */
     url: string
 
@@ -8,14 +7,12 @@ export interface HeartbeatConfig
     intervalSec: number
 }
 
-export interface NedbClientConfig
-{
+export interface NedbClientConfig {
     /** Number of database writes after which the file should be compacted */
     compactionWriteCount: number
 }
 
-export interface MongoClientConfig
-{
+export interface MongoClientConfig {
     /** Number of times to try reconnect when disconnected from MongoDB */
     reconnectTries: number
 
@@ -23,8 +20,7 @@ export interface MongoClientConfig
     reconnectInterval: number
 }
 
-export interface ComputedValues
-{
+export interface ComputedValues {
     /** Whether the database is local */
     isLocalDb: boolean
 
@@ -33,8 +29,7 @@ export interface ComputedValues
 }
 
 /** Configuration properties; see also function isConfigValid in load-configuration.ts */
-export default interface Config
-{
+export default interface Config {
     /** Connection string for the Mongo-like database to be used */
     dbConnectionString: string
 

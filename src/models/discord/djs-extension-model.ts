@@ -1,4 +1,3 @@
-export default interface DjsExtensionModel<TDjsBase>
-{
+export default interface DjsExtensionModel<TDjsBase> {
     readonly djs: TDjsBase
 }

@@ -1,8 +1,7 @@
 import * as Cluster from "cluster"
 import { Logger } from ".."
 
-export default function(modulePath: string, configPath: string)
-{
+export default function (modulePath: string, configPath: string) {
     Cluster.setupMaster({
         exec: modulePath,
         args: [configPath],
@@ -13,15 +12,13 @@ export default function(modulePath: string, configPath: string)
     return worker
 }
 
-function addKillAndExitHooks(worker: Cluster.Worker)
-{
+function addKillAndExitHooks(worker: Cluster.Worker) {
     const killWorker = () => worker.kill()
     process.on("exit", killWorker)
     process.on("SIGINT", killWorker)
     process.on("SIGTERM", killWorker)
 
-    worker.on("exit", () =>
-    {
+    worker.on("exit", () => {
         Logger.debugLog(`Worker process ${worker.process.pid} exited`)
         process.off("exit", killWorker)
         process.off("SIGINT", killWorker)

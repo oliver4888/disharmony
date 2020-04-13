@@ -4,14 +4,12 @@ import { Client, Logger } from ".."
 import { EventStrings } from "../utilities/logging/event-strings"
 import { invokeWorkerAction } from "../utilities/worker-action"
 
-export default class ClientIntervalManager
-{
+export default class ClientIntervalManager {
     private heartbeatInterval: NodeJS.Timeout
     private exportInterval: NodeJS.Timeout
 
     /** Use setInterval to start various callback intervals */
-    public setIntervalCallbacks()
-    {
+    public setIntervalCallbacks() {
         if (this.client.config.heartbeat)
             this.setHeartbeatInterval()
 
@@ -20,8 +18,7 @@ export default class ClientIntervalManager
     }
 
     /** Clear any intervals who's functionality requires a Discord connection */
-    public clearConnectionDependentIntervals()
-    {
+    public clearConnectionDependentIntervals() {
         if (this.heartbeatInterval)
             clearInterval(this.heartbeatInterval)
 
@@ -29,36 +26,30 @@ export default class ClientIntervalManager
             clearInterval(this.exportInterval)
     }
 
-    private setHeartbeatInterval()
-    {
+    private setHeartbeatInterval() {
         const intervalMs = this.client.config.heartbeat!.intervalSec * 1000
         this.sendHeartbeat(true)
             .then(() => this.heartbeatInterval = setInterval(() => this.sendHeartbeat.bind(this)(), intervalMs))
             .catch(() => Logger.debugLogError("Error sending initial heartbeat, interval setup abandoned"))
     }
 
-    private setMemoryMeasureInterval()
-    {
+    private setMemoryMeasureInterval() {
         const intervalMs = (this.client.config.memoryMeasureIntervalSec || 600) * 1000
         setInterval(Logger.logEvent, intervalMs, EventStrings.MemoryMeasured, process.memoryUsage())
     }
 
-    private setExportGenerationInterval()
-    {
+    private setExportGenerationInterval() {
         this.exportInterval = setInterval(this.invokeExportGenerator.bind(this), 5 * 60 * 1000)
     }
 
     /** Send the heartbeat HTTP request
      * @param rethrow Whether to rethrow any caught errors
      */
-    private async sendHeartbeat(rethrow?: boolean)
-    {
-        try
-        {
+    private async sendHeartbeat(rethrow?: boolean) {
+        try {
             await requestPromise.get(this.client.config.heartbeat!.url)
         }
-        catch (err)
-        {
+        catch (err) {
             Logger.debugLogError("Error sending heartbeat", err)
             Logger.logEvent(EventStrings.SendHeartbeatError)
 
@@ -67,8 +58,7 @@ export default class ClientIntervalManager
         }
     }
 
-    private async invokeExportGenerator(): Promise<void>
-    {
+    private async invokeExportGenerator(): Promise<void> {
         const isDbLocal = this.client.config.computedValues!.isLocalDb
         return invokeWorkerAction(
             resolve(__dirname, "../utilities/data-port-processor"),

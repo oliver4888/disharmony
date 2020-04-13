@@ -2,22 +2,17 @@ import { TextChannel } from "discord.js"
 import { Client, DisharmonyGuildMember, DisharmonyMessage, Logger } from ".."
 import { EventStrings } from "./logging/event-strings"
 
-export default class Question
-{
+export default class Question {
     private queryStr: string
     private channel: TextChannel
 
-    public async send(): Promise<DisharmonyMessage>
-    {
-        return new Promise<DisharmonyMessage>(async (resolve, reject) =>
-        {
+    public async send(): Promise<DisharmonyMessage> {
+        return new Promise<DisharmonyMessage>(async (resolve, reject) => {
             let timeout: NodeJS.Timer | null
 
             let resolver: (msg: DisharmonyMessage) => void
-            resolver = msg =>
-            {
-                if (!this.askee || msg.member.id === this.askee.id)
-                {
+            resolver = msg => {
+                if (!this.askee || msg.member.id === this.askee.id) {
                     if (timeout)
                         clearTimeout(timeout)
                     this.client.onMessage.unsub(resolver)
@@ -25,8 +20,7 @@ export default class Question
                 }
             }
 
-            const timeoutRejecter = () =>
-            {
+            const timeoutRejecter = () => {
                 this.client.onMessage.unsub(resolver)
                 reject(QuestionRejectionReason.ResponseTimeout)
             }
@@ -34,12 +28,10 @@ export default class Question
             timeout = setTimeout(timeoutRejecter, this.client.config.askTimeoutMs || 3000)
             this.client.onMessage.sub(resolver)
 
-            try
-            {
+            try {
                 await this.channel.send(this.queryStr)
             }
-            catch (e)
-            {
+            catch (e) {
                 if (timeout)
                     clearTimeout(timeout)
                 this.client.onMessage.unsub(resolver)
@@ -57,8 +49,7 @@ export default class Question
         public readonly channelID: string,
         public readonly query: string,
         public readonly askee?: DisharmonyGuildMember,
-        public readonly pingAskee: boolean = false)
-    {
+        public readonly pingAskee: boolean = false) {
         this.queryStr = query
         if (this.askee && this.pingAskee)
             this.queryStr = `${this.askee.toString()} ` + this.queryStr
@@ -67,8 +58,7 @@ export default class Question
     }
 }
 
-export enum QuestionRejectionReason
-{
+export enum QuestionRejectionReason {
     ResponseTimeout,
     ChannelSendError,
 }

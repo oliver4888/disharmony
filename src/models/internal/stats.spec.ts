@@ -4,19 +4,16 @@ import { IMock, Mock } from "typemoq"
 import Stats from "./stats"
 
 @TestFixture("Stats model transformations")
-export class StatsTestFixture
-{
+export class StatsTestFixture {
     private djsClient: IMock<DjsClient>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.djsClient = Mock.ofType<DjsClient>()
     }
 
     @Test()
-    public zero_hour_zero_minute_uptime_string_correct()
-    {
+    public zero_hour_zero_minute_uptime_string_correct() {
         // ARRANGE
         this.djsClient
             .setup(x => x.uptime)
@@ -30,8 +27,7 @@ export class StatsTestFixture
     }
 
     @Test()
-    public zero_hour_multi_minute_uptime_string_correct()
-    {
+    public zero_hour_multi_minute_uptime_string_correct() {
         // ARRANGE
         this.djsClient
             .setup(x => x.uptime)
@@ -45,8 +41,7 @@ export class StatsTestFixture
     }
 
     @Test()
-    public multi_hour_multi_minute_uptime_string_correct()
-    {
+    public multi_hour_multi_minute_uptime_string_correct() {
         // ARRANGE
         this.djsClient
             .setup(x => x.uptime)

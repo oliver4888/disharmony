@@ -1,5 +1,4 @@
-export default abstract class Serializable
-{
+export default abstract class Serializable {
     protected record: any = {}
 
     /** OVERRIDABLE: Perform any necessary tasks to convert this instance to a record; make sure to invoke super if overriding */

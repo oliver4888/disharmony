@@ -1,5 +1,4 @@
-export default interface EventLogger
-{
+export default interface EventLogger {
     /**
      * @param action What happened
      * @param parameters Associated key-value-pairs

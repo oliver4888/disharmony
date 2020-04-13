@@ -1,11 +1,8 @@
 import { FriendlyError } from "../core/friendly-error"
 
-export class CommandError extends FriendlyError
-{
-    private static getFriendlyMessage(reason: CommandErrorReason)
-    {
-        switch (reason)
-        {
+export class CommandError extends FriendlyError {
+    private static getFriendlyMessage(reason: CommandErrorReason) {
+        switch (reason) {
             case CommandErrorReason.UserMissingPermissions:
                 return "You do not have permission to use this command"
             case CommandErrorReason.IncorrectSyntax:
@@ -17,16 +14,14 @@ export class CommandError extends FriendlyError
 
     constructor(
         public reason: CommandErrorReason,
-    )
-    {
+    ) {
         super(CommandError.getFriendlyMessage(reason), true)
 
         Object.setPrototypeOf(this, CommandError.prototype)
     }
 }
 
-export enum CommandErrorReason
-{
+export enum CommandErrorReason {
     UserMissingPermissions,
     BotMissingGuildPermissions,
     IncorrectSyntax,

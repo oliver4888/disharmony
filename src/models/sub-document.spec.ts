@@ -5,41 +5,35 @@ import { SubDocument } from ".."
 import { DbClient } from "../database/db-client"
 import Document from "./document"
 
-class TestDocument extends Document
-{
+class TestDocument extends Document {
     public sub: TestSubDocument
 }
 
-class TestSubDocument extends SubDocument
-{
+class TestSubDocument extends SubDocument {
     public get recordedString() { return this.record.recordedString }
     public set recordedString(value: string) { this.record.recordedString = value }
 
     public ephemeralString: string
 
     public toRecord() { return this.record }
-    public loadRecord(record: any): void
-    {
+    public loadRecord(record: any): void {
         this.record = record
         this.ephemeralString = "loadRecord"
     }
 }
 
 @TestFixture("SubDocment base class")
-export class SubDocumentTestFixture
-{
+export class SubDocumentTestFixture {
     public dbClient: IMock<DbClient>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.dbClient = Mock.ofType<DbClient>()
         this.dbClient.setup(x => x.isReconnecting).returns(() => false)
     }
 
     @Test()
-    public array_proxy_returns_class_instance_from_record_array_item()
-    {
+    public array_proxy_returns_class_instance_from_record_array_item() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
         const parent = new TestDocument("id")
@@ -53,8 +47,7 @@ export class SubDocumentTestFixture
     }
 
     @Test()
-    public parent_document_updates_db_when_array_item_set()
-    {
+    public parent_document_updates_db_when_array_item_set() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
         const parent = new TestDocument("id")
@@ -71,8 +64,7 @@ export class SubDocumentTestFixture
     }
 
     @Test()
-    public same_instance_returned_when_repeat_access()
-    {
+    public same_instance_returned_when_repeat_access() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
         const parent = new TestDocument("id")
@@ -86,8 +78,7 @@ export class SubDocumentTestFixture
     }
 
     @Test()
-    public error_thrown_when_setting_index_and_parent_pending_field_write()
-    {
+    public error_thrown_when_setting_index_and_parent_pending_field_write() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
         const parent = new TestDocument("id")

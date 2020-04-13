@@ -1,5 +1,4 @@
-export enum EventStrings
-{
+export enum EventStrings {
     DbConnectionLost = "[Core] DbConnectionLost",
     DbReconnected = "[Core] DbReconnected",
     GuildAdd = "[Core] GuildAdd",

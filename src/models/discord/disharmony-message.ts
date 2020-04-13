@@ -11,14 +11,12 @@ export default class DisharmonyMessage implements DjsExtensionModel<DjsMessage>
     public get channelId() { return this.djs.channel.id }
     public get mentions() { return this.djs.mentions }
 
-    public async reply(response: string | RichEmbed)
-    {
+    public async reply(response: string | RichEmbed) {
         await this.djs.reply(response)
     }
 
     constructor(
-        public readonly djs: DjsMessage)
-    {
+        public readonly djs: DjsMessage) {
         this.guild = new DisharmonyGuild(this.djs.guild)
         this.member = new DisharmonyGuildMember(this.djs.member)
     }

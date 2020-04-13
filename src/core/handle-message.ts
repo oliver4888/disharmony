@@ -7,8 +7,7 @@ import { EventStrings } from "../utilities/logging/event-strings"
 export default async function handleMessage<TMessage extends DisharmonyMessage>(
     client: DisharmonyClient<TMessage>,
     djsMessage: DjsMessage,
-    innerGetCommandInvoker?: (client: Client, message: DisharmonyMessage) => Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>)
-{
+    innerGetCommandInvoker?: (client: Client, message: DisharmonyMessage) => Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>) {
     // Sometimes message member is null, no idea why
     if (!djsMessage.member)
         return
@@ -19,11 +18,9 @@ export default async function handleMessage<TMessage extends DisharmonyMessage>(
 
     const message = new client.messageCtor(djsMessage)
 
-    try
-    {
+    try {
         const commandInvoker = await (innerGetCommandInvoker ? innerGetCommandInvoker!(client, message) : getCommandInvoker(client, message))
-        if (commandInvoker)
-        {
+        if (commandInvoker) {
             if (!message.guild.botHasPermissions(client.config.requiredPermissions))
                 throw new CommandError(CommandErrorReason.BotMissingGuildPermissions)
 
@@ -32,8 +29,7 @@ export default async function handleMessage<TMessage extends DisharmonyMessage>(
                 await message.reply(result)
         }
     }
-    catch (err)
-    {
+    catch (err) {
         await Logger.debugLogError(`Error invoking command in guild ${message.guild.id}`, err)
         if (err && (err as CommandError).reason === CommandErrorReason.BotMissingGuildPermissions)
             await Logger.logEvent(EventStrings.MissingGuildPermissions, { guildId: message.guild.id })

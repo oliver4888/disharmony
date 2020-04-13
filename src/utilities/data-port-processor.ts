@@ -6,31 +6,25 @@ import { DisharmonyGuild, Logger } from ".."
 import PendingDataPorts, { PendingDataPort } from "../models/internal/pending-data-ports"
 import WorkerAction from "./worker-action"
 
-export default class DataPortProcessor extends WorkerAction
-{
+export default class DataPortProcessor extends WorkerAction {
     /** @override */
-    public async invoke()
-    {
+    public async invoke() {
         await Logger.debugLog("Beginning iteration of pending data ports")
 
         const pendingPorts = new PendingDataPorts()
         await pendingPorts.loadDocument()
 
-        if (pendingPorts.allPending.length === 0)
-        {
+        if (pendingPorts.allPending.length === 0) {
             await Logger.debugLog("No pending data ports found")
         }
 
-        for (const pendingPort of pendingPorts.allPending)
-        {
+        for (const pendingPort of pendingPorts.allPending) {
             await new Promise(resolve => setTimeout(resolve, 500))
 
-            try
-            {
+            try {
                 await this.processDataPortForPendingEntry(pendingPort)
             }
-            catch (err)
-            {
+            catch (err) {
                 await Logger.debugLogError(`Error processing data port for member ${pendingPort.memberId} in guild ${pendingPort.guildId}`)
             }
         }
@@ -39,8 +33,7 @@ export default class DataPortProcessor extends WorkerAction
         await Logger.debugLog("Finished iterating pending data ports")
     }
 
-    public async processDataPortForPendingEntry(pendingPort: PendingDataPort)
-    {
+    public async processDataPortForPendingEntry(pendingPort: PendingDataPort) {
         // Fetch data for this guild
         const djsGuild = this.client.djs.guilds.get(pendingPort.guildId)
 
@@ -68,8 +61,7 @@ export default class DataPortProcessor extends WorkerAction
             await fsPromises.unlink(filePath)
     }
 
-    private async processImport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string>
-    {
+    private async processImport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string> {
         // Set up the file to be piped into
         const dir = ".imports"
         await fsPromises.mkdir(dir, { recursive: true })
@@ -79,25 +71,21 @@ export default class DataPortProcessor extends WorkerAction
         const response = await new Promise<IncomingMessage>(resolve => httpsGet(pendingPort.url!, resolve))
 
         // Exit if response is not successful
-        if (response.statusCode !== 200)
-        {
+        if (response.statusCode !== 200) {
             Logger.debugLogError(`Failed to fetch the import file for guild ${pendingPort.guildId} from url ${pendingPort.url!}`)
             return ""
         }
 
         // Pipe the response data to a file
-        try
-        {
-            const writePromise = new Promise(resolve =>
-            {
+        try {
+            const writePromise = new Promise(resolve => {
                 response.pipe(writeStream)
                 writeStream.on("close", resolve)
             })
             await writePromise
             writeStream.close()
         }
-        catch (err)
-        {
+        catch (err) {
             await fsPromises.unlink(filePath)
             await Logger.debugLogError(`Error piping response to file when downloading import for guild ${pendingPort.guildId} from url ${pendingPort.url!}`, err)
             return ""
@@ -105,13 +93,11 @@ export default class DataPortProcessor extends WorkerAction
 
         // Load the file
         let data: any
-        try
-        {
+        try {
             const contents = await fsPromises.readFile(filePath, "utf8")
             data = JSON.parse(contents)
         }
-        catch (err)
-        {
+        catch (err) {
             await Logger.debugLogError(`Failed to load JSON data from file ${filePath}`, err)
             return ""
         }
@@ -127,20 +113,17 @@ export default class DataPortProcessor extends WorkerAction
         // Write the new entry to the database
         await document.save()
 
-        try
-        {
+        try {
             await channel.send(`<@${pendingPort.memberId}> Your data import is complete!`)
         }
-        catch (err)
-        {
+        catch (err) {
             Logger.debugLogError(`Error sending import confirmation message for guild ${pendingPort.guildId}`, err)
         }
 
         return filePath
     }
 
-    private async processExport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string>
-    {
+    private async processExport(pendingPort: PendingDataPort, guild: DisharmonyGuild, channel: TextChannel): Promise<string> {
         const exportJson = guild.getExportJson()
 
         // Generate file containing JSON
@@ -152,12 +135,10 @@ export default class DataPortProcessor extends WorkerAction
         // Send JSON file to member
         const attachment = new Attachment(fileName, `${pendingPort.guildId}.json`)
 
-        try
-        {
+        try {
             await channel.send(`<@${pendingPort.memberId}> Here is your JSON data export file`, attachment)
         }
-        catch (err)
-        {
+        catch (err) {
             Logger.debugLogError(`Error uploading export file to channel ${pendingPort.channelId} in guild ${pendingPort.guildId}`, err)
         }
 

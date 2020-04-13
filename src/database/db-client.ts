@@ -3,12 +3,10 @@ import Logger from "../utilities/logging/logger"
 import MongoClient from "./mongo-client"
 import NedbClient from "./nedb-client"
 
-export default function getDbClient(connectionString: string, onCriticalError: (err: CriticalError) => void, clientConfig?: MongoClientConfig | NedbClientConfig): DbClient
-{
+export default function getDbClient(connectionString: string, onCriticalError: (err: CriticalError) => void, clientConfig?: MongoClientConfig | NedbClientConfig): DbClient {
     const protocol = connectionString.match(/^.+:\/\//)![0]
 
-    if (protocol)
-    {
+    if (protocol) {
         Logger.consoleLog(`Using database protocol ${protocol}`)
 
         if (protocol.startsWith("mongodb"))
@@ -20,8 +18,7 @@ export default function getDbClient(connectionString: string, onCriticalError: (
     throw new Error("Invalid connection string")
 }
 
-export interface DbClient
-{
+export interface DbClient {
     updateOne(collectionName: string, query: any, update: any): Promise<void>
     insertOne(collectionName: string, record: any, allowBuffering?: boolean): Promise<void>
     findOne(collectionName: string, query: any, allowBuffering?: boolean): Promise<any>
@@ -34,7 +31,6 @@ export interface DbClient
     isReconnecting: boolean
 }
 
-export enum CriticalError
-{
+export enum CriticalError {
     ReconnectFail = "Reconnect failure",
 }

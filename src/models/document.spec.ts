@@ -5,28 +5,23 @@ import { DbClient } from "../database/db-client"
 import Document from "./document"
 
 @TestFixture("Document base class")
-export class DocumentTestFixture
-{
+export class DocumentTestFixture {
     public dbClient: IMock<DbClient>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.dbClient = Mock.ofType<DbClient>()
         this.dbClient.setup(x => x.isReconnecting).returns(() => false)
     }
 
     @AsyncTest()
-    public async db_client_receives_insert_when_load_document_called_for_new_record()
-    {
+    public async db_client_receives_insert_when_load_document_called_for_new_record() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
+        class Derived extends Document {
             public get num() { return this.record.num }
             public set num(value: number) { this.record.num = value }
-            constructor()
-            {
+            constructor() {
                 super("id")
                 this.isNewRecord = true
             }
@@ -45,14 +40,11 @@ export class DocumentTestFixture
     }
 
     @Test()
-    public db_client_receives_insert_when_new_serializable_saved()
-    {
+    public db_client_receives_insert_when_new_serializable_saved() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
-            constructor()
-            {
+        class Derived extends Document {
+            constructor() {
                 super("id")
                 this.record = { a: 1 }
                 this.isNewRecord = true
@@ -67,16 +59,13 @@ export class DocumentTestFixture
     }
 
     @AsyncTest()
-    public async db_client_receives_update_when_serializable_updated_and_saved()
-    {
+    public async db_client_receives_update_when_serializable_updated_and_saved() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
+        class Derived extends Document {
             public get num() { return this.record.num }
             public set num(value: number) { this.record.num = value }
-            constructor()
-            {
+            constructor() {
                 super("id")
                 this.isNewRecord = false
             }
@@ -97,14 +86,11 @@ export class DocumentTestFixture
     }
 
     @AsyncTest()
-    public async db_client_receives_replace_when_neither_update_nor_insert_valid()
-    {
+    public async db_client_receives_replace_when_neither_update_nor_insert_valid() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
-            constructor()
-            {
+        class Derived extends Document {
+            constructor() {
                 super("id")
                 this.record = { arr: [0, 1, 2] }
                 this.isNewRecord = false
@@ -123,14 +109,11 @@ export class DocumentTestFixture
     }
 
     @AsyncTest()
-    public async db_client_in_ready_state_when_save_complete()
-    {
+    public async db_client_in_ready_state_when_save_complete() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
-            constructor()
-            {
+        class Derived extends Document {
+            constructor() {
                 super("id")
                 this.record = { a: 1 }
                 this.isNewRecord = true
@@ -150,12 +133,10 @@ export class DocumentTestFixture
     }
 
     @AsyncTest()
-    public async serializable_record_set_to_db_value_when_serializable_loads_record()
-    {
+    public async serializable_record_set_to_db_value_when_serializable_loads_record() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
+        class Derived extends Document {
             get exposedRecord() { return this.record }
             constructor() { super("id") }
         }
@@ -173,12 +154,10 @@ export class DocumentTestFixture
     }
 
     @AsyncTest()
-    public async load_document_throws_if_error_returned_when_serializable_loads_record()
-    {
+    public async load_document_throws_if_error_returned_when_serializable_loads_record() {
         // ARRANGE
         Document.dbClient = this.dbClient.object
-        class Derived extends Document
-        {
+        class Derived extends Document {
             get exposedRecord() { return this.record }
             constructor() { super("id") }
         }

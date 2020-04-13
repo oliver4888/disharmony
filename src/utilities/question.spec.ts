@@ -6,8 +6,7 @@ import { Client, DisharmonyGuildMember, DisharmonyMessage } from ".."
 import Question, { QuestionRejectionReason } from "./question"
 
 @TestFixture("Question")
-export class QuestionTestFixture
-{
+export class QuestionTestFixture {
     private messageDispatcher: SimpleEventDispatcher<DisharmonyMessage>
     private channelMock: IMock<TextChannel>
     private clientMock: IMock<Client>
@@ -15,8 +14,7 @@ export class QuestionTestFixture
     private responseMock: IMock<DisharmonyMessage>
 
     @Setup
-    public setup()
-    {
+    public setup() {
         this.messageDispatcher = new SimpleEventDispatcher<DisharmonyMessage>()
 
         this.channelMock = Mock.ofType() as IMock<TextChannel>
@@ -47,8 +45,7 @@ export class QuestionTestFixture
     }
 
     @Test()
-    public query_string_sent_to_channel()
-    {
+    public query_string_sent_to_channel() {
         // ACT
         const sut = new Question(this.clientMock.object, "channelid", "query")
         // tslint:disable-next-line: no-floating-promises
@@ -61,8 +58,7 @@ export class QuestionTestFixture
     }
 
     @Test()
-    public query_string_prefixed_with_askee_mention_if_askee_provided_and_ping_askee_true()
-    {
+    public query_string_prefixed_with_askee_mention_if_askee_provided_and_ping_askee_true() {
         // ACT
         const sut = new Question(this.clientMock.object, "channelid", "query", this.askeeMock.object, true)
         // tslint:disable-next-line: no-floating-promises
@@ -75,8 +71,7 @@ export class QuestionTestFixture
     }
 
     @AsyncTest()
-    public async resolves_with_answer_when_response_within_timeout()
-    {
+    public async resolves_with_answer_when_response_within_timeout() {
         // ACT
         const sut = new Question(this.clientMock.object, "channelid", "query")
         const responsePromise = sut.send()
@@ -88,8 +83,7 @@ export class QuestionTestFixture
     }
 
     @AsyncTest()
-    public async resolves_with_answer_when_askee_provided_and_askee_responds()
-    {
+    public async resolves_with_answer_when_askee_provided_and_askee_responds() {
         // ARRANGE
         this.responseMock
             .setup(x => x.member)
@@ -106,8 +100,7 @@ export class QuestionTestFixture
     }
 
     @AsyncTest()
-    public async does_not_resolve_when_askee_provided_and_other_member_responds()
-    {
+    public async does_not_resolve_when_askee_provided_and_other_member_responds() {
         // ARRANGE
         const otherMemberMock = Mock.ofType<DisharmonyGuildMember>()
         otherMemberMock
@@ -133,8 +126,7 @@ export class QuestionTestFixture
     }
 
     @AsyncTest()
-    public async still_resolves_with_answer_when_askee_provided_and_other_member_responds_before_askee_does()
-    {
+    public async still_resolves_with_answer_when_askee_provided_and_other_member_responds_before_askee_does() {
         // ARRANGE
         const otherMemberMock = Mock.ofType<DisharmonyGuildMember>()
         otherMemberMock
@@ -168,8 +160,7 @@ export class QuestionTestFixture
     }
 
     @AsyncTest()
-    public async rejects_with_response_timeout_reason_when_response_not_within_timeout()
-    {
+    public async rejects_with_response_timeout_reason_when_response_not_within_timeout() {
         // ARRANGE
         this.clientMock
             .setup(x => x.config)

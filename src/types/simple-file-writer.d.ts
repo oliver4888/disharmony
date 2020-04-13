@@ -1,6 +1,5 @@
 declare module "simple-file-writer"
 
-declare class SimpleFileWriter
-{
+declare class SimpleFileWriter {
     public write: (msg: string, cb?: () => void) => void
 }

@@ -6,8 +6,7 @@ import { CommandErrorReason } from "./command-error"
 import getCommandInvoker from "./command-parser"
 
 @TestFixture("Command parsing")
-export class CommandParserTestFixture
-{
+export class CommandParserTestFixture {
     private command: Command
     private client: Client
     private guild: IMock<DisharmonyGuild>
@@ -15,8 +14,7 @@ export class CommandParserTestFixture
     private message: IMock<DisharmonyMessage>
 
     @Setup
-    public async setup()
-    {
+    public async setup() {
         // Don't actually pass types into mocks as I don't want constructors being invoked
 
         const command: any = {}
@@ -45,8 +43,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async null_invoker_when_no_command_syntax_in_message()
-    {
+    public async null_invoker_when_no_command_syntax_in_message() {
         // ARRANGE
         this.message.setup(x => x.content)
             .returns(() => "just a normal chat message")
@@ -59,8 +56,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async null_invoker_when_non_existant_command_in_message()
-    {
+    public async null_invoker_when_non_existant_command_in_message() {
         // ARRANGE
         this.message.setup(x => x.content)
             .returns(() => "<@botid> invalidcommand")
@@ -73,8 +69,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async missing_permission_thrown_when_user_permission_level_too_low()
-    {
+    public async missing_permission_thrown_when_user_permission_level_too_low() {
         // ARRANGE
         this.command.permissionLevel = PermissionLevel.Admin
 
@@ -90,8 +85,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async incorrect_syntax_thrown_when_syntax_incorrect()
-    {
+    public async incorrect_syntax_thrown_when_syntax_incorrect() {
         // ARRANGE
         this.command.syntax = "valid param1 param2"
 
@@ -107,8 +101,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async returns_working_command_invoker_when_valid_command_in_message()
-    {
+    public async returns_working_command_invoker_when_valid_command_in_message() {
         // ARRANGE
         this.command.invoke = async () => "invoked"
 
@@ -124,8 +117,7 @@ export class CommandParserTestFixture
     }
 
     @AsyncTest()
-    public async error_rethrown_when_invoked_command_throws()
-    {
+    public async error_rethrown_when_invoked_command_throws() {
         // ARRANGE
         this.command.invoke = async () => { throw new Error("its borked") }
 
@@ -136,12 +128,11 @@ export class CommandParserTestFixture
         const invoker = await getCommandInvoker(this.client, this.message.object)
 
         // ASSERT
-        await Expect(async() => await invoker!(this.client, this.message.object)).toThrowAsync()
+        await Expect(async () => await invoker!(this.client, this.message.object)).toThrowAsync()
     }
 
     @AsyncTest()
-    public async command_recognised_when_guild_has_command_prefix()
-    {
+    public async command_recognised_when_guild_has_command_prefix() {
         // ARRANGE
         this.guild = Mock.ofType() as IMock<DisharmonyGuild>
         this.guild.setup(x => x.commandPrefix)

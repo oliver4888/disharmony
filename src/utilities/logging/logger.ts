@@ -12,13 +12,11 @@ const consoleLogWriter: SimpleFileWriter = new SimpleFileWriter(join(logsDir, "c
 const debugLogWriter: SimpleFileWriter = new SimpleFileWriter(join(logsDir, "debug.log"))
 const eventLogger: EventLogger = new FileEventLogger(join(logsDir, "event.log"))
 
-function logMessage(message: string, writeToConsole: boolean, prefix: string, error?: Error | boolean)
-{
+function logMessage(message: string, writeToConsole: boolean, prefix: string, error?: Error | boolean) {
     const messageStr = [`[${process.pid}] [${new Date().toUTCString()}]`, prefix, message].join(" ")
     let consoleStr = messageStr, debugStr = messageStr
 
-    if (error instanceof Error)
-    {
+    if (error instanceof Error) {
         consoleStr += ` | ${error.message}`
         debugStr += `\n\t${error.message}\n\t${error.stack}`
     }
@@ -27,8 +25,7 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
         // tslint:disable-next-line: no-console
         console.log(consoleStr)
 
-    return new Promise<void>(async resolve =>
-    {
+    return new Promise<void>(async resolve => {
         debugLogWriter.write(debugStr + "\n", () => resolve())
 
         if (writeToConsole)
@@ -36,8 +33,7 @@ function logMessage(message: string, writeToConsole: boolean, prefix: string, er
     })
 }
 
-function logEvent(action: string, parameters?: any): void | Promise<void>
-{
+function logEvent(action: string, parameters?: any): void | Promise<void> {
     return eventLogger.logEvent(action, parameters)
 }
 

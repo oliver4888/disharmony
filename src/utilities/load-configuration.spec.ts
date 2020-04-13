@@ -3,11 +3,9 @@ import Config from "../models/internal/config"
 import { isConfigValid } from "./load-configuration"
 
 @TestFixture("Config loading")
-export class LoadConfigurationTestFixture
-{
+export class LoadConfigurationTestFixture {
     @Test()
-    public config_valid_when_all_required_fields_present()
-    {
+    public config_valid_when_all_required_fields_present() {
         // ARRANGE
         const config = {
             dbConnectionString: "foo",
@@ -25,8 +23,7 @@ export class LoadConfigurationTestFixture
     }
 
     @Test()
-    public config_valid_when_optional_field_present()
-    {
+    public config_valid_when_optional_field_present() {
         // ARRANGE
         const config = {
             dbConnectionString: "foo",
@@ -48,8 +45,7 @@ export class LoadConfigurationTestFixture
     }
 
     @Test()
-    public config_invalid_when_required_field_missing()
-    {
+    public config_invalid_when_required_field_missing() {
         // ARRANGE
         const config = {
             dbConnectionString: "foo",
@@ -66,8 +62,7 @@ export class LoadConfigurationTestFixture
     }
 
     @Test()
-    public config_invalid_when_optional_field_present_but_invalid()
-    {
+    public config_invalid_when_optional_field_present_but_invalid() {
         // ARRANGE
         const config = {
             dbConnectionString: "foo",

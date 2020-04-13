@@ -2,8 +2,7 @@ import { Permissions } from "discord.js"
 import { Command, DisharmonyMessage, PermissionLevel } from ".."
 import PendingDataPorts from "../models/internal/pending-data-ports"
 
-async function invoke(_: string[], message: DisharmonyMessage)
-{
+async function invoke(_: string[], message: DisharmonyMessage) {
     const pendingList = new PendingDataPorts()
     await pendingList.loadDocument()
 

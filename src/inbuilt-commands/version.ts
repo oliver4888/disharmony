@@ -1,7 +1,6 @@
 import Command, { PermissionLevel } from "../commands/command"
 
-function invoke()
-{
+function invoke() {
     return Promise.resolve(require(process.cwd() + "/package.json").version)
 }
 

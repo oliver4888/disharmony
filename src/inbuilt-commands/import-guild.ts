@@ -1,8 +1,7 @@
 import { Command, DisharmonyMessage, PermissionLevel } from ".."
 import PendingDataPorts from "../models/internal/pending-data-ports"
 
-async function invoke(_: string[], message: DisharmonyMessage)
-{
+async function invoke(_: string[], message: DisharmonyMessage) {
     if (message.djs.attachments.size === 0)
         return "Please issue the command again with your JSON data file attached."
 

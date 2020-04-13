@@ -4,8 +4,7 @@ import { EventStrings } from "../utilities/logging/event-strings"
 import { DocumentError, DocumentErrorReason } from "./document-error"
 import Serializable from "./serializable"
 
-export default abstract class Document extends Serializable
-{
+export default abstract class Document extends Serializable {
     /** Whether this Document represents a brand new Database record */
     protected isNewRecord = false
 
@@ -19,8 +18,7 @@ export default abstract class Document extends Serializable
     public static dbClient: DbClient
 
     /** Save record modifications back to the database, or insert the record for the first time */
-    public async save()
-    {
+    public async save() {
         this.record._id = this.id
 
         /* Invoking toRecord here will execute any record writes that derived
@@ -30,8 +28,7 @@ export default abstract class Document extends Serializable
 
         this.throwIfReconnecting()
 
-        try
-        {
+        try {
             if (this.isNewRecord)
                 await Document.dbClient.insertOne(this.dbCollectionName, record)
             else if (Object.keys(this.updateFields).length > 0)
@@ -41,8 +38,7 @@ export default abstract class Document extends Serializable
             this.updateFields = {}
             this.isNewRecord = false
         }
-        catch (e)
-        {
+        catch (e) {
             await Logger.consoleLogError(`Error inserting or updating document for guild ${this.id}`, e)
             await Logger.logEvent(EventStrings.DocumentUpdateError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
@@ -50,15 +46,12 @@ export default abstract class Document extends Serializable
     }
 
     /** Delete the corresponding database record */
-    public async deleteRecord()
-    {
+    public async deleteRecord() {
         this.throwIfReconnecting()
-        try
-        {
+        try {
             await Document.dbClient.deleteOne(this.dbCollectionName, { _id: this.id })
         }
-        catch (e)
-        {
+        catch (e) {
             await Logger.consoleLogError(`Error deleting record for guild ${this.id}`, e)
             await Logger.logEvent(EventStrings.DocumentDeleteError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
@@ -66,16 +59,13 @@ export default abstract class Document extends Serializable
     }
 
     /** Load the corresponding document from the database (based off this document's .id) */
-    public async loadDocument()
-    {
+    public async loadDocument() {
         this.throwIfReconnecting()
-        try
-        {
+        try {
             const record = await Document.dbClient.findOne(this.dbCollectionName, { _id: this.id })
             const recordProxy = new Proxy(record || {}, {
                 get: (target, prop) => target[prop],
-                set: (target, prop, value) =>
-                {
+                set: (target, prop, value) => {
                     target[prop] = value
 
                     if (typeof prop === "string" && prop !== "id" && prop !== "_id")
@@ -91,8 +81,7 @@ export default abstract class Document extends Serializable
             if (this.isNewRecord)
                 await this.save()
         }
-        catch (e)
-        {
+        catch (e) {
             await Logger.consoleLogError(`Error loading document for guild ${this.id}`, e)
             await Logger.logEvent(EventStrings.DocumentLoadError, { id: this.id })
             throw new DocumentError(DocumentErrorReason.DatabaseCommandThrew)
@@ -100,15 +89,13 @@ export default abstract class Document extends Serializable
     }
 
     /** Throw an error if the database client is currently reconnecting */
-    private throwIfReconnecting()
-    {
+    private throwIfReconnecting() {
         if (Document.dbClient.isReconnecting)
             throw new DocumentError(DocumentErrorReason.DatabaseReconnecting)
     }
 
     /** Add a field to the $set operator used in the next update */
-    public addSetOperator(field: string, value: any)
-    {
+    public addSetOperator(field: string, value: any) {
         this.updateFields[field] = value
     }
 
@@ -118,8 +105,7 @@ export default abstract class Document extends Serializable
     constructor(
         public id: string,
         dbCollectionName?: string,
-    )
-    {
+    ) {
         super()
         this.dbCollectionName = dbCollectionName || this.constructor.name
     }

@@ -6,8 +6,7 @@ import Command from "./command"
 import { CommandError, CommandErrorReason } from "./command-error"
 import CommandRejection from "./command-rejection"
 
-export default async function getCommandInvoker(client: Client, message: DisharmonyMessage): Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>
-{
+export default async function getCommandInvoker(client: Client, message: DisharmonyMessage): Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null> {
     let details: {
         name: string;
         params: string[];
@@ -15,8 +14,7 @@ export default async function getCommandInvoker(client: Client, message: Disharm
 
     let command: Command | undefined
 
-    try
-    {
+    try {
         details = getCommandDetails(message, client)
         if (!details)
             return null
@@ -25,8 +23,7 @@ export default async function getCommandInvoker(client: Client, message: Disharm
         if (!command)
             return null
     }
-    catch (err)
-    {
+    catch (err) {
         /* Suppress any errors that occur while we're not yet sure if this is a command.
            This is important because of the high volume of messages the bot receives, if something
            goes wrong with message parsing we don't want it to reply "an error occurred" to
@@ -42,17 +39,14 @@ export default async function getCommandInvoker(client: Client, message: Disharm
     else if (details.params.length < (command.syntax.match(/\s[^\s\[]+/g) || []).length)
         throw new CommandError(CommandErrorReason.IncorrectSyntax)
     else
-        return async (invokeClient: Client, invokeMessage: DisharmonyMessage) =>
-        {
+        return async (invokeClient: Client, invokeMessage: DisharmonyMessage) => {
             await invokeMessage.guild.loadDocument()
             let out
 
-            try
-            {
+            try {
                 out = await command!.invoke(details!.params, invokeMessage, invokeClient)
             }
-            catch (e)
-            {
+            catch (e) {
                 if (e instanceof CommandRejection)
                     out = e.message
                 else
@@ -64,13 +58,11 @@ export default async function getCommandInvoker(client: Client, message: Disharm
         }
 }
 
-function isUserPermitted(message: DisharmonyMessage, command: Command)
-{
+function isUserPermitted(message: DisharmonyMessage, command: Command) {
     return message.member.getPermissionLevel() >= command.permissionLevel
 }
 
-function getCommandDetails(message: DisharmonyMessage, client: Client)
-{
+function getCommandDetails(message: DisharmonyMessage, client: Client) {
     // If no command prefix exists for this guild command criteria is bot mention
     const commandPrefix = message.guild.commandPrefix || `^<@!?${client.botId}>`
     const regexp = new RegExp(`${commandPrefix}\\s+([^\\s]+)(?:\\s+(.*))?`)

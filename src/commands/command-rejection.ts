@@ -1,5 +1,4 @@
-export default class CommandRejection
-{
+export default class CommandRejection {
     constructor(
         public message: string,
     ) { }

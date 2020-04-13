@@ -13,19 +13,16 @@ export default class DisharmonyGuild extends Document implements DjsExtensionMod
     /** @deprecated Use `botHasPermissions` instead */
     public get hasPermissions() { return this.botHasPermissions }
 
-    public botHasPermissions(permissions: number): boolean
-    {
+    public botHasPermissions(permissions: number): boolean {
         return (this.djs.me.permissions.missing(permissions) as PermissionResolvable[]).length === 0
     }
 
-    public getExportJson()
-    {
+    public getExportJson() {
         return JSON.stringify(this.record)
     }
 
     constructor(
-        public readonly djs: DjsGuild)
-    {
+        public readonly djs: DjsGuild) {
         super(djs.id, "Guild")
         this.me = new DisharmonyGuildMember(djs.me)
     }

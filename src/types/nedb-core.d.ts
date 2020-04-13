@@ -1,12 +1,10 @@
 declare module "nedb-core"
 
-declare class Persistence
-{
+declare class Persistence {
     public compactDatafile(): void
 }
 
-declare class Datastore
-{
+declare class Datastore {
     public filename: string
     public persistence: Persistence
     public update(query: any, record: any, options: { upsert?: boolean }, callback: (err: any, numReplaced?: number) => void): void

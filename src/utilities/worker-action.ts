@@ -4,25 +4,21 @@ import { forkWorkerClient, LiteClient, LiteDisharmonyClient, loadConfig, Logger 
 /** Base class representing a module which can be easily launched in a worker module.
  *  Will automatically connect to Discord and provide a LightClient instance
  */
-export default abstract class WorkerAction
-{
-    public static bootstrapWorkerModule<T extends WorkerAction>(moduleCtor: new (client: LiteDisharmonyClient) => T)
-    {
+export default abstract class WorkerAction {
+    public static bootstrapWorkerModule<T extends WorkerAction>(moduleCtor: new (client: LiteDisharmonyClient) => T) {
         const configPath = process.argv[2]
         const config = loadConfig(undefined, configPath)
         const client = new LiteDisharmonyClient(config)
         const module = new moduleCtor(client)
 
         client.login(config.token)
-            .then(async () =>
-            {
+            .then(async () => {
                 await module.invoke()
                 await client.destroy()
                 await Logger.debugLog("Exiting worker")
                 process.exit(0)
             })
-            .catch(async err =>
-            {
+            .catch(async err => {
                 await Logger.debugLogError("Error invoking module in worker process", err)
                 await Logger.logEvent("ErrorInWorkerModule")
                 process.exit(1)
@@ -30,8 +26,7 @@ export default abstract class WorkerAction
     }
 
     /** @abstract */
-    public async invoke()
-    {
+    public async invoke() {
         return
     }
 
@@ -42,11 +37,9 @@ export default abstract class WorkerAction
 
 export async function invokeWorkerAction(path: string, useMainProcess: boolean, mainProcessClient: LiteClient): Promise<void>
 export async function invokeWorkerAction(path: string, useMainProcess: boolean, configPath: string): Promise<void>
-export async function invokeWorkerAction(path: string, useMainProcess: boolean, processArg: LiteClient | string)
-{
+export async function invokeWorkerAction(path: string, useMainProcess: boolean, processArg: LiteClient | string) {
     await Logger.debugLog(`Loading worker module in ${useMainProcess ? "main" : "worker"} process`)
-    if (useMainProcess)
-    {
+    if (useMainProcess) {
         const moduleCtor = (await import(path)).default
         await new moduleCtor(processArg).invoke()
     }

@@ -12,8 +12,7 @@ import ClientIntervalManager from "./client-interval-manager"
 import handleMessage from "./handle-message"
 import LiteDisharmonyClient, { LiteClient } from "./lite-client"
 
-export interface Client extends LiteClient
-{
+export interface Client extends LiteClient {
     readonly commands: Command[]
     readonly channels: Map<string, DjsChannel>
     readonly onMessage: ISimpleEvent<DisharmonyMessage>
@@ -28,8 +27,7 @@ export default class DisharmonyClient<
     _TGuild extends DisharmonyGuild = DisharmonyGuild,
     TGuildMember extends DisharmonyGuildMember = DisharmonyGuildMember,
     TConfig extends Config = Config,
-    > extends LiteDisharmonyClient implements Client
-{
+    > extends LiteDisharmonyClient implements Client {
     private intervalManager: ClientIntervalManager
 
     public readonly onBeforeLogin = new SignalDispatcher()
@@ -42,8 +40,7 @@ export default class DisharmonyClient<
 
     public get channels(): Map<string, DjsChannel> { return this.djs.channels }
 
-    public async login(token: string)
-    {
+    public async login(token: string) {
         await super.login(token)
         this.intervalManager.setIntervalCallbacks()
 
@@ -51,19 +48,16 @@ export default class DisharmonyClient<
             await this.djs.user.setPresence({ game: { name: this.config.playingStatusString } })
     }
 
-    public async destroy()
-    {
+    public async destroy() {
         this.intervalManager.clearConnectionDependentIntervals()
         await super.destroy()
     }
 
-    public dispatchMessage(message: TMessage)
-    {
+    public dispatchMessage(message: TMessage) {
         this.onMessage.dispatch(message)
     }
 
-    private dispatchVoiceStateUpdateIfPermitted(oldDjsMember: DjsGuildMember, newDjsMember: DjsGuildMember)
-    {
+    private dispatchVoiceStateUpdateIfPermitted(oldDjsMember: DjsGuildMember, newDjsMember: DjsGuildMember) {
         const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
 
         // Sometimes this is undefined, no idea why
@@ -82,8 +76,7 @@ export default class DisharmonyClient<
         public config: TConfig,
         public messageCtor: MessageConstructor<TMessage> = DisharmonyMessage as any,
         public guildMemberCtor: new (djsGuildMember: DjsGuildMember) => TGuildMember = DisharmonyGuildMember as any,
-    )
-    {
+    ) {
         super(config)
 
         this.djs.on("ready", () => this.onReady.dispatch())

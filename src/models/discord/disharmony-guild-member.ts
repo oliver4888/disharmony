@@ -12,8 +12,7 @@ export default class DisharmonyGuildMember extends Document implements DjsExtens
     public addRole(snowflake: string | Role, reason?: string) { return this.djs.addRole(snowflake, reason) }
     public removeRole(snowflake: string | Role, reason?: string) { return this.djs.removeRole(snowflake, reason) }
 
-    public getPermissionLevel(): PermissionLevel
-    {
+    public getPermissionLevel(): PermissionLevel {
         if (this.id === "117966411548196870")
             return PermissionLevel.HostOwner
         else if (this.permissions.has("ADMINISTRATOR"))
@@ -25,8 +24,7 @@ export default class DisharmonyGuildMember extends Document implements DjsExtens
     public toString(): string { return this.djs.toString() }
 
     constructor(
-        public readonly djs: DjsGuildMember)
-    {
+        public readonly djs: DjsGuildMember) {
         super(djs.id)
     }
 }
