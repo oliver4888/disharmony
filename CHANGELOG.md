@@ -1,4 +1,9 @@
 # Changelog
+## v2.0.7
+### Updated
+- Stats command will return an embed
+- Help command urls have been changed (These might be moved to the config in future versions)
+
 ## v2.0.6
 ### Updated
 - All packages excluding discordjs (newer versions contain breaking changes)

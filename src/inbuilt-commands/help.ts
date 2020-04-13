@@ -27,7 +27,7 @@ function createHelpEmbed(client: Client, me: DisharmonyGuildMember, member: Dish
         )
 
     embed.addField("__Need more help?__",
-        "[Visit my website](https://benji7425.github.io) or [Join my Discord](https://discord.gg/SSkbwSJ)")
+        "[Visit my website](https://bots.ol48.uk/) or [Join my Discord](https://discord.gg/ZEPjFJX)")
 
     return embed
 }
