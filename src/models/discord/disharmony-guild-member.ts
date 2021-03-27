@@ -13,7 +13,7 @@ export default class DisharmonyGuildMember extends Document implements DjsExtens
     public removeRole(snowflake: string | Role, reason?: string) { return this.djs.removeRole(snowflake, reason) }
 
     public getPermissionLevel(): PermissionLevel {
-        if (this.id === "117966411548196870")
+        if (this.id === "149509587425296384")
             return PermissionLevel.HostOwner
         else if (this.permissions.has("ADMINISTRATOR"))
             return PermissionLevel.Admin

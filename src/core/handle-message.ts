@@ -8,15 +8,12 @@ export default async function handleMessage<TMessage extends DisharmonyMessage>(
     client: DisharmonyClient<TMessage>,
     djsMessage: DjsMessage,
     innerGetCommandInvoker?: (client: Client, message: DisharmonyMessage) => Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>) {
-    // Sometimes message member is null, no idea why
-    if (!djsMessage.member)
-        return
-
     // Ignore messages from self
-    if (djsMessage.member.id === djsMessage.member.guild.me.id)
+    if (djsMessage.author.id === djsMessage.client.user.id)
         return
 
     const message = new client.messageCtor(djsMessage)
+    await message.fetchMember();
 
     try {
         const commandInvoker = await (innerGetCommandInvoker ? innerGetCommandInvoker!(client, message) : getCommandInvoker(client, message))

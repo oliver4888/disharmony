@@ -6,7 +6,7 @@ import DjsExtensionModel from "./djs-extension-model"
 export default class DisharmonyMessage implements DjsExtensionModel<DjsMessage>
 {
     public readonly guild: DisharmonyGuild
-    public readonly member: DisharmonyGuildMember
+    public member: DisharmonyGuildMember
     public get content() { return this.djs.content }
     public get channelId() { return this.djs.channel.id }
     public get mentions() { return this.djs.mentions }
@@ -15,9 +15,14 @@ export default class DisharmonyMessage implements DjsExtensionModel<DjsMessage>
         await this.djs.reply(response)
     }
 
+    public async fetchMember() {
+        if (this.member === undefined) {
+            this.member = new DisharmonyGuildMember(await this.djs.guild.fetchMember(this.djs.author.id));
+        }
+    }
+
     constructor(
         public readonly djs: DjsMessage) {
         this.guild = new DisharmonyGuild(this.djs.guild)
-        this.member = new DisharmonyGuildMember(this.djs.member)
     }
 }
