@@ -1,4 +1,4 @@
-import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage } from "discord.js"
+import { Channel as DjsChannel, GuildMember as DjsGuildMember, Message as DjsMessage, GuildMember, VoiceState } from "discord.js"
 import { ISimpleEvent, SignalDispatcher, SimpleEventDispatcher } from "strongly-typed-events"
 import { DisharmonyGuild, Logger } from ".."
 import Command from "../commands/command"
@@ -33,19 +33,19 @@ export default class DisharmonyClient<
     public readonly onBeforeLogin = new SignalDispatcher()
     public readonly onReady = new SignalDispatcher()
     public readonly onMessage = new SimpleEventDispatcher<TMessage>()
-    public readonly onVoiceStateUpdate = new SimpleEventDispatcher<{ oldMember: TGuildMember, newMember: TGuildMember }>()
+    public readonly onVoiceStateUpdate = new SimpleEventDispatcher<{ oldState: VoiceState, newState: VoiceState }>()
 
     public commands: Command[]
     public stats: Stats
 
-    public get channels(): Map<string, DjsChannel> { return this.djs.channels }
+    public get channels(): Map<string, DjsChannel> { return this.djs.channels.cache }
 
     public async login(token: string) {
         await super.login(token)
         this.intervalManager.setIntervalCallbacks()
 
         if (this.config.playingStatusString)
-            await this.djs.user.setPresence({ game: { name: this.config.playingStatusString } })
+            await this.djs.user?.setPresence({ activity: { name: this.config.playingStatusString } })
     }
 
     public async destroy() {
@@ -57,18 +57,18 @@ export default class DisharmonyClient<
         this.onMessage.dispatch(message)
     }
 
-    private dispatchVoiceStateUpdateIfPermitted(oldDjsMember: DjsGuildMember, newDjsMember: DjsGuildMember) {
-        const voiceChannel = (newDjsMember.voiceChannel || oldDjsMember.voiceChannel)
+    private dispatchVoiceStateUpdateIfPermitted(oldState: VoiceState, newState: VoiceState) {
+        const voiceChannel = (newState.channel || oldState.channel)
 
         // Sometimes this is undefined, no idea why
         if (!voiceChannel)
             return
 
-        const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me)
+        const botPerms = voiceChannel.permissionsFor(voiceChannel.guild.me as GuildMember)
 
         // Solve the issue where Discord sends voice state update events even when a voice channel is hidden from the bot
         if (botPerms && botPerms.has("VIEW_CHANNEL"))
-            this.onVoiceStateUpdate.dispatch({ oldMember: new this.guildMemberCtor(oldDjsMember), newMember: new this.guildMemberCtor(newDjsMember) })
+            this.onVoiceStateUpdate.dispatch({ oldState: oldState, newState: newState })
     }
 
     constructor(
@@ -82,7 +82,7 @@ export default class DisharmonyClient<
         this.djs.on("ready", () => this.onReady.dispatch())
         this.djs.on("message", dMsg => handleMessage(this, dMsg))
         this.djs.on("guildCreate", guild => Logger.logEvent(EventStrings.GuildAdd, { guildId: guild.id }))
-        this.djs.on("voiceStateUpdate", this.dispatchVoiceStateUpdateIfPermitted.bind(this))
+        this.djs.on("voiceStateUpdate", this.dispatchVoiceStateUpdateIfPermitted)
 
         this.commands = commands.concat(inbuiltCommands)
         this.stats = new Stats(this.djs)

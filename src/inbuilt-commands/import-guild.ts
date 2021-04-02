@@ -19,7 +19,7 @@ async function invoke(_: string[], message: DisharmonyMessage) {
         memberId,
         channelId: message.channelId,
         isImport: true,
-        url: message.djs.attachments.first().url,
+        url: message.djs.attachments.first()?.url,
     })
 
     await pendingList.save()

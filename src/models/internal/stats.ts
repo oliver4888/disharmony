@@ -1,10 +1,10 @@
 import { Client as DjsClient } from "discord.js"
 
 export default class Stats {
-    public get guildCount() { return this.dClient.guilds.size }
-    public get userCount() { return this.dClient.users.size }
+    public get guildCount() { return this.dClient.guilds.cache.size }
+    public get userCount() { return this.dClient.users.cache.size }
     public get uptime() { return this.dClient.uptime }
-    public get uptimeStr() { return this.toHHMMSS(this.uptime) }
+    public get uptimeStr() { return this.toHHMMSS(this.uptime || 0) }
 
     private toHHMMSS(ms: number) {
         const secsTruncated = Math.trunc(ms / 1000)

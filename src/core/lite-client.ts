@@ -16,13 +16,13 @@ export interface LiteClient extends DjsExtensionModel<DjsClient> {
 export default class LiteDisharmonyClient implements LiteClient {
     public djs: DjsClient
 
-    public get botId() { return /[0-9]{18}/.exec(this.djs.user.toString())![0] }
+    public get botId() { return this.djs.user?.id as string }
     public get dbClient() { return Document.dbClient }
 
     public async login(token: string) {
         // Remove newlines from token, sometimes text editors put newlines at the start/end but this causes problems for discord.js' login
         await this.djs.login(token.replace(/\r?\n|\r/g, ""))
-        Logger.consoleLog(`Registered bot ${this.djs.user.username}`)
+        Logger.consoleLog(`Registered bot ${this.djs.user?.username}`)
         Logger.consoleLog(`You can view detailed logs in the logs/ directory`)
     }
 
@@ -45,15 +45,14 @@ export default class LiteDisharmonyClient implements LiteClient {
         public config: Config,
     ) {
         this.djs = new DjsClient({
-            messageCacheMaxSize: 16,
-            disabledEvents: ["TYPING_START"],
+            messageCacheMaxSize: 16
         })
 
         Document.dbClient = getDbClient(config.dbConnectionString, this.onCriticalDbError, config.dbClientConfig)
 
         Error.stackTraceLimit = Infinity
 
-        this.djs.on("error", (err: ErrorEvent) => Logger.debugLogError("Websocket error from discord.js", err.error))
+        this.djs.on("error", (err: Error) => Logger.debugLogError("Websocket error from discord.js", err))
         this.djs.on("debug", this.onDebug)
 
         process.on("uncaughtException", async err => {

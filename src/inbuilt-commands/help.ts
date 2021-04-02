@@ -1,4 +1,4 @@
-import { RichEmbed } from "discord.js"
+import { MessageEmbed } from "discord.js"
 import Command, { PermissionLevel } from "../commands/command"
 import { Client } from "../core/client"
 import DisharmonyGuildMember from "../models/discord/disharmony-guild-member"
@@ -8,8 +8,8 @@ async function invoke(_: string[], message: DisharmonyMessage, client: Client): 
     await message.reply(createHelpEmbed(client, message.guild.me, message.member))
 }
 
-function createHelpEmbed(client: Client, me: DisharmonyGuildMember, member: DisharmonyGuildMember): RichEmbed {
-    const embed = new RichEmbed().setTitle(`__${client.config.serviceName} help__`)
+function createHelpEmbed(client: Client, me: DisharmonyGuildMember, member: DisharmonyGuildMember): MessageEmbed {
+    const embed = new MessageEmbed().setTitle(`__${client.config.serviceName} help__`)
 
     const displayableCommands =
         client.commands

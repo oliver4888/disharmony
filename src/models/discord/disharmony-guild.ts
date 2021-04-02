@@ -1,4 +1,4 @@
-import { Guild as DjsGuild, PermissionResolvable } from "discord.js"
+import { Guild as DjsGuild, PermissionResolvable, GuildMember } from "discord.js"
 import Document from "../document"
 import DisharmonyGuildMember from "./disharmony-guild-member"
 import DjsExtensionModel from "./djs-extension-model"
@@ -14,7 +14,7 @@ export default class DisharmonyGuild extends Document implements DjsExtensionMod
     public get hasPermissions() { return this.botHasPermissions }
 
     public botHasPermissions(permissions: number): boolean {
-        return (this.djs.me.permissions.missing(permissions) as PermissionResolvable[]).length === 0
+        return (this.djs.me?.permissions.missing(permissions) as PermissionResolvable[]).length === 0
     }
 
     public getExportJson() {
@@ -24,6 +24,6 @@ export default class DisharmonyGuild extends Document implements DjsExtensionMod
     constructor(
         public readonly djs: DjsGuild) {
         super(djs.id, "Guild")
-        this.me = new DisharmonyGuildMember(djs.me)
+        this.me = new DisharmonyGuildMember(djs.me as GuildMember)
     }
 }

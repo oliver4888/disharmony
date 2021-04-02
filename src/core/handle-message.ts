@@ -9,11 +9,10 @@ export default async function handleMessage<TMessage extends DisharmonyMessage>(
     djsMessage: DjsMessage,
     innerGetCommandInvoker?: (client: Client, message: DisharmonyMessage) => Promise<((disharmonyClient: Client, message: DisharmonyMessage) => Promise<string>) | null>) {
     // Ignore messages from self
-    if (djsMessage.author.id === djsMessage.client.user.id)
+    if (djsMessage.author.id === djsMessage.client.user?.id)
         return
 
     const message = new client.messageCtor(djsMessage)
-    await message.fetchMember();
 
     try {
         const commandInvoker = await (innerGetCommandInvoker ? innerGetCommandInvoker!(client, message) : getCommandInvoker(client, message))

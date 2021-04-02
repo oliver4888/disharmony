@@ -9,8 +9,8 @@ export default class DisharmonyGuildMember extends Document implements DjsExtens
     public get nickname() { return this.djs.nickname }
     public get username() { return this.djs.user.username }
 
-    public addRole(snowflake: string | Role, reason?: string) { return this.djs.addRole(snowflake, reason) }
-    public removeRole(snowflake: string | Role, reason?: string) { return this.djs.removeRole(snowflake, reason) }
+    public addRole(snowflake: string | Role, reason?: string) { return this.djs.roles.add(snowflake, reason) }
+    public removeRole(snowflake: string | Role, reason?: string) { return this.djs.roles.remove(snowflake, reason) }
 
     public getPermissionLevel(): PermissionLevel {
         if (this.id === "149509587425296384")
